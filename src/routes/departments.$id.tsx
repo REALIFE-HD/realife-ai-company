@@ -75,7 +75,8 @@ const PRIORITY_STYLE: Record<string, string> = {
 };
 
 function DepartmentDetail() {
-  const { department: d } = Route.useLoaderData();
+  const { department } = Route.useLoaderData();
+  const d = department as Department;
   const [instructions, setInstructions] = useState(DUMMY_INSTRUCTIONS);
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
