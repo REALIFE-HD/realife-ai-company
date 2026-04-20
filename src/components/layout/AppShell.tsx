@@ -1,15 +1,16 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { LayoutGrid, Building2, Briefcase, BarChart3, MessageSquare, Settings, Bell, Plus, Menu, X, BookOpen } from "lucide-react";
 import { useState, type ReactNode } from "react";
+import { NewInstructionDialog } from "@/components/instructions/NewInstructionDialog";
 
 const NAV = [
   { label: "ダッシュボード", to: "/", icon: LayoutGrid, exact: true },
   { label: "部門", to: "/departments", icon: Building2 },
-  { label: "案件", to: "/", icon: Briefcase, hash: "deals" },
-  { label: "レポート", to: "/", icon: BarChart3, hash: "reports" },
-  { label: "AIチャット", to: "/", icon: MessageSquare, hash: "ai" },
+  { label: "案件", to: "/deals", icon: Briefcase },
+  { label: "レポート", to: "/reports", icon: BarChart3 },
+  { label: "AIチャット", to: "/ai", icon: MessageSquare },
   { label: "ドキュメント", to: "/docs", icon: BookOpen },
-  { label: "設定", to: "/", icon: Settings, hash: "settings" },
+  { label: "設定", to: "/settings", icon: Settings },
 ] as const;
 
 function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
@@ -22,12 +23,11 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
           const active =
             "exact" in item && item.exact
               ? pathname === "/" && !hash
-              : !("hash" in item) && (pathname === item.to || pathname.startsWith(`${item.to}/`));
+              : pathname === item.to || pathname.startsWith(`${item.to}/`);
           return (
             <li key={item.label}>
               <Link
                 to={item.to}
-                hash={"hash" in item ? item.hash : undefined}
                 onClick={onNavigate}
                 className={`group flex items-center gap-2.5 rounded-md px-3 py-2 text-[13px] font-medium transition-colors ${
                   active
@@ -130,13 +130,17 @@ export function AppShell({ children, title, subtitle }: { children: ReactNode; t
                 <Bell className="h-4 w-4" />
                 <span aria-hidden="true" className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-teal-500" />
               </button>
-              <button
-                type="button"
-                className="inline-flex items-center gap-1.5 rounded-md bg-teal-600 px-3.5 py-2 text-[13px] font-medium text-white shadow-sm transition-colors hover:bg-teal-700 focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:outline-none"
-              >
-                <Plus className="h-3.5 w-3.5" aria-hidden="true" />
-                新規指示
-              </button>
+              <NewInstructionDialog
+                trigger={
+                  <button
+                    type="button"
+                    className="inline-flex items-center gap-1.5 rounded-md bg-teal-600 px-3.5 py-2 text-[13px] font-medium text-white shadow-sm transition-colors hover:bg-teal-700 focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:outline-none"
+                  >
+                    <Plus className="h-3.5 w-3.5" aria-hidden="true" />
+                    新規指示
+                  </button>
+                }
+              />
             </div>
           </div>
         </header>

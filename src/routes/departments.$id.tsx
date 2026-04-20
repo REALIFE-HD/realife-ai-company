@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowLeft, ArrowRight, Plus } from "lucide-react";
 import {
   DEPARTMENTS,
@@ -13,18 +13,15 @@ import { AppShell } from "@/components/layout/AppShell";
 import { Footer } from "@/components/layout/Footer";
 import { CTASection } from "@/components/dashboard/CTASection";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { NewInstructionDialog } from "@/components/instructions/NewInstructionDialog";
+import { InstructionList } from "@/components/instructions/InstructionList";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
+  getInstructionsForDepartment,
+  loadInstructions,
+  saveInstructions,
+  INSTRUCTION_STORAGE_KEY,
+  type Instruction,
+} from "@/lib/instructions";
 
 export const Route = createFileRoute("/departments/$id")({
   loader: ({ params }) => {
@@ -78,23 +75,41 @@ const PRIORITY_STYLE: Record<string, string> = {
 function DepartmentDetail() {
   const { department } = Route.useLoaderData();
   const d = department as Department;
-  const [instructions, setInstructions] = useState(DUMMY_INSTRUCTIONS);
-  const [open, setOpen] = useState(false);
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
+  const [instructions, setInstructions] = useState<Instruction[]>([]);
 
-  const submit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!title.trim()) return;
-    const id = `I-${String(32 + instructions.length).padStart(3, "0")}`;
-    setInstructions([
-      { id, title: title.trim(), body: body.trim(), date: new Date().toISOString().slice(0, 10), from: "代表" },
-      ...instructions,
-    ]);
-    setTitle("");
-    setBody("");
-    setOpen(false);
-  };
+  // Seed dummy instructions for this department on first visit (only if storage is empty for this dept)
+  useEffect(() => {
+    const existing = loadInstructions();
+    const hasAny = existing.some(
+      (i) => i.department_code === d.id || i.department_code === "all",
+    );
+    if (!hasAny && existing.length === 0) {
+      const seeded: Instruction[] = DUMMY_INSTRUCTIONS.map((s, idx) => ({
+        id: `seed_${d.id}_${idx}`,
+        department_code: d.id,
+        title: s.title,
+        content: s.body,
+        created_by: s.from,
+        created_at: new Date(`${s.date}T09:00:00`).toISOString(),
+        status: "open",
+      }));
+      saveInstructions(seeded);
+    }
+    setInstructions(getInstructionsForDepartment(d.id));
+  }, [d.id]);
+
+  // Refresh from storage (after dialog save or status change)
+  const refresh = () => setInstructions(getInstructionsForDepartment(d.id));
+
+  // Cross-tab sync
+  useEffect(() => {
+    const handler = (e: StorageEvent) => {
+      if (e.key === INSTRUCTION_STORAGE_KEY) refresh();
+    };
+    window.addEventListener("storage", handler);
+    return () => window.removeEventListener("storage", handler);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [d.id]);
 
   return (
     <AppShell title={d.name} subtitle={d.role}>
@@ -129,8 +144,10 @@ function DepartmentDetail() {
                 </div>
               </div>
 
-              <Dialog open={open} onOpenChange={setOpen}>
-                <DialogTrigger asChild>
+              <NewInstructionDialog
+                fixedDepartmentCode={d.id}
+                onCreated={refresh}
+                trigger={
                   <button
                     type="button"
                     className="inline-flex items-center justify-center gap-2 rounded-md bg-teal-600 px-4 py-2.5 text-[13px] font-medium text-white shadow-sm transition-colors hover:bg-teal-700 focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:outline-none"
@@ -138,57 +155,8 @@ function DepartmentDetail() {
                     <Plus className="h-3.5 w-3.5" />
                     この部門へ指示を出す
                   </button>
-                </DialogTrigger>
-                <DialogContent>
-                  <form onSubmit={submit}>
-                    <DialogHeader>
-                      <DialogTitle className="font-serif text-xl">
-                        {d.name} へ指示
-                      </DialogTitle>
-                      <DialogDescription>
-                        指示はこの部門のタイムラインに保存されます。
-                      </DialogDescription>
-                    </DialogHeader>
-                    <div className="mt-4 space-y-4">
-                      <div className="space-y-1.5">
-                        <Label htmlFor="i-title">タイトル</Label>
-                        <Input
-                          id="i-title"
-                          value={title}
-                          onChange={(e) => setTitle(e.target.value)}
-                          placeholder="例:今週の優先案件3件を共有"
-                          required
-                        />
-                      </div>
-                      <div className="space-y-1.5">
-                        <Label htmlFor="i-body">内容</Label>
-                        <Textarea
-                          id="i-body"
-                          value={body}
-                          onChange={(e) => setBody(e.target.value)}
-                          placeholder="指示の詳細を記入"
-                          rows={5}
-                        />
-                      </div>
-                    </div>
-                    <DialogFooter className="mt-6">
-                      <button
-                        type="button"
-                        onClick={() => setOpen(false)}
-                        className="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-800 hover:border-slate-900"
-                      >
-                        キャンセル
-                      </button>
-                      <button
-                        type="submit"
-                        className="rounded-md bg-teal-600 px-4 py-2 text-sm font-medium text-white hover:bg-teal-700"
-                      >
-                        指示を保存
-                      </button>
-                    </DialogFooter>
-                  </form>
-                </DialogContent>
-              </Dialog>
+                }
+              />
             </div>
 
             {/* KPI strip */}
@@ -322,23 +290,8 @@ function DepartmentDetail() {
               </TabsContent>
 
               <TabsContent value="instructions" className="mt-6">
-                <ol className="space-y-3">
-                  {instructions.map((i) => (
-                    <li
-                      key={i.id}
-                      className="rounded-xl border border-slate-200 bg-white p-5"
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="font-mono text-[11px] text-slate-500">{i.id}</span>
-                        <span className="font-mono text-[11px] text-slate-500">{i.date}</span>
-                      </div>
-                      <h4 className="mt-2 text-base font-semibold text-slate-950">{i.title}</h4>
-                      {i.body && <p className="mt-1.5 text-sm text-slate-600">{i.body}</p>}
-                      <p className="mt-3 text-[11px] text-slate-500">From: {i.from}</p>
-                    </li>
-                  ))}
-                </ol>
-            </TabsContent>
+                <InstructionList instructions={instructions} onChange={refresh} />
+              </TabsContent>
           </Tabs>
         </section>
         <CTASection />
