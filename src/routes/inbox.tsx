@@ -324,7 +324,7 @@ function InboxPage() {
           </div>
 
           {/* 詳細 */}
-          <div className="rounded-2xl border border-slate-200 bg-white lg:col-span-2">
+          <div className="rounded-lg border-2 border-slate-900/90 bg-white lg:col-span-2">
             {!selected ? (
               <div className="flex h-full min-h-[320px] items-center justify-center text-sm text-slate-500">
                 左から選択してください
