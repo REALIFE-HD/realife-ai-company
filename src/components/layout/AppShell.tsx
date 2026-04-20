@@ -1,8 +1,10 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { LayoutGrid, Building2, Briefcase, BarChart3, MessageSquare, Settings, Bell, Plus, Menu, X, BookOpen, Inbox } from "lucide-react";
+import { LayoutGrid, Building2, Briefcase, BarChart3, MessageSquare, Settings, Bell, Plus, Menu, X, BookOpen, Inbox, LogOut } from "lucide-react";
 import { useState, type ReactNode } from "react";
+import { toast } from "sonner";
 import { NewInstructionDialog } from "@/components/instructions/NewInstructionDialog";
 import { useUserSettings } from "@/hooks/use-user-settings";
+import { useAuth } from "@/hooks/use-auth";
 
 const NAV = [
   { label: "ダッシュボード", to: "/", icon: LayoutGrid, exact: true },
@@ -67,19 +69,35 @@ function Brand() {
 
 function SidebarUser() {
   const { settings, loading } = useUserSettings();
-  const name = settings.display_name || "ゲスト";
+  const { user, signOut } = useAuth();
+  const name = settings.display_name || user?.email?.split("@")[0] || "ゲスト";
   const initials = name.trim().slice(0, 2).toUpperCase();
+  const onLogout = async () => {
+    await signOut();
+    toast.success("ログアウトしました");
+  };
   return (
     <div className="border-t border-slate-200 p-3">
-      <Link to="/settings" className="flex items-center gap-2.5 rounded-md px-2 py-2 hover:bg-slate-50">
-        <div className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-slate-50 font-mono text-[11px] font-medium text-slate-700">
-          {initials}
-        </div>
-        <div className="min-w-0 flex-1">
-          <p className="truncate text-[13px] font-medium text-slate-900">{loading ? "..." : name}</p>
-          <p className="truncate text-[11px] text-slate-500">REALIFE Inc.</p>
-        </div>
-      </Link>
+      <div className="flex items-center gap-2">
+        <Link to="/settings" className="flex flex-1 items-center gap-2.5 rounded-md px-2 py-2 hover:bg-slate-50 min-w-0">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-slate-50 font-mono text-[11px] font-medium text-slate-700">
+            {initials}
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-[13px] font-medium text-slate-900">{loading ? "..." : name}</p>
+            <p className="truncate text-[11px] text-slate-500">{user?.email ?? "REALIFE Inc."}</p>
+          </div>
+        </Link>
+        <button
+          type="button"
+          onClick={onLogout}
+          aria-label="ログアウト"
+          title="ログアウト"
+          className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-500 hover:text-slate-900"
+        >
+          <LogOut className="h-3.5 w-3.5" />
+        </button>
+      </div>
     </div>
   );
 }

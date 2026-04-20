@@ -3,6 +3,8 @@ import { useEffect } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { migrateLocalInstructionsIfAny } from "@/lib/instructions";
 import { UserSettingsProvider } from "@/hooks/use-user-settings";
+import { AuthProvider } from "@/hooks/use-auth";
+import { AuthGate } from "@/components/auth/AuthGate";
 
 import appCss from "../styles.css?url";
 
@@ -79,9 +81,13 @@ function RootComponent() {
     });
   }, []);
   return (
-    <UserSettingsProvider>
-      <Outlet />
-      <Toaster richColors position="top-right" />
-    </UserSettingsProvider>
+    <AuthProvider>
+      <AuthGate>
+        <UserSettingsProvider>
+          <Outlet />
+          <Toaster richColors position="top-right" />
+        </UserSettingsProvider>
+      </AuthGate>
+    </AuthProvider>
   );
 }
