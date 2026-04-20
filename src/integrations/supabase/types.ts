@@ -256,6 +256,33 @@ export type Database = {
         }
         Relationships: []
       }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          department: string
+          display_name: string
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          department?: string
+          display_name?: string
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          department?: string
+          display_name?: string
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_settings: {
         Row: {
           created_at: string
@@ -265,6 +292,7 @@ export type Database = {
           notifications: boolean
           theme: string
           updated_at: string
+          user_id: string | null
         }
         Insert: {
           created_at?: string
@@ -274,6 +302,7 @@ export type Database = {
           notifications?: boolean
           theme?: string
           updated_at?: string
+          user_id?: string | null
         }
         Update: {
           created_at?: string
@@ -283,6 +312,7 @@ export type Database = {
           notifications?: boolean
           theme?: string
           updated_at?: string
+          user_id?: string | null
         }
         Relationships: []
       }
