@@ -141,7 +141,7 @@ function DepartmentDetail() {
               {[
                 { l: d.kpiLabel, v: d.kpiValue },
                 { l: "タスク", v: String(d.tasks) },
-                { l: "案件金額", v: "¥12.5M" },
+                { l: "案件金額", v: "¥12,500,000" },
                 { l: "指示履歴", v: String(instructions.length) },
               ].map((m) => (
                 <div key={m.l}>

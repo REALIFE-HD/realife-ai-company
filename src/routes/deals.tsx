@@ -114,7 +114,7 @@ function DealsPage() {
                         {d.stage}
                       </span>
                     </td>
-                    <td className="whitespace-nowrap px-4 py-3 text-right font-mono text-slate-900">{formatAmount(d.amount)}</td>
+                    <td className="whitespace-nowrap px-4 py-3 text-right text-slate-900"><Money amount={d.amount} /></td>
                     <td className="whitespace-nowrap px-4 py-3 text-right font-mono text-slate-700">{d.probability}%</td>
                     <td className="whitespace-nowrap px-4 py-3 text-xs text-slate-700">{d.owner}</td>
                     <td className="px-4 py-3 text-xs text-slate-700">{d.next_action}</td>
