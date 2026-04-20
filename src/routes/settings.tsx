@@ -64,6 +64,7 @@ function SettingsPage() {
               <Input
                 id="display_name"
                 value={settings.display_name}
+                disabled={loading}
                 onChange={(e) => setSettings({ ...settings, display_name: e.target.value })}
                 onBlur={() => save(settings)}
               />
@@ -78,6 +79,7 @@ function SettingsPage() {
               <Switch
                 id="notifications"
                 checked={settings.notifications}
+                disabled={loading}
                 onCheckedChange={(v) => save({ ...settings, notifications: v })}
               />
             </div>
