@@ -75,7 +75,7 @@ function ReportsPage() {
           <p className="mt-1 text-[13px] text-slate-500">単位:百万円(¥M)・件数</p>
           <div className="mt-6 h-72 w-full">
             <ClientOnly fallback={<div className="h-full w-full animate-pulse rounded-md bg-slate-50" />}>
-              <ResponsiveContainer>
+              <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={MONTHLY} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
                   <XAxis dataKey="month" stroke="#64748b" fontSize={12} />
@@ -96,7 +96,7 @@ function ReportsPage() {
           <p className="mt-1 text-[13px] text-slate-500">単位:%</p>
           <div className="mt-6 h-96 w-full">
             <ClientOnly fallback={<div className="h-full w-full animate-pulse rounded-md bg-slate-50" />}>
-              <ResponsiveContainer>
+              <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={DEPT_PROGRESS} margin={{ top: 10, right: 20, left: 0, bottom: 60 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
                   <XAxis dataKey="name" stroke="#64748b" fontSize={11} angle={-30} textAnchor="end" interval={0} height={70} />
