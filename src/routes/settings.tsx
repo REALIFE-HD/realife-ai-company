@@ -7,32 +7,12 @@ import { Footer } from "@/components/layout/Footer";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { DEFAULT_AUTHOR } from "@/lib/instructions";
-
-const SETTINGS_KEY = "realife_settings";
-
-type Settings = {
-  display_name: string;
-  notifications: boolean;
-  theme: "light";
-};
-
-const DEFAULTS: Settings = {
-  display_name: DEFAULT_AUTHOR,
-  notifications: true,
-  theme: "light",
-};
-
-function loadSettings(): Settings {
-  if (typeof window === "undefined") return DEFAULTS;
-  try {
-    const raw = window.localStorage.getItem(SETTINGS_KEY);
-    if (!raw) return DEFAULTS;
-    return { ...DEFAULTS, ...JSON.parse(raw) };
-  } catch {
-    return DEFAULTS;
-  }
-}
+import {
+  DEFAULT_SETTINGS,
+  loadUserSettings,
+  saveUserSettings,
+  type UserSettings,
+} from "@/lib/settings";
 
 export const Route = createFileRoute("/settings")({
   head: () => ({
@@ -47,19 +27,23 @@ export const Route = createFileRoute("/settings")({
 });
 
 function SettingsPage() {
-  const [settings, setSettings] = useState<Settings>(DEFAULTS);
+  const [settings, setSettings] = useState<UserSettings>(DEFAULT_SETTINGS);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setSettings(loadSettings());
+    loadUserSettings()
+      .then(setSettings)
+      .catch(() => toast.error("設定の読み込みに失敗しました"))
+      .finally(() => setLoading(false));
   }, []);
 
-  const save = (next: Settings) => {
+  const save = async (next: UserSettings) => {
+    setSettings(next);
     try {
-      window.localStorage.setItem(SETTINGS_KEY, JSON.stringify(next));
-      setSettings(next);
+      await saveUserSettings(next);
       toast.success("設定を保存しました");
     } catch {
-      toast.error("エラーが発生しました");
+      toast.error("保存に失敗しました");
     }
   };
 
