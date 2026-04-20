@@ -210,15 +210,18 @@ function InboxPage() {
         </div>
 
         {/* KPI */}
-        <section className="grid grid-cols-3 gap-3">
+        <section className="grid grid-cols-3 gap-2.5">
           {[
-            { l: "総数", v: stats.total, accent: "text-slate-950" },
-            { l: "未割当", v: stats.unassigned, accent: "text-amber-700" },
-            { l: "割当済", v: stats.assigned, accent: "text-teal-700" },
+            { l: "総数", v: stats.total, bar: "before:bg-slate-900", text: "text-slate-950" },
+            { l: "未割当", v: stats.unassigned, bar: "before:bg-amber-500", text: "text-amber-900" },
+            { l: "割当済", v: stats.assigned, bar: "before:bg-teal-600", text: "text-teal-900" },
           ].map((s) => (
-            <div key={s.l} className="rounded-xl border border-slate-200/80 bg-white px-4 py-3.5 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-              <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-slate-500">{s.l}</p>
-              <p className={`num mt-1.5 text-[1.625rem] font-semibold leading-none tracking-tight ${s.accent}`}>{s.v}</p>
+            <div
+              key={s.l}
+              className={`relative overflow-hidden rounded-lg border-2 border-slate-900/90 bg-white px-3.5 py-3 before:absolute before:inset-y-0 before:left-0 before:w-1 ${s.bar}`}
+            >
+              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-700">{s.l}</p>
+              <p className={`num mt-1 text-[1.5rem] font-extrabold leading-none tracking-tight ${s.text}`}>{s.v}</p>
             </div>
           ))}
         </section>
@@ -277,9 +280,9 @@ function InboxPage() {
         </div>
 
         {/* 一覧 + 詳細 */}
-        <section className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-          <div className="rounded-2xl border border-slate-200 bg-white lg:col-span-1">
-            <div className="border-b border-slate-100 px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">
+        <section className="grid grid-cols-1 gap-3 lg:grid-cols-3">
+          <div className="overflow-hidden rounded-lg border-2 border-slate-900/90 bg-white lg:col-span-1">
+            <div className="border-b-2 border-slate-900/90 bg-slate-900 px-3 py-2 text-[10px] font-bold uppercase tracking-[0.16em] text-white">
               <InboxIcon className="mr-1.5 inline h-3.5 w-3.5" />
               {filtered.length} 件
             </div>
@@ -321,7 +324,7 @@ function InboxPage() {
           </div>
 
           {/* 詳細 */}
-          <div className="rounded-2xl border border-slate-200 bg-white lg:col-span-2">
+          <div className="rounded-lg border-2 border-slate-900/90 bg-white lg:col-span-2">
             {!selected ? (
               <div className="flex h-full min-h-[320px] items-center justify-center text-sm text-slate-500">
                 左から選択してください
