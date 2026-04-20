@@ -66,11 +66,14 @@ export function NewInstructionDialog({
     }
   }, [open, fixedDepartmentCode]);
 
-  const submit = (e: React.FormEvent) => {
+  const [submitting, setSubmitting] = useState(false);
+
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim() || !content.trim()) return;
+    if (!title.trim() || !content.trim() || submitting) return;
+    setSubmitting(true);
     try {
-      const created = addInstruction({
+      const created = await addInstruction({
         department_code: department,
         title,
         content,
@@ -81,6 +84,8 @@ export function NewInstructionDialog({
       setOpen(false);
     } catch {
       toast.error("エラーが発生しました");
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -181,9 +186,10 @@ export function NewInstructionDialog({
             </button>
             <button
               type="submit"
-              className="rounded-md bg-teal-600 px-4 py-2 text-sm font-medium text-white hover:bg-teal-700"
+              disabled={submitting}
+              className="rounded-md bg-teal-600 px-4 py-2 text-sm font-medium text-white hover:bg-teal-700 disabled:opacity-60"
             >
-              指示を保存
+              {submitting ? "保存中..." : "指示を保存"}
             </button>
           </DialogFooter>
         </form>
