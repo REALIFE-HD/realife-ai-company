@@ -8,6 +8,7 @@
 
 @theme {
   --font-sans: "Inter", "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", "Yu Gothic", "Meiryo", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Inter", "Zen Kaku Gothic New", "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Yu Gothic", ui-sans-serif, sans-serif;
   --font-serif: "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", ui-serif, Georgia, serif;
   --font-mono: "JetBrains Mono", "DM Mono", ui-monospace, SFMono-Regular, monospace;
 }
