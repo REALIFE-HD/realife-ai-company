@@ -19,7 +19,10 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
       <ul className="flex flex-col gap-0.5">
         {NAV.map((item) => {
           const Icon = item.icon;
-          const active = "exact" in item && item.exact ? pathname === "/" && !hash : false;
+          const active =
+            "exact" in item && item.exact
+              ? pathname === "/" && !hash
+              : !("hash" in item) && (pathname === item.to || pathname.startsWith(`${item.to}/`));
           return (
             <li key={item.label}>
               <Link
