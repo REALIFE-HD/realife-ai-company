@@ -160,6 +160,14 @@
     letter-spacing: 0.005em;
   }
 
+  h1, h2, h3, h4, h5, h6,
+  .font-display {
+    font-family: var(--font-display);
+    font-feature-settings: "palt", "kern";
+    letter-spacing: -0.015em;
+    font-weight: 700;
+  }
+
   .font-serif {
     font-family: var(--font-serif);
     font-feature-settings: "palt";
