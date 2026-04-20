@@ -1,5 +1,5 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { LayoutGrid, Building2, Briefcase, BarChart3, MessageSquare, Settings, Bell, Plus, Menu, X } from "lucide-react";
+import { LayoutGrid, Building2, Briefcase, BarChart3, MessageSquare, Settings, Bell, Plus, Menu, X, BookOpen } from "lucide-react";
 import { useState, type ReactNode } from "react";
 
 const NAV = [
@@ -8,6 +8,7 @@ const NAV = [
   { label: "案件", to: "/", icon: Briefcase, hash: "deals" },
   { label: "レポート", to: "/", icon: BarChart3, hash: "reports" },
   { label: "AIチャット", to: "/", icon: MessageSquare, hash: "ai" },
+  { label: "ドキュメント", to: "/docs", icon: BookOpen },
   { label: "設定", to: "/", icon: Settings, hash: "settings" },
 ] as const;
 
