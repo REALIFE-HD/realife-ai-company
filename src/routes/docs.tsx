@@ -1,7 +1,38 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, ArrowRight, BookOpen, Compass, LayoutGrid, MessageSquare, Workflow } from "lucide-react";
+import { useEffect, useState } from "react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  BookOpen,
+  Check,
+  Compass,
+  LayoutGrid,
+  MessageSquare,
+  Pencil,
+  Plus,
+  Trash2,
+  Workflow,
+  X,
+  type LucideIcon,
+} from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
 import { Footer } from "@/components/layout/Footer";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
+import {
+  addDocFaq,
+  addDocSection,
+  deleteDocFaq,
+  deleteDocSection,
+  loadDocFaqs,
+  loadDocSections,
+  updateDocFaq,
+  updateDocSection,
+  type DocFaq,
+  type DocSection,
+} from "@/lib/docs";
 
 export const Route = createFileRoute("/docs")({
   head: () => ({
@@ -22,71 +53,76 @@ export const Route = createFileRoute("/docs")({
   component: DocsPage,
 });
 
-const SECTIONS = [
-  {
-    id: "getting-started",
-    icon: Compass,
-    title: "はじめに",
-    lead: "REALIFE Operations は、合同会社REALIFEの12仮想部門を一望し、業務指示を横断的に動かすためのオペレーションシステムです。",
-    body: [
-      "ダッシュボード(/)では今月の成約・進行中案件・見積・稼働メンバーなど主要KPIを確認できます。",
-      "部門一覧(/departments)から各部門の詳細ページへ移動し、KPI・タスク・案件・指示履歴にアクセスします。",
-    ],
-  },
-  {
-    id: "dashboard",
-    icon: LayoutGrid,
-    title: "ダッシュボードの読み方",
-    lead: "上部のKPIカードと部門ステータス分布で、組織全体の状態を瞬時に把握します。",
-    body: [
-      "KPIカードは前月比トレンド付きで、進捗の良し悪しをひと目で確認できます。",
-      "「部門ステータス分布」では稼働中・構築中・標準運用の構成比をグラフで表示します。",
-      "「すべての部門を、一望する。」セクションから、各部門カードへ直接遷移できます。",
-    ],
-  },
-  {
-    id: "departments",
-    icon: Workflow,
-    title: "部門と指示出し",
-    lead: "各部門詳細ページで、KPI・タスク・案件・指示履歴の4タブを切り替えて状況を確認します。",
-    body: [
-      "右上の「新規指示」ボタンから、タイトルと内容を入力して指示を発行できます。",
-      "発行した指示は「指示履歴」タブに即時反映され、From フィールドで担当者を確認できます。",
-      "関連部門カードから、横断的に他部門の状況へジャンプできます。",
-    ],
-  },
-  {
-    id: "ai-chat",
-    icon: MessageSquare,
-    title: "AIチャット連携",
-    lead: "サイドバーの「AIチャット」から、Coworkプロジェクトと連携した業務支援チャットを呼び出せます。",
-    body: [
-      "見積・発注・採用・経理など、各部門の業務を自然言語で指示できます。",
-      "チャットからの指示は対象部門の指示履歴へ自動的に記録されます(今後対応予定)。",
-    ],
-  },
-];
+const ICON_MAP: Record<string, LucideIcon> = {
+  Compass,
+  LayoutGrid,
+  Workflow,
+  MessageSquare,
+  BookOpen,
+};
 
-const FAQ = [
-  {
-    q: "部門の追加・編集はどこで行えますか?",
-    a: "現在のバージョンでは部門マスタは src/data/departments.ts に定義されています。今後の管理画面リリースで、UI からの編集に対応予定です。",
-  },
-  {
-    q: "指示は永続化されますか?",
-    a: "現状はブラウザセッション内のみ保持されます。永続化が必要な場合は Lovable Cloud の有効化をご相談ください。",
-  },
-  {
-    q: "モバイルから操作できますか?",
-    a: "はい。サイドバーは左上のメニューアイコンからドロワーで開閉でき、すべての画面がレスポンシブ対応しています。",
-  },
-];
+function getIcon(name: string): LucideIcon {
+  return ICON_MAP[name] ?? BookOpen;
+}
 
 function DocsPage() {
+  const [sections, setSections] = useState<DocSection[]>([]);
+  const [faqs, setFaqs] = useState<DocFaq[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [editMode, setEditMode] = useState(false);
+
+  async function refresh() {
+    try {
+      const [s, f] = await Promise.all([loadDocSections(), loadDocFaqs()]);
+      setSections(s);
+      setFaqs(f);
+    } catch (e) {
+      toast.error("ドキュメントの読み込みに失敗しました");
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    refresh();
+  }, []);
+
+  async function handleAddSection() {
+    const slug = `section-${Date.now()}`;
+    try {
+      await addDocSection({
+        slug,
+        title: "新しいセクション",
+        lead: "概要を入力してください。",
+        body: ["箇条書きを入力してください。"],
+        sort_order: (sections[sections.length - 1]?.sort_order ?? 0) + 1,
+      });
+      toast.success("セクションを追加しました");
+      refresh();
+    } catch {
+      toast.error("追加に失敗しました");
+    }
+  }
+
+  async function handleAddFaq() {
+    try {
+      await addDocFaq({
+        question: "新しい質問",
+        answer: "回答を入力してください。",
+        sort_order: (faqs[faqs.length - 1]?.sort_order ?? 0) + 1,
+      });
+      toast.success("FAQを追加しました");
+      refresh();
+    } catch {
+      toast.error("追加に失敗しました");
+    }
+  }
+
   return (
     <AppShell title="ドキュメント" subtitle="使い方ガイドと運用ベストプラクティス">
       <div className="space-y-8 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-        <div>
+        <div className="flex items-center justify-between">
           <Link
             to="/"
             className="inline-flex items-center gap-1.5 text-[12px] font-medium text-slate-500 transition-colors hover:text-slate-900"
@@ -94,6 +130,21 @@ function DocsPage() {
             <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
             ダッシュボードへ戻る
           </Link>
+          <Button
+            variant={editMode ? "default" : "outline"}
+            size="sm"
+            onClick={() => setEditMode((v) => !v)}
+          >
+            {editMode ? (
+              <>
+                <Check className="mr-1.5 h-3.5 w-3.5" /> 編集を終了
+              </>
+            ) : (
+              <>
+                <Pencil className="mr-1.5 h-3.5 w-3.5" /> 編集モード
+              </>
+            )}
+          </Button>
         </div>
 
         {/* Hero */}
@@ -113,83 +164,91 @@ function DocsPage() {
           </p>
 
           {/* TOC */}
-          <nav aria-label="目次" className="mt-6 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
-            {SECTIONS.map((s) => {
-              const Icon = s.icon;
-              return (
-                <a
-                  key={s.id}
-                  href={`#${s.id}`}
-                  className="group flex items-center gap-2.5 rounded-md border border-slate-200 bg-slate-50/60 px-3 py-2.5 text-[13px] font-medium text-slate-700 transition-colors hover:border-teal-300 hover:bg-white hover:text-teal-700"
-                >
-                  <Icon className="h-4 w-4 text-slate-400 group-hover:text-teal-600" aria-hidden="true" />
-                  {s.title}
-                </a>
-              );
-            })}
-          </nav>
+          {!loading && sections.length > 0 && (
+            <nav
+              aria-label="目次"
+              className="mt-6 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4"
+            >
+              {sections.map((s) => {
+                const Icon = getIcon(s.icon);
+                return (
+                  <a
+                    key={s.id}
+                    href={`#${s.slug}`}
+                    className="group flex items-center gap-2.5 rounded-md border border-slate-200 bg-slate-50/60 px-3 py-2.5 text-[13px] font-medium text-slate-700 transition-colors hover:border-teal-300 hover:bg-white hover:text-teal-700"
+                  >
+                    <Icon
+                      className="h-4 w-4 text-slate-400 group-hover:text-teal-600"
+                      aria-hidden="true"
+                    />
+                    {s.title}
+                  </a>
+                );
+              })}
+            </nav>
+          )}
         </section>
 
         {/* Sections */}
-        {SECTIONS.map((s) => {
-          const Icon = s.icon;
-          return (
+        {loading ? (
+          <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-sm text-slate-500">
+            読み込み中...
+          </div>
+        ) : (
+          <>
+            {sections.map((s) => (
+              <SectionCard
+                key={s.id}
+                section={s}
+                editMode={editMode}
+                onChanged={refresh}
+              />
+            ))}
+
+            {editMode && (
+              <button
+                onClick={handleAddSection}
+                className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-slate-300 bg-white/40 p-6 text-sm font-medium text-slate-500 transition-colors hover:border-teal-400 hover:text-teal-700"
+              >
+                <Plus className="h-4 w-4" />
+                セクションを追加
+              </button>
+            )}
+
+            {/* FAQ */}
             <section
-              key={s.id}
-              id={s.id}
-              aria-labelledby={`${s.id}-heading`}
+              id="faq"
+              aria-labelledby="faq-heading"
               className="scroll-mt-24 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8"
             >
               <div className="flex items-center gap-3">
                 <span className="flex h-9 w-9 items-center justify-center rounded-md bg-teal-50 text-teal-700">
-                  <Icon className="h-4.5 w-4.5" aria-hidden="true" />
+                  <BookOpen className="h-4.5 w-4.5" aria-hidden="true" />
                 </span>
                 <h3
-                  id={`${s.id}-heading`}
+                  id="faq-heading"
                   className="font-serif text-xl font-semibold tracking-tight text-slate-900 sm:text-[1.5rem]"
                 >
-                  {s.title}
+                  よくある質問
                 </h3>
               </div>
-              <p className="mt-4 max-w-3xl text-[14px] leading-relaxed text-slate-700">{s.lead}</p>
-              <ul className="mt-4 space-y-2 text-[13px] leading-relaxed text-slate-600">
-                {s.body.map((line, i) => (
-                  <li key={i} className="flex gap-2.5">
-                    <span aria-hidden="true" className="mt-2 h-1 w-1 flex-shrink-0 rounded-full bg-teal-500" />
-                    <span>{line}</span>
-                  </li>
+              <dl className="mt-5 divide-y divide-slate-200">
+                {faqs.map((item) => (
+                  <FaqRow key={item.id} faq={item} editMode={editMode} onChanged={refresh} />
                 ))}
-              </ul>
+              </dl>
+              {editMode && (
+                <button
+                  onClick={handleAddFaq}
+                  className="mt-4 flex w-full items-center justify-center gap-2 rounded-md border-2 border-dashed border-slate-300 p-3 text-sm font-medium text-slate-500 transition-colors hover:border-teal-400 hover:text-teal-700"
+                >
+                  <Plus className="h-4 w-4" />
+                  FAQを追加
+                </button>
+              )}
             </section>
-          );
-        })}
-
-        {/* FAQ */}
-        <section
-          id="faq"
-          aria-labelledby="faq-heading"
-          className="scroll-mt-24 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8"
-        >
-          <div className="flex items-center gap-3">
-            <span className="flex h-9 w-9 items-center justify-center rounded-md bg-teal-50 text-teal-700">
-              <BookOpen className="h-4.5 w-4.5" aria-hidden="true" />
-            </span>
-            <h3
-              id="faq-heading"
-              className="font-serif text-xl font-semibold tracking-tight text-slate-900 sm:text-[1.5rem]"
-            >
-              よくある質問
-            </h3>
-          </div>
-          <dl className="mt-5 divide-y divide-slate-200">
-            {FAQ.map((item, i) => (
-              <div key={i} className="py-4">
-                <dt className="text-[14px] font-medium text-slate-900">Q. {item.q}</dt>
-                <dd className="mt-2 text-[13px] leading-relaxed text-slate-600">A. {item.a}</dd>
-              </div>
-            ))}
-          </dl>
-        </section>
+          </>
+        )}
 
         {/* CTA back */}
         <section className="rounded-2xl border border-slate-200 bg-slate-50/60 p-6 sm:p-8">
@@ -214,5 +273,261 @@ function DocsPage() {
       </div>
       <Footer />
     </AppShell>
+  );
+}
+
+function SectionCard({
+  section,
+  editMode,
+  onChanged,
+}: {
+  section: DocSection;
+  editMode: boolean;
+  onChanged: () => void;
+}) {
+  const Icon = getIcon(section.icon);
+  const [editing, setEditing] = useState(false);
+  const [title, setTitle] = useState(section.title);
+  const [lead, setLead] = useState(section.lead);
+  const [bodyText, setBodyText] = useState(section.body.join("\n"));
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    setTitle(section.title);
+    setLead(section.lead);
+    setBodyText(section.body.join("\n"));
+  }, [section]);
+
+  async function save() {
+    setSaving(true);
+    try {
+      await updateDocSection(section.id, {
+        title: title.trim() || section.title,
+        lead,
+        body: bodyText.split("\n").map((l) => l.trim()).filter(Boolean),
+      });
+      toast.success("保存しました");
+      setEditing(false);
+      onChanged();
+    } catch {
+      toast.error("保存に失敗しました");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function remove() {
+    if (!confirm(`「${section.title}」を削除しますか?`)) return;
+    try {
+      await deleteDocSection(section.id);
+      toast.success("削除しました");
+      onChanged();
+    } catch {
+      toast.error("削除に失敗しました");
+    }
+  }
+
+  return (
+    <section
+      id={section.slug}
+      aria-labelledby={`${section.slug}-heading`}
+      className="scroll-mt-24 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8"
+    >
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <span className="flex h-9 w-9 items-center justify-center rounded-md bg-teal-50 text-teal-700">
+            <Icon className="h-4.5 w-4.5" aria-hidden="true" />
+          </span>
+          {editing ? (
+            <Input
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="font-serif text-xl font-semibold"
+            />
+          ) : (
+            <h3
+              id={`${section.slug}-heading`}
+              className="font-serif text-xl font-semibold tracking-tight text-slate-900 sm:text-[1.5rem]"
+            >
+              {section.title}
+            </h3>
+          )}
+        </div>
+        {editMode && (
+          <div className="flex shrink-0 items-center gap-1">
+            {editing ? (
+              <>
+                <Button size="sm" onClick={save} disabled={saving}>
+                  <Check className="mr-1 h-3.5 w-3.5" />
+                  保存
+                </Button>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => {
+                    setEditing(false);
+                    setTitle(section.title);
+                    setLead(section.lead);
+                    setBodyText(section.body.join("\n"));
+                  }}
+                >
+                  <X className="h-3.5 w-3.5" />
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button size="sm" variant="ghost" onClick={() => setEditing(true)}>
+                  <Pencil className="h-3.5 w-3.5" />
+                </Button>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={remove}
+                  className="text-rose-600 hover:bg-rose-50 hover:text-rose-700"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                </Button>
+              </>
+            )}
+          </div>
+        )}
+      </div>
+
+      {editing ? (
+        <div className="mt-4 space-y-3">
+          <div>
+            <label className="text-xs font-medium text-slate-500">リード文</label>
+            <Textarea value={lead} onChange={(e) => setLead(e.target.value)} rows={2} />
+          </div>
+          <div>
+            <label className="text-xs font-medium text-slate-500">
+              本文(1行=1箇条書き)
+            </label>
+            <Textarea
+              value={bodyText}
+              onChange={(e) => setBodyText(e.target.value)}
+              rows={5}
+            />
+          </div>
+        </div>
+      ) : (
+        <>
+          <p className="mt-4 max-w-3xl text-[14px] leading-relaxed text-slate-700">
+            {section.lead}
+          </p>
+          <ul className="mt-4 space-y-2 text-[13px] leading-relaxed text-slate-600">
+            {section.body.map((line, i) => (
+              <li key={i} className="flex gap-2.5">
+                <span
+                  aria-hidden="true"
+                  className="mt-2 h-1 w-1 flex-shrink-0 rounded-full bg-teal-500"
+                />
+                <span>{line}</span>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+    </section>
+  );
+}
+
+function FaqRow({
+  faq,
+  editMode,
+  onChanged,
+}: {
+  faq: DocFaq;
+  editMode: boolean;
+  onChanged: () => void;
+}) {
+  const [editing, setEditing] = useState(false);
+  const [q, setQ] = useState(faq.question);
+  const [a, setA] = useState(faq.answer);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    setQ(faq.question);
+    setA(faq.answer);
+  }, [faq]);
+
+  async function save() {
+    setSaving(true);
+    try {
+      await updateDocFaq(faq.id, { question: q.trim() || faq.question, answer: a });
+      toast.success("保存しました");
+      setEditing(false);
+      onChanged();
+    } catch {
+      toast.error("保存に失敗しました");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function remove() {
+    if (!confirm("このFAQを削除しますか?")) return;
+    try {
+      await deleteDocFaq(faq.id);
+      toast.success("削除しました");
+      onChanged();
+    } catch {
+      toast.error("削除に失敗しました");
+    }
+  }
+
+  return (
+    <div className="py-4">
+      <div className="flex items-start justify-between gap-3">
+        {editing ? (
+          <div className="flex-1 space-y-2">
+            <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="質問" />
+            <Textarea value={a} onChange={(e) => setA(e.target.value)} rows={3} placeholder="回答" />
+          </div>
+        ) : (
+          <div className="flex-1">
+            <dt className="text-[14px] font-medium text-slate-900">Q. {faq.question}</dt>
+            <dd className="mt-2 text-[13px] leading-relaxed text-slate-600">A. {faq.answer}</dd>
+          </div>
+        )}
+        {editMode && (
+          <div className="flex shrink-0 items-center gap-1">
+            {editing ? (
+              <>
+                <Button size="sm" onClick={save} disabled={saving}>
+                  <Check className="mr-1 h-3.5 w-3.5" />
+                  保存
+                </Button>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => {
+                    setEditing(false);
+                    setQ(faq.question);
+                    setA(faq.answer);
+                  }}
+                >
+                  <X className="h-3.5 w-3.5" />
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button size="sm" variant="ghost" onClick={() => setEditing(true)}>
+                  <Pencil className="h-3.5 w-3.5" />
+                </Button>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={remove}
+                  className="text-rose-600 hover:bg-rose-50 hover:text-rose-700"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                </Button>
+              </>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
