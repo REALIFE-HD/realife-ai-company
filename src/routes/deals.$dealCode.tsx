@@ -19,7 +19,7 @@ import {
   type DealActivityKind,
   type DealStage,
 } from "@/lib/deals";
-import { listInstructionsByDept, type Instruction } from "@/lib/instructions";
+import { getInstructionsForDepartment, type Instruction } from "@/lib/instructions";
 
 export const Route = createFileRoute("/deals/$dealCode")({
   head: ({ params }) => ({
@@ -90,11 +90,13 @@ function DealDetailPage() {
 
         const [acts, instrs] = await Promise.all([
           listActivities(d.id),
-          listInstructionsByDept("02"),
+          getInstructionsForDepartment("02"),
         ]);
         if (!mounted) return;
         setActivities(acts);
-        setInstructions(instrs.filter((i) => i.title.includes(d.code) || i.content.includes(d.code)));
+        setInstructions(
+          instrs.filter((i: Instruction) => i.title.includes(d.code) || i.content.includes(d.code)),
+        );
       } catch (e) {
         console.error(e);
         toast.error("読み込みに失敗しました");
