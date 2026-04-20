@@ -175,10 +175,11 @@
   }
 
   .font-mono,
-  .tabular {
+  .tabular,
+  .num {
     font-family: "Inter", var(--font-mono);
-    font-variant-numeric: tabular-nums;
-    font-feature-settings: "tnum", "cv11";
+    font-variant-numeric: tabular-nums slashed-zero;
+    font-feature-settings: "tnum", "cv11", "ss01", "zero";
     letter-spacing: -0.01em;
   }
 
