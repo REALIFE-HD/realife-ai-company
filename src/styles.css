@@ -2,14 +2,17 @@
 @source "../src";
 @import "tw-animate-css";
 @plugin "@tailwindcss/typography";
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;600;700&family=Noto+Serif+JP:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@500;700;900&family=JetBrains+Mono:wght@400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Noto+Sans+JP:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap");
 
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --font-sans: "Inter", "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", "Yu Gothic", "Meiryo", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Inter", "Zen Kaku Gothic New", "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Yu Gothic", ui-sans-serif, sans-serif;
-  --font-serif: "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", ui-serif, Georgia, serif;
+  /* 本文: 欧文 Inter + 和文 Noto Sans JP(SmartHR / Notion JP / freee などで定番のスタック) */
+  --font-sans: "Inter", "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", "Yu Gothic Medium", "Yu Gothic", "Meiryo", ui-sans-serif, system-ui, sans-serif;
+  /* 見出し: Plus Jakarta Sans(モダンSaaS定番) + Noto Sans JP Bold */
+  --font-display: "Plus Jakarta Sans", "Inter", "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Yu Gothic", ui-sans-serif, sans-serif;
+  /* 数値: Inter の tabular + slashed-zero を最優先 */
+  --font-numeric: "Inter", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", "DM Mono", ui-monospace, SFMono-Regular, monospace;
 }
 
@@ -156,36 +159,35 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-feature-settings: "palt", "kern";
-    letter-spacing: 0.005em;
+    /* palt: 和文プロポーショナル / kern: カーニング / tnum: 等幅数字 */
+    font-feature-settings: "palt", "kern", "tnum";
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.01em;
+    text-rendering: optimizeLegibility;
   }
 
   h1, h2, h3, h4, h5, h6,
   .font-display {
     font-family: var(--font-display);
-    font-feature-settings: "palt", "kern";
-    letter-spacing: -0.015em;
+    font-feature-settings: "palt", "kern", "ss01";
+    letter-spacing: -0.02em;
     font-weight: 700;
   }
 
-  .font-serif {
-    font-family: var(--font-serif);
-    font-feature-settings: "palt";
-    letter-spacing: -0.01em;
-  }
-
-  .font-mono,
+  /* 数値専用クラス: KPI / 金額 / 日付などに使用 */
+  .font-numeric,
   .tabular,
   .num {
-    font-family: "Inter", var(--font-mono);
+    font-family: var(--font-numeric);
     font-variant-numeric: tabular-nums slashed-zero;
-    font-feature-settings: "tnum", "cv11", "ss01", "zero";
-    letter-spacing: -0.01em;
+    font-feature-settings: "tnum", "zero", "ss01", "cv11";
+    letter-spacing: -0.015em;
+    font-feature-settings: "tnum" 1, "zero" 1;
   }
 
-  /* 数値要素は自動的にtabular-numsを適用 */
-  body {
-    font-variant-numeric: tabular-nums;
+  .font-mono {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums slashed-zero;
   }
 }
 
