@@ -6,11 +6,11 @@ import { NewInstructionDialog } from "@/components/instructions/NewInstructionDi
 const NAV = [
   { label: "ダッシュボード", to: "/", icon: LayoutGrid, exact: true },
   { label: "部門", to: "/departments", icon: Building2 },
-  { label: "案件", to: "/", icon: Briefcase, hash: "deals" },
-  { label: "レポート", to: "/", icon: BarChart3, hash: "reports" },
-  { label: "AIチャット", to: "/", icon: MessageSquare, hash: "ai" },
+  { label: "案件", to: "/deals", icon: Briefcase },
+  { label: "レポート", to: "/reports", icon: BarChart3 },
+  { label: "AIチャット", to: "/ai", icon: MessageSquare },
   { label: "ドキュメント", to: "/docs", icon: BookOpen },
-  { label: "設定", to: "/", icon: Settings, hash: "settings" },
+  { label: "設定", to: "/settings", icon: Settings },
 ] as const;
 
 function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
