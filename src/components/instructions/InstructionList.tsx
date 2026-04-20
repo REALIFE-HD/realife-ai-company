@@ -34,9 +34,9 @@ export function InstructionList({ instructions, onChange }: Props) {
     });
   };
 
-  const changeStatus = (id: string, status: InstructionStatus) => {
+  const changeStatus = async (id: string, status: InstructionStatus) => {
     try {
-      updateInstructionStatus(id, status);
+      await updateInstructionStatus(id, status);
       toast.success("ステータスを更新しました");
       onChange?.();
     } catch {

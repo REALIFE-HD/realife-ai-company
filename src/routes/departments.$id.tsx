@@ -4,7 +4,6 @@ import { ArrowLeft, ArrowRight, Plus } from "lucide-react";
 import {
   DEPARTMENTS,
   DUMMY_DEALS,
-  DUMMY_INSTRUCTIONS,
   DUMMY_TASKS,
   getDepartment,
   type Department,
@@ -17,9 +16,7 @@ import { NewInstructionDialog } from "@/components/instructions/NewInstructionDi
 import { InstructionList } from "@/components/instructions/InstructionList";
 import {
   getInstructionsForDepartment,
-  loadInstructions,
-  saveInstructions,
-  INSTRUCTION_STORAGE_KEY,
+  subscribeToInstructions,
   type Instruction,
 } from "@/lib/instructions";
 
@@ -77,37 +74,17 @@ function DepartmentDetail() {
   const d = department as Department;
   const [instructions, setInstructions] = useState<Instruction[]>([]);
 
-  // Seed dummy instructions for this department on first visit (only if storage is empty for this dept)
-  useEffect(() => {
-    const existing = loadInstructions();
-    const hasAny = existing.some(
-      (i) => i.department_code === d.id || i.department_code === "all",
-    );
-    if (!hasAny && existing.length === 0) {
-      const seeded: Instruction[] = DUMMY_INSTRUCTIONS.map((s, idx) => ({
-        id: `seed_${d.id}_${idx}`,
-        department_code: d.id,
-        title: s.title,
-        content: s.body,
-        created_by: s.from,
-        created_at: new Date(`${s.date}T09:00:00`).toISOString(),
-        status: "open",
-      }));
-      saveInstructions(seeded);
-    }
-    setInstructions(getInstructionsForDepartment(d.id));
-  }, [d.id]);
+  const refresh = () => {
+    getInstructionsForDepartment(d.id)
+      .then(setInstructions)
+      .catch(() => setInstructions([]));
+  };
 
-  // Refresh from storage (after dialog save or status change)
-  const refresh = () => setInstructions(getInstructionsForDepartment(d.id));
-
-  // Cross-tab sync
+  // Initial load + realtime sync across devices
   useEffect(() => {
-    const handler = (e: StorageEvent) => {
-      if (e.key === INSTRUCTION_STORAGE_KEY) refresh();
-    };
-    window.addEventListener("storage", handler);
-    return () => window.removeEventListener("storage", handler);
+    refresh();
+    const unsub = subscribeToInstructions(refresh);
+    return () => unsub();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [d.id]);
 
