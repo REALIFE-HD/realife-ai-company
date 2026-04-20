@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import { ArrowLeft, ChevronRight } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
 import { Footer } from "@/components/layout/Footer";
-import { listDeals, formatAmount, STAGE_STYLE, type Deal } from "@/lib/deals";
+import { listDeals, STAGE_STYLE, type Deal } from "@/lib/deals";
+import { Money } from "@/components/ui/money";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/deals")({
@@ -113,7 +114,7 @@ function DealsPage() {
                         {d.stage}
                       </span>
                     </td>
-                    <td className="whitespace-nowrap px-4 py-3 text-right font-mono text-slate-900">{formatAmount(d.amount)}</td>
+                    <td className="whitespace-nowrap px-4 py-3 text-right text-slate-900"><Money amount={d.amount} /></td>
                     <td className="whitespace-nowrap px-4 py-3 text-right font-mono text-slate-700">{d.probability}%</td>
                     <td className="whitespace-nowrap px-4 py-3 text-xs text-slate-700">{d.owner}</td>
                     <td className="px-4 py-3 text-xs text-slate-700">{d.next_action}</td>
