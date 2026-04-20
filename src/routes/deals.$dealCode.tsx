@@ -157,7 +157,13 @@ function DealDetailPage() {
     e.preventDefault();
     if (!deal || !actContent.trim()) return;
     try {
-      await addActivity({ deal_id: deal.id, kind: actKind, content: actContent.trim() });
+      const settings = await loadUserSettings().catch(() => null);
+      await addActivity({
+        deal_id: deal.id,
+        kind: actKind,
+        content: actContent.trim(),
+        created_by: settings?.display_name?.trim() || undefined,
+      });
       setActContent("");
       toast.success("活動を記録しました");
     } catch (err) {
