@@ -21,6 +21,9 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
   const { pathname, hash } = useLocation();
   return (
     <nav className="px-3" aria-label="メインナビゲーション">
+      <p className="px-3 pb-2 pt-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+        Workspace
+      </p>
       <ul className="flex flex-col gap-0.5">
         {NAV.map((item) => {
           const Icon = item.icon;
@@ -33,13 +36,19 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
               <Link
                 to={item.to}
                 onClick={onNavigate}
-                className={`group flex items-center gap-2.5 rounded-md px-3 py-2 text-[13px] font-medium transition-colors ${
+                className={`group relative flex items-center gap-2.5 rounded-md px-3 py-2 text-[13px] font-medium transition-all ${
                   active
-                    ? "bg-teal-50 text-teal-700"
-                    : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                    ? "bg-teal-50/70 text-teal-800"
+                    : "text-slate-600 hover:bg-slate-100/70 hover:text-slate-900"
                 }`}
               >
-                <Icon className={`h-4 w-4 ${active ? "text-teal-600" : "text-slate-400 group-hover:text-slate-600"}`} aria-hidden="true" />
+                {active && (
+                  <span
+                    aria-hidden="true"
+                    className="absolute inset-y-1.5 left-0 w-[2px] rounded-r bg-teal-600"
+                  />
+                )}
+                <Icon className={`h-4 w-4 transition-colors ${active ? "text-teal-600" : "text-slate-400 group-hover:text-slate-600"}`} aria-hidden="true" />
                 {item.label}
               </Link>
             </li>
@@ -106,9 +115,9 @@ export function AppShell({ children, title, subtitle }: { children: ReactNode; t
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-slate-50/70">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50/80 via-white to-slate-50/40">
       {/* Mobile top bar */}
-      <div className="sticky top-0 z-40 flex h-14 items-center justify-between border-b border-slate-200 bg-white px-4 md:hidden">
+      <div className="sticky top-0 z-40 flex h-14 items-center justify-between border-b border-slate-200 bg-white/90 px-4 backdrop-blur md:hidden">
         <Brand />
         <button
           type="button"
@@ -133,7 +142,7 @@ export function AppShell({ children, title, subtitle }: { children: ReactNode; t
       )}
 
       {/* Desktop sidebar */}
-      <aside className="fixed inset-y-0 left-0 z-20 hidden w-60 border-r border-slate-200 bg-white md:flex md:flex-col">
+      <aside className="fixed inset-y-0 left-0 z-20 hidden w-60 border-r border-slate-200/80 bg-white/80 backdrop-blur md:flex md:flex-col">
         <Brand />
         <div className="mt-2 flex-1 overflow-y-auto pb-4">
           <SidebarNav />
@@ -144,11 +153,11 @@ export function AppShell({ children, title, subtitle }: { children: ReactNode; t
       {/* Main */}
       <div className="md:pl-60">
         {/* Page header (sticky) */}
-        <header className="sticky top-0 z-10 hidden border-b border-slate-200 bg-white/85 backdrop-blur md:block">
+        <header className="sticky top-0 z-10 hidden border-b border-slate-200/80 bg-white/75 backdrop-blur-xl md:block">
           <div className="flex h-16 items-center justify-between px-6 lg:px-8">
-            <div>
-              <h1 className="font-serif text-xl font-semibold tracking-tight text-slate-900">{title}</h1>
-              {subtitle && <p className="mt-1.5 text-[12.5px] leading-snug tracking-[0.01em] text-slate-500/90">{subtitle}</p>}
+            <div className="min-w-0">
+              <h1 className="truncate text-[18px] font-semibold tracking-tight text-slate-950">{title}</h1>
+              {subtitle && <p className="mt-1 truncate text-[12px] leading-snug tracking-[0.01em] text-slate-500">{subtitle}</p>}
             </div>
             <div className="flex items-center gap-2">
               <button

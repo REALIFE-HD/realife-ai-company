@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 
 export function CTASection() {
   return (
-    <section className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white">
+    <section className="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-gradient-to-br from-white via-white to-teal-50/30 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
       {/* Subtle accent rail */}
       <div
         aria-hidden="true"
@@ -12,7 +12,12 @@ export function CTASection() {
       {/* Soft top glow */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-24 right-0 h-48 w-48 rounded-full bg-teal-100/60 blur-3xl"
+        className="pointer-events-none absolute -top-24 right-0 h-56 w-56 rounded-full bg-teal-100/60 blur-3xl"
+      />
+      {/* Faint grid texture */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 opacity-[0.35] [background-image:linear-gradient(to_right,rgba(15,23,42,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.04)_1px,transparent_1px)] [background-size:32px_32px] [mask-image:radial-gradient(ellipse_60%_50%_at_80%_30%,black_30%,transparent_80%)]"
       />
 
       <div className="relative grid gap-7 p-7 sm:p-9 lg:grid-cols-12 lg:items-center lg:gap-10">
@@ -34,14 +39,14 @@ export function CTASection() {
         <div className="flex flex-col gap-2.5 lg:col-span-4 lg:items-stretch lg:justify-end">
           <Link
             to="/departments"
-            className="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-teal-600 px-4 text-[13px] font-medium text-white shadow-[0_8px_24px_-12px_rgba(13,148,136,0.6)] transition-colors hover:bg-teal-700 focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:outline-none"
+            className="group inline-flex h-11 items-center justify-center gap-2 rounded-md bg-teal-600 px-4 text-[13px] font-semibold text-white shadow-[0_8px_24px_-12px_rgba(13,148,136,0.6)] transition-all hover:bg-teal-700 hover:shadow-[0_12px_28px_-12px_rgba(13,148,136,0.7)] focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 focus-visible:outline-none"
           >
             部門を選んで指示
-            <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
           </Link>
           <Link
             to="/docs"
-            className="inline-flex h-11 items-center justify-center gap-2 rounded-md border border-slate-300 bg-white px-4 text-[13px] font-medium text-slate-800 transition-colors hover:border-slate-400 hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-slate-300 focus-visible:outline-none"
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-md border border-slate-300/80 bg-white/60 px-4 text-[13px] font-medium text-slate-800 backdrop-blur transition-colors hover:border-slate-400 hover:bg-white focus-visible:ring-2 focus-visible:ring-slate-300 focus-visible:ring-offset-2 focus-visible:outline-none"
           >
             <BookOpen className="h-3.5 w-3.5" aria-hidden="true" />
             ドキュメント

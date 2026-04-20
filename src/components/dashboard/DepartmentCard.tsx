@@ -14,11 +14,17 @@ export function DepartmentCard({ d }: { d: Department }) {
       to="/departments/$id"
       params={{ id: d.id }}
       aria-label={`${d.name} の詳細`}
-      className="group relative flex flex-col rounded-xl border border-slate-200 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)] outline-none transition-all duration-200 hover:-translate-y-0.5 hover:border-teal-300 hover:shadow-[0_18px_32px_-18px_rgba(13,148,136,0.25)] focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500"
+      className="group relative flex flex-col rounded-xl border border-slate-200/80 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)] outline-none transition-all duration-200 hover:-translate-y-0.5 hover:border-teal-300/80 hover:shadow-[0_18px_32px_-18px_rgba(13,148,136,0.28)] focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2"
     >
+      {/* Hover accent rail */}
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-y-3 left-0 w-[2px] origin-top scale-y-0 rounded-r bg-teal-500 transition-transform duration-200 group-hover:scale-y-100"
+      />
+
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-2.5">
-          <span className="flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 bg-slate-50 font-mono text-[13px] font-medium text-slate-600 transition-colors group-hover:border-teal-600 group-hover:bg-teal-600 group-hover:text-white">
+          <span className="num flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 bg-slate-50 text-[13px] font-semibold tracking-tight text-slate-700 transition-colors group-hover:border-teal-600 group-hover:bg-teal-600 group-hover:text-white">
             {d.id}
           </span>
           {d.status !== "standard" && d.statusLabel && (
@@ -32,7 +38,7 @@ export function DepartmentCard({ d }: { d: Department }) {
         {d.unread !== undefined && d.unread > 0 && (
           <span
             aria-label={`未読 ${d.unread} 件`}
-            className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-teal-600 px-1.5 font-mono text-[10px] font-semibold text-white"
+            className="num inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-teal-600 px-1.5 text-[10px] font-semibold text-white shadow-[0_4px_12px_-4px_rgba(13,148,136,0.6)]"
           >
             {d.unread}
           </span>
@@ -40,19 +46,19 @@ export function DepartmentCard({ d }: { d: Department }) {
       </div>
 
       <div className="mt-4">
-        <h3 className="text-[15px] font-semibold text-slate-900">{d.name}</h3>
+        <h3 className="text-[15px] font-semibold tracking-tight text-slate-950">{d.name}</h3>
         <p className="mt-1 text-xs leading-relaxed text-slate-500">{d.role}</p>
       </div>
 
-      <div className="mt-4 flex items-end justify-between border-t border-slate-100 pt-4">
+      <div className="mt-5 flex items-end justify-between border-t border-slate-100 pt-4">
         <div className="flex gap-6">
           <div>
-            <p className="text-[10px] uppercase tracking-wider text-slate-500">{d.kpiLabel}</p>
-            <p className="mt-1 font-mono text-lg font-semibold text-slate-900">{d.kpiValue}</p>
+            <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-slate-500">{d.kpiLabel}</p>
+            <p className="num mt-1 text-lg font-semibold tracking-tight text-slate-950">{d.kpiValue}</p>
           </div>
           <div>
-            <p className="text-[10px] uppercase tracking-wider text-slate-500">タスク</p>
-            <p className="mt-1 font-mono text-lg font-semibold text-slate-900">{d.tasks}</p>
+            <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-slate-500">タスク</p>
+            <p className="num mt-1 text-lg font-semibold tracking-tight text-slate-950">{d.tasks}</p>
           </div>
         </div>
         <span
