@@ -6,6 +6,7 @@ import ReactMarkdown from "react-markdown";
 import { AppShell } from "@/components/layout/AppShell";
 import { Footer } from "@/components/layout/Footer";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/ai")({
   head: () => ({
@@ -32,6 +33,7 @@ const GREETING: Msg = {
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`;
 
 function AiPage() {
+  const { user } = useAuth();
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<Msg[]>([GREETING]);
   const [isLoading, setIsLoading] = useState(false);
@@ -97,13 +99,15 @@ function AiPage() {
     };
     setMessages((prev) => [...prev, userMsg]);
 
-    // Persist user message
-    supabase
-      .from("ai_chat_messages")
-      .insert({ role: "user", content: text })
-      .then(({ error }) => {
-        if (error) console.error("persist user msg failed:", error);
-      });
+    // Persist user message (RLS requires user_id = auth.uid())
+    if (user) {
+      supabase
+        .from("ai_chat_messages")
+        .insert({ role: "user", content: text, user_id: user.id })
+        .then(({ error }) => {
+          if (error) console.error("persist user msg failed:", error);
+        });
+    }
 
     // Build payload: only user/assistant turns from current state (skip greeting which has id=greeting)
     const history = [...messages, userMsg]
@@ -219,10 +223,10 @@ function AiPage() {
       }
 
       // Persist assistant message
-      if (assistantSoFar) {
+      if (assistantSoFar && user) {
         const { error } = await supabase
           .from("ai_chat_messages")
-          .insert({ role: "assistant", content: assistantSoFar });
+          .insert({ role: "assistant", content: assistantSoFar, user_id: user.id });
         if (error) console.error("persist assistant msg failed:", error);
       }
     } catch (err) {
