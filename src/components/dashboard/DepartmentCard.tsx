@@ -32,7 +32,7 @@ export function DepartmentCard({ d }: { d: Department }) {
         {d.unread !== undefined && d.unread > 0 && (
           <span
             aria-label={`未読 ${d.unread} 件`}
-            className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-blue-600 px-1.5 font-mono text-[10px] font-semibold text-white"
+            className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-teal-600 px-1.5 font-mono text-[10px] font-semibold text-white"
           >
             {d.unread}
           </span>

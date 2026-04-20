@@ -9,7 +9,7 @@ export function Hero() {
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 grid-bg-light" />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-blue-500 to-transparent"
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-teal-500 to-transparent"
       />
       <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-28">
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-10">
@@ -29,7 +29,7 @@ export function Hero() {
                 会社を動かす。
                 <span
                   aria-hidden="true"
-                  className="absolute -bottom-1.5 left-0 h-[2px] w-full rounded-full bg-gradient-to-r from-blue-500 to-blue-400"
+                  className="absolute -bottom-1.5 left-0 h-[2px] w-full rounded-full bg-gradient-to-r from-teal-500 to-teal-400"
                 />
               </span>
             </h1>
@@ -99,7 +99,7 @@ export function Hero() {
                   className="mt-4 h-1.5 w-full overflow-hidden rounded-full bg-slate-100"
                 >
                   <div
-                    className="h-full rounded-full bg-gradient-to-r from-slate-950 to-blue-500"
+                    className="h-full rounded-full bg-gradient-to-r from-slate-950 to-teal-500"
                     style={{ width: "62%" }}
                   />
                 </div>
@@ -131,9 +131,9 @@ export function Hero() {
             </div>
             <div
               aria-hidden="true"
-              className="absolute -bottom-3 -right-3 hidden rotate-[2deg] rounded-lg border border-blue-600 bg-blue-600 px-3 py-2 text-white shadow-[0_10px_30px_-10px_rgba(37,99,235,0.55)] md:block"
+              className="absolute -bottom-3 -right-3 hidden rotate-[2deg] rounded-lg border border-teal-600 bg-teal-600 px-3 py-2 text-white shadow-[0_10px_30px_-10px_rgba(13,148,136,0.45)] md:block"
             >
-              <p className="text-[10px] uppercase tracking-wider text-blue-100">今週新規</p>
+              <p className="text-[10px] uppercase tracking-wider text-teal-100">今週新規</p>
               <p className="font-mono text-sm font-semibold">+7 件</p>
             </div>
           </div>
