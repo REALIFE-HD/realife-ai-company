@@ -119,7 +119,7 @@ export function AppShell({ children, title, subtitle }: { children: ReactNode; t
           <div className="flex h-16 items-center justify-between px-6 lg:px-8">
             <div>
               <h1 className="font-serif text-xl font-semibold tracking-tight text-slate-900">{title}</h1>
-              {subtitle && <p className="mt-0.5 text-[13px] text-slate-500">{subtitle}</p>}
+              {subtitle && <p className="mt-1.5 text-[12.5px] leading-snug tracking-[0.01em] text-slate-500/90">{subtitle}</p>}
             </div>
             <div className="flex items-center gap-2">
               <button
@@ -148,7 +148,7 @@ export function AppShell({ children, title, subtitle }: { children: ReactNode; t
         {/* Mobile title */}
         <div className="border-b border-slate-200 bg-white px-4 py-4 md:hidden">
           <h1 className="font-serif text-lg font-semibold text-slate-900">{title}</h1>
-          {subtitle && <p className="mt-0.5 text-xs text-slate-500">{subtitle}</p>}
+          {subtitle && <p className="mt-1.5 text-[11.5px] leading-snug tracking-[0.01em] text-slate-500/90">{subtitle}</p>}
         </div>
 
         <main>{children}</main>
