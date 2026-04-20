@@ -17,9 +17,6 @@ export function DepartmentsGrid() {
           <h2 id="departments-heading" className="mt-2 font-serif text-2xl font-semibold tracking-tight text-slate-900 sm:text-[1.75rem]">
             組織一覧
           </h2>
-          <p className="mt-1.5 max-w-2xl text-[13px] leading-relaxed text-slate-500">
-            各部門のカードから指示出し・タスク・案件進捗にアクセスできます。
-          </p>
         </div>
         <Link
           to="/departments"
