@@ -96,11 +96,10 @@ function DepartmentDetail() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-slate-900">
-      <Header />
-      <main>
-        <section className="border-b border-slate-200 bg-white">
-          <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
+    <AppShell title={d.name} subtitle={d.role}>
+      <div className="space-y-6 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+        <section className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
+          <div>
             <Link
               to="/"
               className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 transition-colors hover:text-slate-950"
@@ -133,9 +132,9 @@ function DepartmentDetail() {
                 <DialogTrigger asChild>
                   <button
                     type="button"
-                    className="inline-flex items-center justify-center gap-2 rounded-md bg-slate-950 px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-slate-800 focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:outline-none"
+                    className="inline-flex items-center justify-center gap-2 rounded-md bg-teal-600 px-4 py-2.5 text-[13px] font-medium text-white shadow-sm transition-colors hover:bg-teal-700 focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:outline-none"
                   >
-                    <Plus className="h-4 w-4" />
+                    <Plus className="h-3.5 w-3.5" />
                     この部門へ指示を出す
                   </button>
                 </DialogTrigger>
@@ -181,7 +180,7 @@ function DepartmentDetail() {
                       </button>
                       <button
                         type="submit"
-                        className="rounded-md bg-slate-950 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800"
+                        className="rounded-md bg-teal-600 px-4 py-2 text-sm font-medium text-white hover:bg-teal-700"
                       >
                         指示を保存
                       </button>
@@ -208,9 +207,8 @@ function DepartmentDetail() {
           </div>
         </section>
 
-        <section className="bg-slate-50/40">
-          <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
-            <Tabs defaultValue="overview">
+        <section>
+          <Tabs defaultValue="overview">
               <TabsList className="bg-white">
                 <TabsTrigger value="overview">概要</TabsTrigger>
                 <TabsTrigger value="tasks">タスク</TabsTrigger>
@@ -339,12 +337,11 @@ function DepartmentDetail() {
                     </li>
                   ))}
                 </ol>
-              </TabsContent>
-            </Tabs>
-          </div>
+            </TabsContent>
+          </Tabs>
         </section>
-      </main>
+      </div>
       <Footer />
-    </div>
+    </AppShell>
   );
 }
