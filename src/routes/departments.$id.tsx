@@ -75,23 +75,41 @@ const PRIORITY_STYLE: Record<string, string> = {
 function DepartmentDetail() {
   const { department } = Route.useLoaderData();
   const d = department as Department;
-  const [instructions, setInstructions] = useState(DUMMY_INSTRUCTIONS);
-  const [open, setOpen] = useState(false);
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
+  const [instructions, setInstructions] = useState<Instruction[]>([]);
 
-  const submit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!title.trim()) return;
-    const id = `I-${String(32 + instructions.length).padStart(3, "0")}`;
-    setInstructions([
-      { id, title: title.trim(), body: body.trim(), date: new Date().toISOString().slice(0, 10), from: "代表" },
-      ...instructions,
-    ]);
-    setTitle("");
-    setBody("");
-    setOpen(false);
-  };
+  // Seed dummy instructions for this department on first visit (only if storage is empty for this dept)
+  useEffect(() => {
+    const existing = loadInstructions();
+    const hasAny = existing.some(
+      (i) => i.department_code === d.id || i.department_code === "all",
+    );
+    if (!hasAny && existing.length === 0) {
+      const seeded: Instruction[] = DUMMY_INSTRUCTIONS.map((s, idx) => ({
+        id: `seed_${d.id}_${idx}`,
+        department_code: d.id,
+        title: s.title,
+        content: s.body,
+        created_by: s.from,
+        created_at: new Date(`${s.date}T09:00:00`).toISOString(),
+        status: "open",
+      }));
+      saveInstructions(seeded);
+    }
+    setInstructions(getInstructionsForDepartment(d.id));
+  }, [d.id]);
+
+  // Refresh from storage (after dialog save or status change)
+  const refresh = () => setInstructions(getInstructionsForDepartment(d.id));
+
+  // Cross-tab sync
+  useEffect(() => {
+    const handler = (e: StorageEvent) => {
+      if (e.key === INSTRUCTION_STORAGE_KEY) refresh();
+    };
+    window.addEventListener("storage", handler);
+    return () => window.removeEventListener("storage", handler);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [d.id]);
 
   return (
     <AppShell title={d.name} subtitle={d.role}>
