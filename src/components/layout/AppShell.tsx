@@ -2,6 +2,7 @@ import { Link, useLocation } from "@tanstack/react-router";
 import { LayoutGrid, Building2, Briefcase, BarChart3, MessageSquare, Settings, Bell, Plus, Menu, X, BookOpen } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { NewInstructionDialog } from "@/components/instructions/NewInstructionDialog";
+import { useUserSettings } from "@/hooks/use-user-settings";
 
 const NAV = [
   { label: "ダッシュボード", to: "/", icon: LayoutGrid, exact: true },
@@ -63,6 +64,25 @@ function Brand() {
   );
 }
 
+function SidebarUser() {
+  const { settings, loading } = useUserSettings();
+  const name = settings.display_name || "ゲスト";
+  const initials = name.trim().slice(0, 2).toUpperCase();
+  return (
+    <div className="border-t border-slate-200 p-3">
+      <Link to="/settings" className="flex items-center gap-2.5 rounded-md px-2 py-2 hover:bg-slate-50">
+        <div className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-slate-50 font-mono text-[11px] font-medium text-slate-700">
+          {initials}
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-[13px] font-medium text-slate-900">{loading ? "..." : name}</p>
+          <p className="truncate text-[11px] text-slate-500">REALIFE Inc.</p>
+        </div>
+      </Link>
+    </div>
+  );
+}
+
 export function AppShell({ children, title, subtitle }: { children: ReactNode; title: string; subtitle?: string }) {
   const [open, setOpen] = useState(false);
 
@@ -99,17 +119,7 @@ export function AppShell({ children, title, subtitle }: { children: ReactNode; t
         <div className="mt-2 flex-1 overflow-y-auto pb-4">
           <SidebarNav />
         </div>
-        <div className="border-t border-slate-200 p-3">
-          <div className="flex items-center gap-2.5 rounded-md px-2 py-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-slate-50 font-mono text-[11px] font-medium text-slate-700">
-              KT
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-[13px] font-medium text-slate-900">KT 代表</p>
-              <p className="truncate text-[11px] text-slate-500">REALIFE Inc.</p>
-            </div>
-          </div>
-        </div>
+        <SidebarUser />
       </aside>
 
       {/* Main */}

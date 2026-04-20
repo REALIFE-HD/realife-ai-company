@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { ArrowLeft } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
@@ -7,12 +7,8 @@ import { Footer } from "@/components/layout/Footer";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import {
-  DEFAULT_SETTINGS,
-  loadUserSettings,
-  saveUserSettings,
-  type UserSettings,
-} from "@/lib/settings";
+import { useUserSettings } from "@/hooks/use-user-settings";
+import type { UserSettings } from "@/lib/settings";
 
 export const Route = createFileRoute("/settings")({
   head: () => ({
@@ -27,20 +23,16 @@ export const Route = createFileRoute("/settings")({
 });
 
 function SettingsPage() {
-  const [settings, setSettings] = useState<UserSettings>(DEFAULT_SETTINGS);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    loadUserSettings()
-      .then(setSettings)
-      .catch(() => toast.error("設定の読み込みに失敗しました"))
-      .finally(() => setLoading(false));
-  }, []);
+  const { settings: ctxSettings, loading, update } = useUserSettings();
+  const [draftName, setDraftName] = useState<string | null>(null);
+  const settings: UserSettings = {
+    ...ctxSettings,
+    display_name: draftName ?? ctxSettings.display_name,
+  };
 
   const save = async (next: UserSettings) => {
-    setSettings(next);
     try {
-      await saveUserSettings(next);
+      await update(next);
       toast.success("設定を保存しました");
     } catch {
       toast.error("保存に失敗しました");
@@ -65,8 +57,13 @@ function SettingsPage() {
                 id="display_name"
                 value={settings.display_name}
                 disabled={loading}
-                onChange={(e) => setSettings({ ...settings, display_name: e.target.value })}
-                onBlur={() => save(settings)}
+                onChange={(e) => setDraftName(e.target.value)}
+                onBlur={() => {
+                  if (draftName !== null && draftName !== ctxSettings.display_name) {
+                    save({ ...ctxSettings, display_name: draftName });
+                  }
+                  setDraftName(null);
+                }}
               />
               <p className="text-[11px] text-slate-500">指示の発信者として記録されます。</p>
             </div>
