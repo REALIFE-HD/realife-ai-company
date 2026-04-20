@@ -5,7 +5,7 @@ function Donut() {
   const segments = [
     { label: "稼働中", value: 1, color: "#0d9488" },
     { label: "標準運用", value: 10, color: "#0f172a" },
-    { label: "構築中", value: 1, color: "#cbd5e1" },
+    { label: "構築中", value: 1, color: "#f59e0b" },
   ];
   const total = segments.reduce((a, b) => a + b.value, 0);
   const radius = 56;
