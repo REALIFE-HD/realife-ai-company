@@ -1,7 +1,7 @@
 project_id = "ecflruxlsmnqtifikncl"
 
 [functions.chat]
-verify_jwt = false
+verify_jwt = true
 
 [functions.inbox-classify]
-verify_jwt = false
+verify_jwt = true
