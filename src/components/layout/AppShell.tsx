@@ -4,7 +4,7 @@ import { useState, type ReactNode } from "react";
 
 const NAV = [
   { label: "ダッシュボード", to: "/", icon: LayoutGrid, exact: true },
-  { label: "部門", to: "/", icon: Building2, hash: "departments" },
+  { label: "部門", to: "/departments", icon: Building2 },
   { label: "案件", to: "/", icon: Briefcase, hash: "deals" },
   { label: "レポート", to: "/", icon: BarChart3, hash: "reports" },
   { label: "AIチャット", to: "/", icon: MessageSquare, hash: "ai" },

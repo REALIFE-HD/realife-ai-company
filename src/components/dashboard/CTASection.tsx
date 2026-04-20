@@ -30,8 +30,7 @@ export function CTASection() {
         </div>
         <div className="flex flex-col gap-2.5 sm:flex-row lg:col-span-4 lg:justify-end">
           <Link
-            to="/"
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            to="/departments"
             className="inline-flex items-center justify-center gap-2 rounded-md bg-teal-500 px-4 py-2.5 text-[13px] font-medium text-white shadow-[0_10px_30px_-10px_rgba(13,148,136,0.55)] transition-colors hover:bg-teal-400 focus-visible:ring-2 focus-visible:ring-teal-400 focus-visible:outline-none"
           >
             部門を選んで指示
