@@ -4,7 +4,7 @@ import { DepartmentCard } from "./DepartmentCard";
 
 export function DepartmentsGrid() {
   return (
-    <section id="departments" className="border-b border-slate-200 bg-slate-50/40">
+    <section id="departments" className="border-b border-slate-200 bg-gradient-to-b from-slate-50/60 via-white to-white">
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
         <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
           <div>
@@ -14,7 +14,7 @@ export function DepartmentsGrid() {
                 Departments · 12
               </span>
             </div>
-            <h2 className="mt-4 font-serif text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl lg:text-5xl">
+            <h2 className="mt-4 font-serif text-3xl font-semibold leading-[1.2] tracking-tight text-slate-950 sm:text-[2.25rem] lg:text-[2.75rem]">
               すべての部門を、一望する。
             </h2>
             <p className="mt-4 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base">
