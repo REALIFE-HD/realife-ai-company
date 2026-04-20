@@ -20,6 +20,7 @@ import {
   type DealStage,
 } from "@/lib/deals";
 import { getInstructionsForDepartment, type Instruction } from "@/lib/instructions";
+import { loadUserSettings } from "@/lib/settings";
 
 export const Route = createFileRoute("/deals/$dealCode")({
   head: ({ params }) => ({
