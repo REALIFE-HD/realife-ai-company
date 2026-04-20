@@ -17,6 +17,7 @@ import { Route as AiRouteImport } from './routes/ai'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DepartmentsIndexRouteImport } from './routes/departments.index'
 import { Route as DepartmentsIdRouteImport } from './routes/departments.$id'
+import { Route as DealsDealCodeRouteImport } from './routes/deals.$dealCode'
 
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
@@ -58,24 +59,31 @@ const DepartmentsIdRoute = DepartmentsIdRouteImport.update({
   path: '/departments/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DealsDealCodeRoute = DealsDealCodeRouteImport.update({
+  id: '/$dealCode',
+  path: '/$dealCode',
+  getParentRoute: () => DealsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/ai': typeof AiRoute
-  '/deals': typeof DealsRoute
+  '/deals': typeof DealsRouteWithChildren
   '/docs': typeof DocsRoute
   '/reports': typeof ReportsRoute
   '/settings': typeof SettingsRoute
+  '/deals/$dealCode': typeof DealsDealCodeRoute
   '/departments/$id': typeof DepartmentsIdRoute
   '/departments/': typeof DepartmentsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/ai': typeof AiRoute
-  '/deals': typeof DealsRoute
+  '/deals': typeof DealsRouteWithChildren
   '/docs': typeof DocsRoute
   '/reports': typeof ReportsRoute
   '/settings': typeof SettingsRoute
+  '/deals/$dealCode': typeof DealsDealCodeRoute
   '/departments/$id': typeof DepartmentsIdRoute
   '/departments': typeof DepartmentsIndexRoute
 }
@@ -83,10 +91,11 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/ai': typeof AiRoute
-  '/deals': typeof DealsRoute
+  '/deals': typeof DealsRouteWithChildren
   '/docs': typeof DocsRoute
   '/reports': typeof ReportsRoute
   '/settings': typeof SettingsRoute
+  '/deals/$dealCode': typeof DealsDealCodeRoute
   '/departments/$id': typeof DepartmentsIdRoute
   '/departments/': typeof DepartmentsIndexRoute
 }
@@ -99,6 +108,7 @@ export interface FileRouteTypes {
     | '/docs'
     | '/reports'
     | '/settings'
+    | '/deals/$dealCode'
     | '/departments/$id'
     | '/departments/'
   fileRoutesByTo: FileRoutesByTo
@@ -109,6 +119,7 @@ export interface FileRouteTypes {
     | '/docs'
     | '/reports'
     | '/settings'
+    | '/deals/$dealCode'
     | '/departments/$id'
     | '/departments'
   id:
@@ -119,6 +130,7 @@ export interface FileRouteTypes {
     | '/docs'
     | '/reports'
     | '/settings'
+    | '/deals/$dealCode'
     | '/departments/$id'
     | '/departments/'
   fileRoutesById: FileRoutesById
@@ -126,7 +138,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AiRoute: typeof AiRoute
-  DealsRoute: typeof DealsRoute
+  DealsRoute: typeof DealsRouteWithChildren
   DocsRoute: typeof DocsRoute
   ReportsRoute: typeof ReportsRoute
   SettingsRoute: typeof SettingsRoute
@@ -192,13 +204,30 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DepartmentsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/deals/$dealCode': {
+      id: '/deals/$dealCode'
+      path: '/$dealCode'
+      fullPath: '/deals/$dealCode'
+      preLoaderRoute: typeof DealsDealCodeRouteImport
+      parentRoute: typeof DealsRoute
+    }
   }
 }
+
+interface DealsRouteChildren {
+  DealsDealCodeRoute: typeof DealsDealCodeRoute
+}
+
+const DealsRouteChildren: DealsRouteChildren = {
+  DealsDealCodeRoute: DealsDealCodeRoute,
+}
+
+const DealsRouteWithChildren = DealsRoute._addFileChildren(DealsRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AiRoute: AiRoute,
-  DealsRoute: DealsRoute,
+  DealsRoute: DealsRouteWithChildren,
   DocsRoute: DocsRoute,
   ReportsRoute: ReportsRoute,
   SettingsRoute: SettingsRoute,
