@@ -26,7 +26,7 @@ import {
   type Instruction,
   type InstructionStatus,
 } from "@/lib/instructions";
-import { loadUserSettings } from "@/lib/settings";
+import { useUserSettings } from "@/hooks/use-user-settings";
 
 type Props = {
   /** When set, the department selector is hidden and this code is used. */
@@ -68,19 +68,19 @@ export function NewInstructionDialog({
   }, [open, fixedDepartmentCode]);
 
   const [submitting, setSubmitting] = useState(false);
+  const { settings } = useUserSettings();
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim() || !content.trim() || submitting) return;
     setSubmitting(true);
     try {
-      const settings = await loadUserSettings().catch(() => null);
       const created = await addInstruction({
         department_code: department,
         title,
         content,
         status,
-        created_by: settings?.display_name?.trim() || undefined,
+        created_by: settings.display_name?.trim() || undefined,
       });
       toast.success("指示を保存しました");
       onCreated?.(created);
