@@ -22,14 +22,14 @@ export function Hero() {
               </span>
             </div>
 
-            <h1 className="mt-6 font-serif text-4xl font-semibold leading-tight tracking-tight text-slate-950 sm:text-5xl lg:text-6xl">
+            <h1 className="mt-6 font-serif text-[2.5rem] font-semibold leading-[1.15] tracking-tight text-slate-950 sm:text-5xl lg:text-[3.5rem]">
               一人で、
               <br />
               <span className="relative inline-block">
                 会社を動かす。
                 <span
                   aria-hidden="true"
-                  className="absolute -bottom-1 left-0 h-px w-full bg-blue-500"
+                  className="absolute -bottom-1.5 left-0 h-[2px] w-full rounded-full bg-gradient-to-r from-blue-500 to-blue-400"
                 />
               </span>
             </h1>
