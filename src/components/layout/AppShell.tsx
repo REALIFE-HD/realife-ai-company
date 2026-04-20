@@ -57,7 +57,7 @@ function Brand() {
       </span>
       <span className="flex flex-col leading-none">
         <span className="font-serif text-[15px] font-semibold tracking-wide text-slate-900">REALIFE</span>
-        <span className="mt-1 text-[10px] uppercase tracking-[0.18em] text-slate-500">Operations</span>
+        <span className="mt-1 text-[10px] uppercase tracking-[0.18em] text-slate-500">AI COMPANY</span>
       </span>
     </Link>
   );
