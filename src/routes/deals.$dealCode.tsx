@@ -20,7 +20,7 @@ import {
   type DealStage,
 } from "@/lib/deals";
 import { getInstructionsForDepartment, type Instruction } from "@/lib/instructions";
-import { loadUserSettings } from "@/lib/settings";
+import { useUserSettings } from "@/hooks/use-user-settings";
 
 export const Route = createFileRoute("/deals/$dealCode")({
   head: ({ params }) => ({
@@ -53,6 +53,7 @@ const KIND_ICONS: Record<DealActivityKind, typeof MessageSquare> = {
 function DealDetailPage() {
   const { dealCode } = Route.useParams();
   const router = useRouter();
+  const { settings } = useUserSettings();
   const [deal, setDeal] = useState<Deal | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -157,12 +158,11 @@ function DealDetailPage() {
     e.preventDefault();
     if (!deal || !actContent.trim()) return;
     try {
-      const settings = await loadUserSettings().catch(() => null);
       await addActivity({
         deal_id: deal.id,
         kind: actKind,
         content: actContent.trim(),
-        created_by: settings?.display_name?.trim() || undefined,
+        created_by: settings.display_name?.trim() || undefined,
       });
       setActContent("");
       toast.success("活動を記録しました");
