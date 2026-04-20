@@ -1,4 +1,5 @@
 import { ArrowRight } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 
 export function CTASection() {
   return (
@@ -28,13 +29,14 @@ export function CTASection() {
           </p>
         </div>
         <div className="flex flex-col gap-2.5 sm:flex-row lg:col-span-4 lg:justify-end">
-          <a
-            href="#departments"
+          <Link
+            to="/"
+            hash="departments"
             className="inline-flex items-center justify-center gap-2 rounded-md bg-teal-500 px-4 py-2.5 text-[13px] font-medium text-white shadow-[0_10px_30px_-10px_rgba(13,148,136,0.55)] transition-colors hover:bg-teal-400 focus-visible:ring-2 focus-visible:ring-teal-400 focus-visible:outline-none"
           >
             部門を選んで指示
             <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
-          </a>
+          </Link>
           <a
             href="#"
             className="inline-flex items-center justify-center gap-2 rounded-md border border-slate-700 bg-white/5 px-4 py-2.5 text-[13px] font-medium text-white transition-colors hover:border-slate-500 hover:bg-white/10"
