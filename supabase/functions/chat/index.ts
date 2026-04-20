@@ -36,8 +36,42 @@ Deno.serve(async (req: Request) => {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
-    if (messages.length > 50) {
-      return new Response(JSON.stringify({ error: "Too many messages" }), {
+    if (messages.length === 0 || messages.length > 50) {
+      return new Response(JSON.stringify({ error: "Invalid message count" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    // Per-message and total size limits to prevent DoS / credit drain
+    let totalChars = 0;
+    for (const m of messages) {
+      if (
+        !m ||
+        typeof m !== "object" ||
+        typeof m.role !== "string" ||
+        typeof m.content !== "string"
+      ) {
+        return new Response(JSON.stringify({ error: "Invalid message format" }), {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      if (!["user", "assistant", "system"].includes(m.role)) {
+        return new Response(JSON.stringify({ error: "Invalid message role" }), {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      if (m.content.length > 8000) {
+        return new Response(JSON.stringify({ error: "Message too long" }), {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      totalChars += m.content.length;
+    }
+    if (totalChars > 40000) {
+      return new Response(JSON.stringify({ error: "Conversation too large" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
