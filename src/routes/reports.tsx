@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, ClientOnly } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
 import { Footer } from "@/components/layout/Footer";
@@ -74,18 +74,20 @@ function ReportsPage() {
           <h2 className="font-serif text-xl font-semibold tracking-tight text-slate-900">月次成約推移</h2>
           <p className="mt-1 text-[13px] text-slate-500">単位:百万円(¥M)・件数</p>
           <div className="mt-6 h-72 w-full">
-            <ResponsiveContainer>
-              <LineChart data={MONTHLY} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                <XAxis dataKey="month" stroke="#64748b" fontSize={12} />
-                <YAxis yAxisId="left" stroke="#64748b" fontSize={12} />
-                <YAxis yAxisId="right" orientation="right" stroke="#64748b" fontSize={12} />
-                <Tooltip />
-                <Legend />
-                <Line yAxisId="left" type="monotone" dataKey="revenue" name="成約額(¥M)" stroke="#0d9488" strokeWidth={2} dot={{ r: 3 }} />
-                <Line yAxisId="right" type="monotone" dataKey="deals" name="件数" stroke="#f59e0b" strokeWidth={2} dot={{ r: 3 }} />
-              </LineChart>
-            </ResponsiveContainer>
+            <ClientOnly fallback={<div className="h-full w-full animate-pulse rounded-md bg-slate-50" />}>
+              <ResponsiveContainer>
+                <LineChart data={MONTHLY} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                  <XAxis dataKey="month" stroke="#64748b" fontSize={12} />
+                  <YAxis yAxisId="left" stroke="#64748b" fontSize={12} />
+                  <YAxis yAxisId="right" orientation="right" stroke="#64748b" fontSize={12} />
+                  <Tooltip />
+                  <Legend />
+                  <Line yAxisId="left" type="monotone" dataKey="revenue" name="成約額(¥M)" stroke="#0d9488" strokeWidth={2} dot={{ r: 3 }} />
+                  <Line yAxisId="right" type="monotone" dataKey="deals" name="件数" stroke="#f59e0b" strokeWidth={2} dot={{ r: 3 }} />
+                </LineChart>
+              </ResponsiveContainer>
+            </ClientOnly>
           </div>
         </section>
 
@@ -93,19 +95,21 @@ function ReportsPage() {
           <h2 className="font-serif text-xl font-semibold tracking-tight text-slate-900">部門別タスク消化率</h2>
           <p className="mt-1 text-[13px] text-slate-500">単位:%</p>
           <div className="mt-6 h-96 w-full">
-            <ResponsiveContainer>
-              <BarChart data={DEPT_PROGRESS} margin={{ top: 10, right: 20, left: 0, bottom: 60 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                <XAxis dataKey="name" stroke="#64748b" fontSize={11} angle={-30} textAnchor="end" interval={0} height={70} />
-                <YAxis stroke="#64748b" fontSize={12} domain={[0, 100]} />
-                <Tooltip />
-                <Bar dataKey="完了率" radius={[6, 6, 0, 0]}>
-                  {DEPT_PROGRESS.map((d, i) => (
-                    <Cell key={i} fill={d.完了率 >= 80 ? "#10b981" : d.完了率 >= 60 ? "#0d9488" : "#f59e0b"} />
-                  ))}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
+            <ClientOnly fallback={<div className="h-full w-full animate-pulse rounded-md bg-slate-50" />}>
+              <ResponsiveContainer>
+                <BarChart data={DEPT_PROGRESS} margin={{ top: 10, right: 20, left: 0, bottom: 60 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                  <XAxis dataKey="name" stroke="#64748b" fontSize={11} angle={-30} textAnchor="end" interval={0} height={70} />
+                  <YAxis stroke="#64748b" fontSize={12} domain={[0, 100]} />
+                  <Tooltip />
+                  <Bar dataKey="完了率" radius={[6, 6, 0, 0]}>
+                    {DEPT_PROGRESS.map((d, i) => (
+                      <Cell key={i} fill={d.完了率 >= 80 ? "#10b981" : d.完了率 >= 60 ? "#0d9488" : "#f59e0b"} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </ClientOnly>
           </div>
         </section>
       </div>
