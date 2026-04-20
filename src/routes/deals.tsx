@@ -63,17 +63,17 @@ function DealsPage() {
             { l: "受注済", v: String(won) },
             { l: "案件総額", v: `¥${(total / 1_000_000).toFixed(1)}M` },
           ].map((s) => (
-            <div key={s.l} className="rounded-xl border border-slate-200 bg-white px-4 py-3">
-              <p className="text-[11px] uppercase tracking-wider text-slate-500">{s.l}</p>
-              <p className="mt-1 font-mono text-2xl font-semibold tracking-tight text-slate-900 tabular">{s.v}</p>
+            <div key={s.l} className="rounded-xl border border-slate-200/80 bg-white px-4 py-3.5 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+              <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-slate-500">{s.l}</p>
+              <p className="num mt-1.5 text-[1.625rem] font-semibold leading-none tracking-tight text-slate-950">{s.v}</p>
             </div>
           ))}
         </section>
 
-        <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+        <section className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="border-b border-slate-200 bg-slate-50 text-[10px] uppercase tracking-wider text-slate-500">
+              <thead className="border-b border-slate-200 bg-slate-50/60 text-[10px] font-medium uppercase tracking-[0.14em] text-slate-500">
                 <tr>
                   <th className="px-4 py-3 text-left font-medium">ID</th>
                   <th className="px-4 py-3 text-left font-medium">クライアント</th>
@@ -99,29 +99,29 @@ function DealsPage() {
                   </tr>
                 )}
                 {deals.map((d) => (
-                  <tr key={d.id} className="cursor-pointer hover:bg-slate-50">
-                    <td className="whitespace-nowrap px-4 py-3 font-mono text-xs text-slate-500">
-                      <Link to="/deals/$dealCode" params={{ dealCode: d.code }} className="hover:text-teal-700">{d.code}</Link>
+                  <tr key={d.id} className="group cursor-pointer transition-colors hover:bg-teal-50/30">
+                    <td className="whitespace-nowrap px-4 py-3 num text-xs text-slate-500">
+                      <Link to="/deals/$dealCode" params={{ dealCode: d.code }} className="transition-colors group-hover:text-teal-700">{d.code}</Link>
                     </td>
                     <td className="whitespace-nowrap px-4 py-3 text-slate-700">
-                      <Link to="/deals/$dealCode" params={{ dealCode: d.code }} className="hover:text-teal-700">{d.client}</Link>
+                      <Link to="/deals/$dealCode" params={{ dealCode: d.code }} className="transition-colors group-hover:text-teal-700">{d.client}</Link>
                     </td>
-                    <td className="px-4 py-3 text-slate-900">
-                      <Link to="/deals/$dealCode" params={{ dealCode: d.code }} className="hover:text-teal-700">{d.title}</Link>
+                    <td className="px-4 py-3 font-medium text-slate-900">
+                      <Link to="/deals/$dealCode" params={{ dealCode: d.code }} className="transition-colors group-hover:text-teal-700">{d.title}</Link>
                     </td>
                     <td className="whitespace-nowrap px-4 py-3">
                       <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-medium ${STAGE_STYLE[d.stage]}`}>
                         {d.stage}
                       </span>
                     </td>
-                    <td className="whitespace-nowrap px-4 py-3 text-right text-slate-900"><Money amount={d.amount} /></td>
-                    <td className="whitespace-nowrap px-4 py-3 text-right font-mono text-slate-700">{d.probability}%</td>
+                    <td className="whitespace-nowrap px-4 py-3 text-right num font-semibold text-slate-950"><Money amount={d.amount} /></td>
+                    <td className="whitespace-nowrap px-4 py-3 text-right num text-slate-700">{d.probability}%</td>
                     <td className="whitespace-nowrap px-4 py-3 text-xs text-slate-700">{d.owner}</td>
                     <td className="px-4 py-3 text-xs text-slate-700">{d.next_action}</td>
-                    <td className="whitespace-nowrap px-4 py-3 text-right font-mono text-xs text-slate-700">{d.due ?? "—"}</td>
-                    <td className="whitespace-nowrap px-2 py-3 text-slate-400">
+                    <td className="whitespace-nowrap px-4 py-3 text-right num text-xs text-slate-700">{d.due ?? "—"}</td>
+                    <td className="whitespace-nowrap px-2 py-3 text-slate-400 transition-colors group-hover:text-teal-600">
                       <Link to="/deals/$dealCode" params={{ dealCode: d.code }}>
-                        <ChevronRight className="h-4 w-4" />
+                        <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                       </Link>
                     </td>
                   </tr>

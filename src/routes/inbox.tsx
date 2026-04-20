@@ -212,13 +212,13 @@ function InboxPage() {
         {/* KPI */}
         <section className="grid grid-cols-3 gap-3">
           {[
-            { l: "総数", v: stats.total },
-            { l: "未割当", v: stats.unassigned },
-            { l: "割当済", v: stats.assigned },
+            { l: "総数", v: stats.total, accent: "text-slate-950" },
+            { l: "未割当", v: stats.unassigned, accent: "text-amber-700" },
+            { l: "割当済", v: stats.assigned, accent: "text-teal-700" },
           ].map((s) => (
-            <div key={s.l} className="rounded-xl border border-slate-200 bg-white px-4 py-3">
-              <p className="text-[11px] uppercase tracking-wider text-slate-500">{s.l}</p>
-              <p className="mt-1 font-mono text-2xl font-semibold tracking-tight text-slate-900 tabular">{s.v}</p>
+            <div key={s.l} className="rounded-xl border border-slate-200/80 bg-white px-4 py-3.5 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+              <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-slate-500">{s.l}</p>
+              <p className={`num mt-1.5 text-[1.625rem] font-semibold leading-none tracking-tight ${s.accent}`}>{s.v}</p>
             </div>
           ))}
         </section>
