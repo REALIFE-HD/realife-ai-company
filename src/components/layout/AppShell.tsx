@@ -1,5 +1,5 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { LayoutGrid, Building2, Briefcase, BarChart3, MessageSquare, Settings, Bell, Plus, Menu, X } from "lucide-react";
+import { LayoutGrid, Building2, Briefcase, BarChart3, MessageSquare, Settings, Bell, Plus, Menu, X, BookOpen } from "lucide-react";
 import { useState, type ReactNode } from "react";
 
 const NAV = [
@@ -8,6 +8,7 @@ const NAV = [
   { label: "案件", to: "/", icon: Briefcase, hash: "deals" },
   { label: "レポート", to: "/", icon: BarChart3, hash: "reports" },
   { label: "AIチャット", to: "/", icon: MessageSquare, hash: "ai" },
+  { label: "ドキュメント", to: "/docs", icon: BookOpen },
   { label: "設定", to: "/", icon: Settings, hash: "settings" },
 ] as const;
 
@@ -18,7 +19,10 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
       <ul className="flex flex-col gap-0.5">
         {NAV.map((item) => {
           const Icon = item.icon;
-          const active = "exact" in item && item.exact ? pathname === "/" && !hash : false;
+          const active =
+            "exact" in item && item.exact
+              ? pathname === "/" && !hash
+              : !("hash" in item) && (pathname === item.to || pathname.startsWith(`${item.to}/`));
           return (
             <li key={item.label}>
               <Link
