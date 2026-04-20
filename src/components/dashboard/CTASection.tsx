@@ -31,7 +31,7 @@ export function CTASection() {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-2.5 lg:col-span-4 lg:justify-end">
+        <div className="flex flex-col gap-2.5 lg:col-span-4 lg:items-stretch lg:justify-end">
           <Link
             to="/departments"
             className="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-teal-600 px-4 text-[13px] font-medium text-white shadow-[0_8px_24px_-12px_rgba(13,148,136,0.6)] transition-colors hover:bg-teal-700 focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:outline-none"
