@@ -44,6 +44,8 @@ function DepartmentsIndex() {
           </Link>
         </div>
 
+        <CTASection />
+
         <section
           aria-labelledby="dept-summary"
           className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8"
@@ -93,8 +95,6 @@ function DepartmentsIndex() {
             ))}
           </div>
         </section>
-
-        <CTASection />
       </div>
       <Footer />
     </AppShell>
