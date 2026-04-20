@@ -144,8 +144,10 @@ function DepartmentDetail() {
                 </div>
               </div>
 
-              <Dialog open={open} onOpenChange={setOpen}>
-                <DialogTrigger asChild>
+              <NewInstructionDialog
+                fixedDepartmentCode={d.id}
+                onCreated={refresh}
+                trigger={
                   <button
                     type="button"
                     className="inline-flex items-center justify-center gap-2 rounded-md bg-teal-600 px-4 py-2.5 text-[13px] font-medium text-white shadow-sm transition-colors hover:bg-teal-700 focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:outline-none"
@@ -153,57 +155,8 @@ function DepartmentDetail() {
                     <Plus className="h-3.5 w-3.5" />
                     この部門へ指示を出す
                   </button>
-                </DialogTrigger>
-                <DialogContent>
-                  <form onSubmit={submit}>
-                    <DialogHeader>
-                      <DialogTitle className="font-serif text-xl">
-                        {d.name} へ指示
-                      </DialogTitle>
-                      <DialogDescription>
-                        指示はこの部門のタイムラインに保存されます。
-                      </DialogDescription>
-                    </DialogHeader>
-                    <div className="mt-4 space-y-4">
-                      <div className="space-y-1.5">
-                        <Label htmlFor="i-title">タイトル</Label>
-                        <Input
-                          id="i-title"
-                          value={title}
-                          onChange={(e) => setTitle(e.target.value)}
-                          placeholder="例:今週の優先案件3件を共有"
-                          required
-                        />
-                      </div>
-                      <div className="space-y-1.5">
-                        <Label htmlFor="i-body">内容</Label>
-                        <Textarea
-                          id="i-body"
-                          value={body}
-                          onChange={(e) => setBody(e.target.value)}
-                          placeholder="指示の詳細を記入"
-                          rows={5}
-                        />
-                      </div>
-                    </div>
-                    <DialogFooter className="mt-6">
-                      <button
-                        type="button"
-                        onClick={() => setOpen(false)}
-                        className="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-800 hover:border-slate-900"
-                      >
-                        キャンセル
-                      </button>
-                      <button
-                        type="submit"
-                        className="rounded-md bg-teal-600 px-4 py-2 text-sm font-medium text-white hover:bg-teal-700"
-                      >
-                        指示を保存
-                      </button>
-                    </DialogFooter>
-                  </form>
-                </DialogContent>
-              </Dialog>
+                }
+              />
             </div>
 
             {/* KPI strip */}
