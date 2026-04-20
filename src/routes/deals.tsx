@@ -56,49 +56,38 @@ function DealsPage() {
           </Link>
         </div>
 
-        <section className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
+        <section className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           {[
-            { l: "総案件", v: String(deals.length), tone: "slate" },
-            { l: "進行中", v: String(open), tone: "amber" },
-            { l: "受注済", v: String(won), tone: "teal" },
-            { l: "案件総額", v: `¥${(total / 1_000_000).toFixed(1)}M`, tone: "indigo" },
-          ].map((s) => {
-            const accent: Record<string, string> = {
-              slate: "before:bg-slate-900 text-slate-950",
-              amber: "before:bg-amber-500 text-amber-900",
-              teal: "before:bg-teal-600 text-teal-900",
-              indigo: "before:bg-indigo-600 text-indigo-900",
-            };
-            return (
-              <div
-                key={s.l}
-                className={`relative overflow-hidden rounded-lg border-2 border-slate-900/90 bg-white px-3.5 py-3 before:absolute before:inset-y-0 before:left-0 before:w-1 ${accent[s.tone]}`}
-              >
-                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-700">{s.l}</p>
-                <p className={`num mt-1 text-[1.5rem] font-extrabold leading-none tracking-tight ${accent[s.tone].split(" ").pop()}`}>{s.v}</p>
-              </div>
-            );
-          })}
+            { l: "総案件", v: String(deals.length) },
+            { l: "進行中", v: String(open) },
+            { l: "受注済", v: String(won) },
+            { l: "案件総額", v: `¥${(total / 1_000_000).toFixed(1)}M` },
+          ].map((s) => (
+            <div key={s.l} className="rounded-xl border border-slate-200/80 bg-white px-4 py-3.5 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+              <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-slate-500">{s.l}</p>
+              <p className="num mt-1.5 text-[1.625rem] font-semibold leading-none tracking-tight text-slate-950">{s.v}</p>
+            </div>
+          ))}
         </section>
 
-        <section className="overflow-hidden rounded-lg border-2 border-slate-900/90 bg-white shadow-[0_2px_0_0_rgba(15,23,42,0.06)]">
+        <section className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
           <div className="overflow-x-auto">
-            <table className="w-full text-[13px]">
-              <thead className="border-b-2 border-slate-900/90 bg-slate-900 text-[10px] font-bold uppercase tracking-[0.16em] text-white">
+            <table className="w-full text-sm">
+              <thead className="border-b border-slate-200 bg-slate-50/60 text-[10px] font-medium uppercase tracking-[0.14em] text-slate-500">
                 <tr>
-                  <th className="px-3 py-2.5 text-left">ID</th>
-                  <th className="px-3 py-2.5 text-left">クライアント</th>
-                  <th className="px-3 py-2.5 text-left">案件名</th>
-                  <th className="px-3 py-2.5 text-left">ステージ</th>
-                  <th className="px-3 py-2.5 text-right">金額</th>
-                  <th className="px-3 py-2.5 text-right">確度</th>
-                  <th className="px-3 py-2.5 text-left">担当</th>
-                  <th className="px-3 py-2.5 text-left">次のアクション</th>
-                  <th className="px-3 py-2.5 text-right">期日</th>
-                  <th className="px-3 py-2.5" />
+                  <th className="px-4 py-3 text-left font-medium">ID</th>
+                  <th className="px-4 py-3 text-left font-medium">クライアント</th>
+                  <th className="px-4 py-3 text-left font-medium">案件名</th>
+                  <th className="px-4 py-3 text-left font-medium">ステージ</th>
+                  <th className="px-4 py-3 text-right font-medium">金額</th>
+                  <th className="px-4 py-3 text-right font-medium">確度</th>
+                  <th className="px-4 py-3 text-left font-medium">担当</th>
+                  <th className="px-4 py-3 text-left font-medium">次のアクション</th>
+                  <th className="px-4 py-3 text-right font-medium">期日</th>
+                  <th className="px-4 py-3" />
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-200 [&>tr:nth-child(even)]:bg-slate-50/70">
+              <tbody className="divide-y divide-slate-100">
                 {loading && (
                   <tr>
                     <td colSpan={10} className="px-4 py-8 text-center text-xs text-slate-400">読み込み中...</td>
@@ -109,41 +98,34 @@ function DealsPage() {
                     <td colSpan={10} className="px-4 py-8 text-center text-xs text-slate-400">案件がありません</td>
                   </tr>
                 )}
-                {deals.map((d) => {
-                  const prob = d.probability;
-                  const probTone =
-                    prob >= 80 ? "bg-teal-600 text-white" : prob >= 50 ? "bg-amber-500 text-white" : "bg-slate-300 text-slate-800";
-                  return (
-                    <tr key={d.id} className="group cursor-pointer transition-colors hover:!bg-teal-50">
-                      <td className="whitespace-nowrap px-3 py-2.5 num text-[11px] font-semibold text-slate-600">
-                        <Link to="/deals/$dealCode" params={{ dealCode: d.code }} className="rounded bg-slate-100 px-1.5 py-0.5 ring-1 ring-slate-200 transition-colors group-hover:bg-teal-600 group-hover:text-white group-hover:ring-teal-600">{d.code}</Link>
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-2.5 font-medium text-slate-900">
-                        <Link to="/deals/$dealCode" params={{ dealCode: d.code }}>{d.client}</Link>
-                      </td>
-                      <td className="px-3 py-2.5 font-semibold text-slate-950">
-                        <Link to="/deals/$dealCode" params={{ dealCode: d.code }} className="transition-colors group-hover:text-teal-700">{d.title}</Link>
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-2.5">
-                        <span className={`inline-flex items-center rounded-sm border px-2 py-0.5 text-[10px] font-bold ${STAGE_STYLE[d.stage]}`}>
-                          {d.stage}
-                        </span>
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-2.5 text-right num text-[14px] font-bold text-slate-950"><Money amount={d.amount} /></td>
-                      <td className="whitespace-nowrap px-3 py-2.5 text-right">
-                        <span className={`num inline-flex min-w-[42px] justify-center rounded px-1.5 py-0.5 text-[11px] font-bold ${probTone}`}>{prob}%</span>
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-2.5 text-[12px] font-medium text-slate-800">{d.owner}</td>
-                      <td className="px-3 py-2.5 text-[12px] text-slate-700">{d.next_action}</td>
-                      <td className="whitespace-nowrap px-3 py-2.5 text-right num text-[12px] font-medium text-slate-800">{d.due ?? "—"}</td>
-                      <td className="whitespace-nowrap px-2 py-2.5 text-slate-400 transition-colors group-hover:text-teal-600">
-                        <Link to="/deals/$dealCode" params={{ dealCode: d.code }}>
-                          <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                        </Link>
-                      </td>
-                    </tr>
-                  );
-                })}
+                {deals.map((d) => (
+                  <tr key={d.id} className="group cursor-pointer transition-colors hover:bg-teal-50/30">
+                    <td className="whitespace-nowrap px-4 py-3 num text-xs text-slate-500">
+                      <Link to="/deals/$dealCode" params={{ dealCode: d.code }} className="transition-colors group-hover:text-teal-700">{d.code}</Link>
+                    </td>
+                    <td className="whitespace-nowrap px-4 py-3 text-slate-700">
+                      <Link to="/deals/$dealCode" params={{ dealCode: d.code }} className="transition-colors group-hover:text-teal-700">{d.client}</Link>
+                    </td>
+                    <td className="px-4 py-3 font-medium text-slate-900">
+                      <Link to="/deals/$dealCode" params={{ dealCode: d.code }} className="transition-colors group-hover:text-teal-700">{d.title}</Link>
+                    </td>
+                    <td className="whitespace-nowrap px-4 py-3">
+                      <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-medium ${STAGE_STYLE[d.stage]}`}>
+                        {d.stage}
+                      </span>
+                    </td>
+                    <td className="whitespace-nowrap px-4 py-3 text-right num font-semibold text-slate-950"><Money amount={d.amount} /></td>
+                    <td className="whitespace-nowrap px-4 py-3 text-right num text-slate-700">{d.probability}%</td>
+                    <td className="whitespace-nowrap px-4 py-3 text-xs text-slate-700">{d.owner}</td>
+                    <td className="px-4 py-3 text-xs text-slate-700">{d.next_action}</td>
+                    <td className="whitespace-nowrap px-4 py-3 text-right num text-xs text-slate-700">{d.due ?? "—"}</td>
+                    <td className="whitespace-nowrap px-2 py-3 text-slate-400 transition-colors group-hover:text-teal-600">
+                      <Link to="/deals/$dealCode" params={{ dealCode: d.code }}>
+                        <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
