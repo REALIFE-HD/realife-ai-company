@@ -9,14 +9,38 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as DocsRouteImport } from './routes/docs'
+import { Route as DealsRouteImport } from './routes/deals'
+import { Route as AiRouteImport } from './routes/ai'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DepartmentsIndexRouteImport } from './routes/departments.index'
 import { Route as DepartmentsIdRouteImport } from './routes/departments.$id'
 
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportsRoute = ReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DocsRoute = DocsRouteImport.update({
   id: '/docs',
   path: '/docs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DealsRoute = DealsRouteImport.update({
+  id: '/deals',
+  path: '/deals',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AiRoute = AiRouteImport.update({
+  id: '/ai',
+  path: '/ai',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -37,45 +61,114 @@ const DepartmentsIdRoute = DepartmentsIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/ai': typeof AiRoute
+  '/deals': typeof DealsRoute
   '/docs': typeof DocsRoute
+  '/reports': typeof ReportsRoute
+  '/settings': typeof SettingsRoute
   '/departments/$id': typeof DepartmentsIdRoute
   '/departments/': typeof DepartmentsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/ai': typeof AiRoute
+  '/deals': typeof DealsRoute
   '/docs': typeof DocsRoute
+  '/reports': typeof ReportsRoute
+  '/settings': typeof SettingsRoute
   '/departments/$id': typeof DepartmentsIdRoute
   '/departments': typeof DepartmentsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/ai': typeof AiRoute
+  '/deals': typeof DealsRoute
   '/docs': typeof DocsRoute
+  '/reports': typeof ReportsRoute
+  '/settings': typeof SettingsRoute
   '/departments/$id': typeof DepartmentsIdRoute
   '/departments/': typeof DepartmentsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/docs' | '/departments/$id' | '/departments/'
+  fullPaths:
+    | '/'
+    | '/ai'
+    | '/deals'
+    | '/docs'
+    | '/reports'
+    | '/settings'
+    | '/departments/$id'
+    | '/departments/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/docs' | '/departments/$id' | '/departments'
-  id: '__root__' | '/' | '/docs' | '/departments/$id' | '/departments/'
+  to:
+    | '/'
+    | '/ai'
+    | '/deals'
+    | '/docs'
+    | '/reports'
+    | '/settings'
+    | '/departments/$id'
+    | '/departments'
+  id:
+    | '__root__'
+    | '/'
+    | '/ai'
+    | '/deals'
+    | '/docs'
+    | '/reports'
+    | '/settings'
+    | '/departments/$id'
+    | '/departments/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AiRoute: typeof AiRoute
+  DealsRoute: typeof DealsRoute
   DocsRoute: typeof DocsRoute
+  ReportsRoute: typeof ReportsRoute
+  SettingsRoute: typeof SettingsRoute
   DepartmentsIdRoute: typeof DepartmentsIdRoute
   DepartmentsIndexRoute: typeof DepartmentsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reports': {
+      id: '/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof ReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/docs': {
       id: '/docs'
       path: '/docs'
       fullPath: '/docs'
       preLoaderRoute: typeof DocsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/deals': {
+      id: '/deals'
+      path: '/deals'
+      fullPath: '/deals'
+      preLoaderRoute: typeof DealsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ai': {
+      id: '/ai'
+      path: '/ai'
+      fullPath: '/ai'
+      preLoaderRoute: typeof AiRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -104,10 +197,23 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AiRoute: AiRoute,
+  DealsRoute: DealsRoute,
   DocsRoute: DocsRoute,
+  ReportsRoute: ReportsRoute,
+  SettingsRoute: SettingsRoute,
   DepartmentsIdRoute: DepartmentsIdRoute,
   DepartmentsIndexRoute: DepartmentsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
