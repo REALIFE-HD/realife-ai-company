@@ -9,7 +9,7 @@ import {
   getDepartment,
   type Department,
 } from "@/data/departments";
-import { Header } from "@/components/layout/Header";
+import { AppShell } from "@/components/layout/AppShell";
 import { Footer } from "@/components/layout/Footer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -63,7 +63,7 @@ export const Route = createFileRoute("/departments/$id")({
 });
 
 const STATUS_STYLE: Record<Department["status"], string> = {
-  active: "border-emerald-200 bg-emerald-50 text-emerald-700",
+  active: "border-teal-200 bg-teal-50 text-teal-700",
   setup: "border-amber-200 bg-amber-50 text-amber-700",
   standard: "",
 };
