@@ -21,7 +21,7 @@ export function CTASection() {
                 Next Action
               </span>
             </div>
-            <h2 className="mt-5 font-serif text-3xl font-semibold leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">
+            <h2 className="mt-5 font-serif text-3xl font-semibold leading-[1.2] tracking-tight text-white sm:text-[2.25rem] lg:text-[2.75rem]">
               今日、どの部門に
               <br className="sm:hidden" />
               指示を出しますか?
