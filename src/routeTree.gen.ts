@@ -14,6 +14,7 @@ import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as InboxRouteImport } from './routes/inbox'
 import { Route as DocsRouteImport } from './routes/docs'
 import { Route as DealsRouteImport } from './routes/deals'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AiRouteImport } from './routes/ai'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DepartmentsIndexRouteImport } from './routes/departments.index'
@@ -45,6 +46,11 @@ const DealsRoute = DealsRouteImport.update({
   path: '/deals',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AiRoute = AiRouteImport.update({
   id: '/ai',
   path: '/ai',
@@ -74,6 +80,7 @@ const DealsDealCodeRoute = DealsDealCodeRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/ai': typeof AiRoute
+  '/auth': typeof AuthRoute
   '/deals': typeof DealsRouteWithChildren
   '/docs': typeof DocsRoute
   '/inbox': typeof InboxRoute
@@ -86,6 +93,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/ai': typeof AiRoute
+  '/auth': typeof AuthRoute
   '/deals': typeof DealsRouteWithChildren
   '/docs': typeof DocsRoute
   '/inbox': typeof InboxRoute
@@ -99,6 +107,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/ai': typeof AiRoute
+  '/auth': typeof AuthRoute
   '/deals': typeof DealsRouteWithChildren
   '/docs': typeof DocsRoute
   '/inbox': typeof InboxRoute
@@ -113,6 +122,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/ai'
+    | '/auth'
     | '/deals'
     | '/docs'
     | '/inbox'
@@ -125,6 +135,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/ai'
+    | '/auth'
     | '/deals'
     | '/docs'
     | '/inbox'
@@ -137,6 +148,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/ai'
+    | '/auth'
     | '/deals'
     | '/docs'
     | '/inbox'
@@ -150,6 +162,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AiRoute: typeof AiRoute
+  AuthRoute: typeof AuthRoute
   DealsRoute: typeof DealsRouteWithChildren
   DocsRoute: typeof DocsRoute
   InboxRoute: typeof InboxRoute
@@ -194,6 +207,13 @@ declare module '@tanstack/react-router' {
       path: '/deals'
       fullPath: '/deals'
       preLoaderRoute: typeof DealsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ai': {
@@ -247,6 +267,7 @@ const DealsRouteWithChildren = DealsRoute._addFileChildren(DealsRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AiRoute: AiRoute,
+  AuthRoute: AuthRoute,
   DealsRoute: DealsRouteWithChildren,
   DocsRoute: DocsRoute,
   InboxRoute: InboxRoute,
@@ -258,3 +279,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
