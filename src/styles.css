@@ -2,12 +2,13 @@
 @source "../src";
 @import "tw-animate-css";
 @plugin "@tailwindcss/typography";
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&family=Noto+Serif+JP:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;600;700&family=Noto+Serif+JP:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@500;700;900&family=JetBrains+Mono:wght@400;500&display=swap");
 
 @custom-variant dark (&:is(.dark *));
 
 @theme {
   --font-sans: "Inter", "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", "Yu Gothic", "Meiryo", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Inter", "Zen Kaku Gothic New", "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Yu Gothic", ui-sans-serif, sans-serif;
   --font-serif: "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", ui-serif, Georgia, serif;
   --font-mono: "JetBrains Mono", "DM Mono", ui-monospace, SFMono-Regular, monospace;
 }
@@ -157,6 +158,14 @@
     -moz-osx-font-smoothing: grayscale;
     font-feature-settings: "palt", "kern";
     letter-spacing: 0.005em;
+  }
+
+  h1, h2, h3, h4, h5, h6,
+  .font-display {
+    font-family: var(--font-display);
+    font-feature-settings: "palt", "kern";
+    letter-spacing: -0.015em;
+    font-weight: 700;
   }
 
   .font-serif {
