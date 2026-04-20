@@ -23,12 +23,11 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
           const active =
             "exact" in item && item.exact
               ? pathname === "/" && !hash
-              : !("hash" in item) && (pathname === item.to || pathname.startsWith(`${item.to}/`));
+              : pathname === item.to || pathname.startsWith(`${item.to}/`);
           return (
             <li key={item.label}>
               <Link
                 to={item.to}
-                hash={"hash" in item ? item.hash : undefined}
                 onClick={onNavigate}
                 className={`group flex items-center gap-2.5 rounded-md px-3 py-2 text-[13px] font-medium transition-colors ${
                   active
