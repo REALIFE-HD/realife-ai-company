@@ -5,7 +5,7 @@ export function Hero() {
   const featured = DEPARTMENTS.slice(1, 5);
 
   return (
-    <section className="relative overflow-hidden border-b border-neutral-200 bg-white">
+    <section className="relative overflow-hidden border-b border-slate-200 bg-white">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 grid-bg-light" />
       <div
         aria-hidden="true"
@@ -17,7 +17,7 @@ export function Hero() {
           <div className="lg:col-span-7">
             <div className="flex items-center gap-3">
               <span aria-hidden="true" className="h-px w-8 bg-neutral-400" />
-              <span className="text-[11px] font-medium uppercase tracking-[0.22em] text-neutral-500">
+              <span className="text-[11px] font-medium uppercase tracking-[0.22em] text-slate-500">
                 Virtual Organization
               </span>
             </div>
@@ -34,7 +34,7 @@ export function Hero() {
               </span>
             </h1>
 
-            <p className="mt-6 max-w-xl text-base leading-relaxed text-neutral-600 sm:text-lg">
+            <p className="mt-6 max-w-xl text-base leading-relaxed text-slate-600 sm:text-lg">
               12の仮想部門を、一つのダッシュボードから指揮する。見積・発注・請求・採用・マーケ——業務指示と案件進捗を横断的に可視化するオペレーションシステム。
             </p>
 
@@ -48,20 +48,20 @@ export function Hero() {
               </a>
               <a
                 href="#setup"
-                className="inline-flex items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-5 py-3 text-sm font-medium text-neutral-800 transition-colors hover:border-neutral-900 hover:text-neutral-950 focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:outline-none"
+                className="inline-flex items-center justify-center gap-2 rounded-md border border-slate-300 bg-white px-5 py-3 text-sm font-medium text-slate-800 transition-colors hover:border-neutral-900 hover:text-neutral-950 focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:outline-none"
               >
                 セットアップを見る
               </a>
             </div>
 
-            <dl className="mt-12 grid grid-cols-3 gap-6 border-t border-neutral-200 pt-8">
+            <dl className="mt-12 grid grid-cols-3 gap-6 border-t border-slate-200 pt-8">
               {[
                 { v: "47", l: "進行中案件" },
                 { v: "12", l: "今週の見積" },
                 { v: "¥18.4M", l: "成約(当月)" },
               ].map((m) => (
                 <div key={m.l}>
-                  <dt className="text-[10px] uppercase tracking-[0.18em] text-neutral-500">{m.l}</dt>
+                  <dt className="text-[10px] uppercase tracking-[0.18em] text-slate-500">{m.l}</dt>
                   <dd className="mt-2 font-mono text-xl font-medium text-neutral-950 sm:text-2xl">
                     {m.v}
                   </dd>
@@ -72,19 +72,19 @@ export function Hero() {
 
           {/* Right */}
           <div className="relative lg:col-span-5">
-            <div className="relative rounded-2xl border border-neutral-200 bg-white p-5 shadow-[0_24px_48px_-24px_rgba(0,0,0,0.18)] sm:p-6">
+            <div className="relative rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_24px_48px_-24px_rgba(0,0,0,0.18)] sm:p-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span aria-hidden="true" className="h-2 w-2 rounded-full bg-emerald-500" />
-                  <span className="text-xs font-medium text-neutral-700">稼働中</span>
+                  <span className="text-xs font-medium text-slate-700">稼働中</span>
                 </div>
-                <span className="font-mono text-[10px] uppercase tracking-wider text-neutral-400">
+                <span className="font-mono text-[10px] uppercase tracking-wider text-slate-400">
                   REALIFE.DASHBOARD
                 </span>
               </div>
 
               <div className="mt-5">
-                <p className="text-[11px] uppercase tracking-[0.18em] text-neutral-500">今月の成約額</p>
+                <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">今月の成約額</p>
                 <div className="mt-1 flex items-baseline gap-3">
                   <span className="font-mono text-2xl font-semibold text-neutral-950 sm:text-3xl">
                     ¥18,450,000
@@ -96,24 +96,24 @@ export function Hero() {
                   aria-valuenow={62}
                   aria-valuemin={0}
                   aria-valuemax={100}
-                  className="mt-4 h-1.5 w-full overflow-hidden rounded-full bg-neutral-100"
+                  className="mt-4 h-1.5 w-full overflow-hidden rounded-full bg-slate-100"
                 >
                   <div
                     className="h-full rounded-full bg-gradient-to-r from-neutral-950 to-blue-500"
                     style={{ width: "62%" }}
                   />
                 </div>
-                <p className="mt-2 text-[11px] text-neutral-500">月次目標達成率 62%</p>
+                <p className="mt-2 text-[11px] text-slate-500">月次目標達成率 62%</p>
               </div>
 
-              <ul className="mt-6 space-y-2 border-t border-neutral-100 pt-4">
+              <ul className="mt-6 space-y-2 border-t border-slate-100 pt-4">
                 {featured.map((d) => (
                   <li key={d.id} className="flex items-center justify-between gap-3 py-1.5">
                     <div className="flex items-center gap-3">
-                      <span className="flex h-7 w-7 items-center justify-center rounded-md border border-neutral-200 bg-neutral-50 font-mono text-[11px] font-medium text-neutral-700">
+                      <span className="flex h-7 w-7 items-center justify-center rounded-md border border-slate-200 bg-slate-50 font-mono text-[11px] font-medium text-slate-700">
                         {d.id}
                       </span>
-                      <span className="text-sm font-medium text-neutral-800">{d.name}</span>
+                      <span className="text-sm font-medium text-slate-800">{d.name}</span>
                     </div>
                     <span className="font-mono text-sm font-semibold text-neutral-950">{d.kpiValue}</span>
                   </li>
@@ -124,9 +124,9 @@ export function Hero() {
             {/* Floating cards */}
             <div
               aria-hidden="true"
-              className="absolute -left-3 -top-3 hidden -rotate-[4deg] rounded-lg border border-neutral-200 bg-white px-3 py-2 shadow-lg md:block"
+              className="absolute -left-3 -top-3 hidden -rotate-[4deg] rounded-lg border border-slate-200 bg-white px-3 py-2 shadow-lg md:block"
             >
-              <p className="text-[10px] uppercase tracking-wider text-neutral-500">未処理</p>
+              <p className="text-[10px] uppercase tracking-wider text-slate-500">未処理</p>
               <p className="font-mono text-sm font-semibold text-neutral-950">28 タスク</p>
             </div>
             <div

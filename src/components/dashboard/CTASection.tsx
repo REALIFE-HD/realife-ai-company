@@ -26,14 +26,14 @@ export function CTASection() {
               <br className="sm:hidden" />
               指示を出しますか?
             </h2>
-            <p className="mt-5 max-w-2xl text-sm leading-relaxed text-neutral-400 sm:text-base">
+            <p className="mt-5 max-w-2xl text-sm leading-relaxed text-slate-400 sm:text-base">
               Cowork プロジェクトと連携し、各部門への業務指示をワンクリックで起動。見積・発注・採用・経理まで、すべての業務を横断的に動かせます。
             </p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row lg:col-span-4 lg:justify-end">
             <a
               href="#departments"
-              className="inline-flex items-center justify-center gap-2 rounded-md bg-white px-5 py-3 text-sm font-medium text-neutral-950 transition-colors hover:bg-neutral-100 focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:outline-none"
+              className="inline-flex items-center justify-center gap-2 rounded-md bg-white px-5 py-3 text-sm font-medium text-neutral-950 transition-colors hover:bg-slate-100 focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:outline-none"
             >
               部門を選んで指示
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
