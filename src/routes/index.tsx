@@ -1,9 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
-import { Hero } from "@/components/dashboard/Hero";
+import { AppShell } from "@/components/layout/AppShell";
+import { KpiCards } from "@/components/dashboard/KpiCards";
+import { DashboardCharts } from "@/components/dashboard/DashboardCharts";
 import { DepartmentsGrid } from "@/components/dashboard/DepartmentsGrid";
 import { CTASection } from "@/components/dashboard/CTASection";
+import { Footer } from "@/components/layout/Footer";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -26,14 +27,14 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   return (
-    <div className="min-h-screen bg-white text-slate-900">
-      <Header />
-      <main>
-        <Hero />
+    <AppShell title="ダッシュボード" subtitle="Q2 2026 ・ 12部門の業務指揮を一望">
+      <div className="space-y-6 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+        <KpiCards />
+        <DashboardCharts />
         <DepartmentsGrid />
         <CTASection />
-      </main>
+      </div>
       <Footer />
-    </div>
+    </AppShell>
   );
 }
