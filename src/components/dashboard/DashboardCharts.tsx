@@ -95,19 +95,19 @@ function Bars() {
 export function DashboardCharts() {
   return (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-      <div className="rounded-xl border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-        <div className="flex items-center justify-between">
-          <h3 className="text-[13px] font-semibold tracking-tight text-slate-900">部門ステータス分布</h3>
-          <span className="text-[10px] font-medium uppercase tracking-[0.16em] text-slate-400">12 Departments</span>
+      <div className="rounded-xl border border-slate-300 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
+        <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+          <h3 className="text-[13px] font-bold tracking-tight text-slate-950">部門ステータス分布</h3>
+          <span className="num rounded-md bg-slate-950 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white">12 Depts</span>
         </div>
         <div className="mt-6">
           <Donut />
         </div>
       </div>
-      <div className="rounded-xl border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-        <div className="flex items-center justify-between">
-          <h3 className="text-[13px] font-semibold tracking-tight text-slate-900">部門別タスク負荷</h3>
-          <span className="text-[10px] font-medium uppercase tracking-[0.16em] text-slate-400">Top 8</span>
+      <div className="rounded-xl border border-slate-300 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.06)]">
+        <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+          <h3 className="text-[13px] font-bold tracking-tight text-slate-950">部門別タスク負荷</h3>
+          <span className="num rounded-md bg-teal-600 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white">Top 8</span>
         </div>
         <div className="mt-6">
           <Bars />
