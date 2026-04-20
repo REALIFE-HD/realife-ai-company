@@ -1,6 +1,7 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { LayoutGrid, Building2, Briefcase, BarChart3, MessageSquare, Settings, Bell, Plus, Menu, X, BookOpen } from "lucide-react";
 import { useState, type ReactNode } from "react";
+import { NewInstructionDialog } from "@/components/instructions/NewInstructionDialog";
 
 const NAV = [
   { label: "ダッシュボード", to: "/", icon: LayoutGrid, exact: true },
@@ -130,13 +131,17 @@ export function AppShell({ children, title, subtitle }: { children: ReactNode; t
                 <Bell className="h-4 w-4" />
                 <span aria-hidden="true" className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-teal-500" />
               </button>
-              <button
-                type="button"
-                className="inline-flex items-center gap-1.5 rounded-md bg-teal-600 px-3.5 py-2 text-[13px] font-medium text-white shadow-sm transition-colors hover:bg-teal-700 focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:outline-none"
-              >
-                <Plus className="h-3.5 w-3.5" aria-hidden="true" />
-                新規指示
-              </button>
+              <NewInstructionDialog
+                trigger={
+                  <button
+                    type="button"
+                    className="inline-flex items-center gap-1.5 rounded-md bg-teal-600 px-3.5 py-2 text-[13px] font-medium text-white shadow-sm transition-colors hover:bg-teal-700 focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:outline-none"
+                  >
+                    <Plus className="h-3.5 w-3.5" aria-hidden="true" />
+                    新規指示
+                  </button>
+                }
+              />
             </div>
           </div>
         </header>
