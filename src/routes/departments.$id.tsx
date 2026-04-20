@@ -290,23 +290,8 @@ function DepartmentDetail() {
               </TabsContent>
 
               <TabsContent value="instructions" className="mt-6">
-                <ol className="space-y-3">
-                  {instructions.map((i) => (
-                    <li
-                      key={i.id}
-                      className="rounded-xl border border-slate-200 bg-white p-5"
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="font-mono text-[11px] text-slate-500">{i.id}</span>
-                        <span className="font-mono text-[11px] text-slate-500">{i.date}</span>
-                      </div>
-                      <h4 className="mt-2 text-base font-semibold text-slate-950">{i.title}</h4>
-                      {i.body && <p className="mt-1.5 text-sm text-slate-600">{i.body}</p>}
-                      <p className="mt-3 text-[11px] text-slate-500">From: {i.from}</p>
-                    </li>
-                  ))}
-                </ol>
-            </TabsContent>
+                <InstructionList instructions={instructions} onChange={refresh} />
+              </TabsContent>
           </Tabs>
         </section>
         <CTASection />
