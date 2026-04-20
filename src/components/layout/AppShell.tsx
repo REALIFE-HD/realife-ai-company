@@ -18,8 +18,7 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
       <ul className="flex flex-col gap-0.5">
         {NAV.map((item) => {
           const Icon = item.icon;
-          const active =
-            item.exact ? pathname === "/" && !hash : false; // simple highlight for dashboard only
+          const active = "exact" in item && item.exact ? pathname === "/" && !hash : false;
           return (
             <li key={item.label}>
               <Link
