@@ -1,4 +1,5 @@
 import { ArrowRight } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { DEPARTMENTS } from "@/data/departments";
 import { DepartmentCard } from "./DepartmentCard";
 
@@ -20,13 +21,13 @@ export function DepartmentsGrid() {
             各部門のカードから指示出し・タスク・案件進捗にアクセスできます。
           </p>
         </div>
-        <a
-          href="#"
+        <Link
+          to="/departments"
           className="inline-flex items-center gap-1.5 text-[13px] font-medium text-teal-700 transition-colors hover:text-teal-800"
         >
           全部門を表示
           <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
-        </a>
+        </Link>
       </div>
 
       <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
