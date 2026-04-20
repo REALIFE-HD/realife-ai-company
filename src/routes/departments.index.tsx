@@ -27,9 +27,9 @@ export const Route = createFileRoute("/departments/")({
 
 function DepartmentsIndex() {
   const total = DEPARTMENTS.length;
-  const active = DEPARTMENTS.filter((d) => d.status === "稼働中").length;
-  const building = DEPARTMENTS.filter((d) => d.status === "構築中").length;
-  const planning = DEPARTMENTS.filter((d) => d.status === "計画中").length;
+  const active = DEPARTMENTS.filter((d) => d.status === "active").length;
+  const building = DEPARTMENTS.filter((d) => d.status === "setup").length;
+  const standard = DEPARTMENTS.filter((d) => d.status === "standard").length;
 
   return (
     <AppShell title="部門一覧" subtitle={`12部門の役割・ステータス・進捗を一覧で確認`}>
@@ -69,7 +69,7 @@ function DepartmentsIndex() {
               { label: "総部門数", value: total },
               { label: "稼働中", value: active },
               { label: "構築中", value: building },
-              { label: "計画中", value: planning },
+              { label: "標準運用", value: standard },
             ].map((s) => (
               <div
                 key={s.label}
