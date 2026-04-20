@@ -72,7 +72,7 @@ export function Hero() {
 
           {/* Right */}
           <div className="relative lg:col-span-5">
-            <div className="relative rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_24px_48px_-24px_rgba(0,0,0,0.18)] sm:p-6">
+            <div className="relative rounded-2xl border border-slate-200/80 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04),0_24px_48px_-24px_rgba(15,23,42,0.18)] sm:p-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span aria-hidden="true" className="h-2 w-2 rounded-full bg-emerald-500" />
@@ -124,14 +124,14 @@ export function Hero() {
             {/* Floating cards */}
             <div
               aria-hidden="true"
-              className="absolute -left-3 -top-3 hidden -rotate-[4deg] rounded-lg border border-slate-200 bg-white px-3 py-2 shadow-lg md:block"
+              className="absolute -left-3 -top-3 hidden -rotate-[3deg] rounded-lg border border-slate-200 bg-white px-3 py-2 shadow-[0_10px_30px_-12px_rgba(15,23,42,0.25)] md:block"
             >
               <p className="text-[10px] uppercase tracking-wider text-slate-500">未処理</p>
               <p className="font-mono text-sm font-semibold text-slate-950">28 タスク</p>
             </div>
             <div
               aria-hidden="true"
-              className="absolute -bottom-3 -right-3 hidden rotate-[3deg] rounded-lg border border-blue-700 bg-blue-600 px-3 py-2 text-white shadow-lg md:block"
+              className="absolute -bottom-3 -right-3 hidden rotate-[2deg] rounded-lg border border-blue-600 bg-blue-600 px-3 py-2 text-white shadow-[0_10px_30px_-10px_rgba(37,99,235,0.55)] md:block"
             >
               <p className="text-[10px] uppercase tracking-wider text-blue-100">今週新規</p>
               <p className="font-mono text-sm font-semibold">+7 件</p>

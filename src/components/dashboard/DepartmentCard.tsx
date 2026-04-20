@@ -14,7 +14,7 @@ export function DepartmentCard({ d }: { d: Department }) {
       to="/departments/$id"
       params={{ id: d.id }}
       aria-label={`${d.name} の詳細`}
-      className="group relative flex flex-col rounded-xl border border-slate-200 bg-white p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-900 hover:shadow-[0_18px_32px_-18px_rgba(0,0,0,0.25)] focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:outline-none"
+      className="group relative flex flex-col rounded-xl border border-slate-200/80 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-900 hover:shadow-[0_18px_32px_-18px_rgba(15,23,42,0.25)] focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:outline-none"
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-2.5">
