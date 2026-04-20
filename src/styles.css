@@ -167,9 +167,15 @@
 
   .font-mono,
   .tabular {
-    font-family: var(--font-mono);
+    font-family: "Inter", var(--font-mono);
     font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum", "cv11";
     letter-spacing: -0.01em;
+  }
+
+  /* 数値要素は自動的にtabular-numsを適用 */
+  body {
+    font-variant-numeric: tabular-nums;
   }
 }
 
