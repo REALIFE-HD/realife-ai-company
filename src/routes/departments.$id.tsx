@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowLeft, ArrowRight, Plus } from "lucide-react";
 import {
   DEPARTMENTS,
@@ -13,18 +13,15 @@ import { AppShell } from "@/components/layout/AppShell";
 import { Footer } from "@/components/layout/Footer";
 import { CTASection } from "@/components/dashboard/CTASection";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { NewInstructionDialog } from "@/components/instructions/NewInstructionDialog";
+import { InstructionList } from "@/components/instructions/InstructionList";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
+  getInstructionsForDepartment,
+  loadInstructions,
+  saveInstructions,
+  INSTRUCTION_STORAGE_KEY,
+  type Instruction,
+} from "@/lib/instructions";
 
 export const Route = createFileRoute("/departments/$id")({
   loader: ({ params }) => {
