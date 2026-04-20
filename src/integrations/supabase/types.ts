@@ -35,6 +35,89 @@ export type Database = {
         }
         Relationships: []
       }
+      deal_activities: {
+        Row: {
+          content: string
+          created_at: string
+          created_by: string
+          deal_id: string
+          id: string
+          kind: Database["public"]["Enums"]["deal_activity_kind"]
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          created_by?: string
+          deal_id: string
+          id?: string
+          kind?: Database["public"]["Enums"]["deal_activity_kind"]
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          created_by?: string
+          deal_id?: string
+          id?: string
+          kind?: Database["public"]["Enums"]["deal_activity_kind"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deal_activities_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "deals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      deals: {
+        Row: {
+          amount: number
+          client: string
+          code: string
+          created_at: string
+          due: string | null
+          id: string
+          next_action: string
+          notes: string
+          owner: string
+          probability: number
+          stage: Database["public"]["Enums"]["deal_stage"]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          amount?: number
+          client: string
+          code: string
+          created_at?: string
+          due?: string | null
+          id?: string
+          next_action?: string
+          notes?: string
+          owner?: string
+          probability?: number
+          stage?: Database["public"]["Enums"]["deal_stage"]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          client?: string
+          code?: string
+          created_at?: string
+          due?: string | null
+          id?: string
+          next_action?: string
+          notes?: string
+          owner?: string
+          probability?: number
+          stage?: Database["public"]["Enums"]["deal_stage"]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       instructions: {
         Row: {
           content: string
@@ -76,6 +159,8 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
+      deal_activity_kind: "メモ" | "電話" | "訪問" | "メール" | "その他"
+      deal_stage: "見積中" | "提案中" | "見積提出" | "受注" | "失注"
       instruction_status: "open" | "in_progress" | "completed"
     }
     CompositeTypes: {
@@ -204,6 +289,8 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      deal_activity_kind: ["メモ", "電話", "訪問", "メール", "その他"],
+      deal_stage: ["見積中", "提案中", "見積提出", "受注", "失注"],
       instruction_status: ["open", "in_progress", "completed"],
     },
   },
