@@ -16,13 +16,13 @@ export function Hero() {
           {/* Left */}
           <div className="lg:col-span-7">
             <div className="flex items-center gap-3">
-              <span aria-hidden="true" className="h-px w-8 bg-neutral-400" />
+              <span aria-hidden="true" className="h-px w-8 bg-slate-400" />
               <span className="text-[11px] font-medium uppercase tracking-[0.22em] text-slate-500">
                 Virtual Organization
               </span>
             </div>
 
-            <h1 className="mt-6 font-serif text-4xl font-semibold leading-tight tracking-tight text-neutral-950 sm:text-5xl lg:text-6xl">
+            <h1 className="mt-6 font-serif text-4xl font-semibold leading-tight tracking-tight text-slate-950 sm:text-5xl lg:text-6xl">
               一人で、
               <br />
               <span className="relative inline-block">
@@ -41,14 +41,14 @@ export function Hero() {
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <a
                 href="#departments"
-                className="inline-flex items-center justify-center gap-2 rounded-md bg-neutral-950 px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800 focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:outline-none"
+                className="inline-flex items-center justify-center gap-2 rounded-md bg-slate-950 px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-slate-800 focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:outline-none"
               >
                 部門ダッシュボードへ
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </a>
               <a
                 href="#setup"
-                className="inline-flex items-center justify-center gap-2 rounded-md border border-slate-300 bg-white px-5 py-3 text-sm font-medium text-slate-800 transition-colors hover:border-neutral-900 hover:text-neutral-950 focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:outline-none"
+                className="inline-flex items-center justify-center gap-2 rounded-md border border-slate-300 bg-white px-5 py-3 text-sm font-medium text-slate-800 transition-colors hover:border-slate-900 hover:text-slate-950 focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:outline-none"
               >
                 セットアップを見る
               </a>
@@ -62,7 +62,7 @@ export function Hero() {
               ].map((m) => (
                 <div key={m.l}>
                   <dt className="text-[10px] uppercase tracking-[0.18em] text-slate-500">{m.l}</dt>
-                  <dd className="mt-2 font-mono text-xl font-medium text-neutral-950 sm:text-2xl">
+                  <dd className="mt-2 font-mono text-xl font-medium text-slate-950 sm:text-2xl">
                     {m.v}
                   </dd>
                 </div>
@@ -86,7 +86,7 @@ export function Hero() {
               <div className="mt-5">
                 <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">今月の成約額</p>
                 <div className="mt-1 flex items-baseline gap-3">
-                  <span className="font-mono text-2xl font-semibold text-neutral-950 sm:text-3xl">
+                  <span className="font-mono text-2xl font-semibold text-slate-950 sm:text-3xl">
                     ¥18,450,000
                   </span>
                   <span className="font-mono text-xs font-medium text-emerald-600">+12.4%</span>
@@ -99,7 +99,7 @@ export function Hero() {
                   className="mt-4 h-1.5 w-full overflow-hidden rounded-full bg-slate-100"
                 >
                   <div
-                    className="h-full rounded-full bg-gradient-to-r from-neutral-950 to-blue-500"
+                    className="h-full rounded-full bg-gradient-to-r from-slate-950 to-blue-500"
                     style={{ width: "62%" }}
                   />
                 </div>
@@ -115,7 +115,7 @@ export function Hero() {
                       </span>
                       <span className="text-sm font-medium text-slate-800">{d.name}</span>
                     </div>
-                    <span className="font-mono text-sm font-semibold text-neutral-950">{d.kpiValue}</span>
+                    <span className="font-mono text-sm font-semibold text-slate-950">{d.kpiValue}</span>
                   </li>
                 ))}
               </ul>
@@ -127,7 +127,7 @@ export function Hero() {
               className="absolute -left-3 -top-3 hidden -rotate-[4deg] rounded-lg border border-slate-200 bg-white px-3 py-2 shadow-lg md:block"
             >
               <p className="text-[10px] uppercase tracking-wider text-slate-500">未処理</p>
-              <p className="font-mono text-sm font-semibold text-neutral-950">28 タスク</p>
+              <p className="font-mono text-sm font-semibold text-slate-950">28 タスク</p>
             </div>
             <div
               aria-hidden="true"

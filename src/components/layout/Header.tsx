@@ -18,12 +18,12 @@ export function Header() {
         <Link to="/" className="flex items-center gap-2.5" aria-label="REALIFE Operations ホーム">
           <span
             aria-hidden="true"
-            className="flex h-8 w-8 items-center justify-center rounded bg-neutral-950 font-serif text-sm font-semibold text-white"
+            className="flex h-8 w-8 items-center justify-center rounded bg-slate-950 font-serif text-sm font-semibold text-white"
           >
             RL
           </span>
           <span className="flex flex-col leading-none">
-            <span className="font-serif text-sm font-semibold tracking-wide text-neutral-950">REALIFE</span>
+            <span className="font-serif text-sm font-semibold tracking-wide text-slate-950">REALIFE</span>
             <span className="mt-0.5 text-[10px] uppercase tracking-[0.18em] text-slate-500">Operations</span>
           </span>
         </Link>
@@ -34,12 +34,12 @@ export function Header() {
               <li key={item.label}>
                 <a
                   href={item.hash ? `#${item.hash}` : "/"}
-                  className="group relative inline-flex items-center px-3 py-2 text-sm text-slate-700 transition-colors hover:text-neutral-950"
+                  className="group relative inline-flex items-center px-3 py-2 text-sm text-slate-700 transition-colors hover:text-slate-950"
                 >
                   {item.label}
                   <span
                     aria-hidden="true"
-                    className="absolute inset-x-3 bottom-1 h-px origin-left scale-x-0 bg-neutral-950 transition-transform duration-300 group-hover:scale-x-100"
+                    className="absolute inset-x-3 bottom-1 h-px origin-left scale-x-0 bg-slate-950 transition-transform duration-300 group-hover:scale-x-100"
                   />
                 </a>
               </li>
@@ -51,14 +51,14 @@ export function Header() {
           <button
             type="button"
             aria-label="通知"
-            className="relative inline-flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 text-slate-700 transition-colors hover:border-neutral-900 hover:text-neutral-950 focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:outline-none"
+            className="relative inline-flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 text-slate-700 transition-colors hover:border-slate-900 hover:text-slate-950 focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:outline-none"
           >
             <Bell className="h-4 w-4" />
             <span aria-hidden="true" className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-blue-600" />
           </button>
           <button
             type="button"
-            className="inline-flex items-center gap-1.5 rounded-md bg-neutral-950 px-3.5 py-2 text-sm font-medium text-white transition-colors hover:bg-neutral-800 focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:outline-none"
+            className="inline-flex items-center gap-1.5 rounded-md bg-slate-950 px-3.5 py-2 text-sm font-medium text-white transition-colors hover:bg-slate-800 focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:outline-none"
           >
             <Plus className="h-4 w-4" aria-hidden="true" />
             新規指示
@@ -101,7 +101,7 @@ export function Header() {
             <div className="mt-3 flex items-center gap-2 border-t border-slate-100 pt-3">
               <button
                 type="button"
-                className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-md bg-neutral-950 px-3.5 py-2 text-sm font-medium text-white"
+                className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-md bg-slate-950 px-3.5 py-2 text-sm font-medium text-white"
               >
                 <Plus className="h-4 w-4" aria-hidden="true" />
                 新規指示

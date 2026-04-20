@@ -2,7 +2,7 @@ import { ArrowRight } from "lucide-react";
 
 export function CTASection() {
   return (
-    <section className="relative overflow-hidden bg-neutral-950">
+    <section className="relative overflow-hidden bg-slate-950">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 grid-bg-dark" />
       <div
         aria-hidden="true"
@@ -33,14 +33,14 @@ export function CTASection() {
           <div className="flex flex-col gap-3 sm:flex-row lg:col-span-4 lg:justify-end">
             <a
               href="#departments"
-              className="inline-flex items-center justify-center gap-2 rounded-md bg-white px-5 py-3 text-sm font-medium text-neutral-950 transition-colors hover:bg-slate-100 focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:outline-none"
+              className="inline-flex items-center justify-center gap-2 rounded-md bg-white px-5 py-3 text-sm font-medium text-slate-950 transition-colors hover:bg-slate-100 focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:outline-none"
             >
               部門を選んで指示
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </a>
             <a
               href="#"
-              className="inline-flex items-center justify-center gap-2 rounded-md border border-neutral-700 bg-white/5 px-5 py-3 text-sm font-medium text-white transition-colors hover:border-neutral-500 hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:outline-none"
+              className="inline-flex items-center justify-center gap-2 rounded-md border border-slate-700 bg-white/5 px-5 py-3 text-sm font-medium text-white transition-colors hover:border-slate-500 hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:outline-none"
             >
               ドキュメント
             </a>

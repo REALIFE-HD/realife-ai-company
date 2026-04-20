@@ -5,7 +5,7 @@ export function Footer() {
         <div className="flex items-center gap-2.5">
           <span
             aria-hidden="true"
-            className="flex h-7 w-7 items-center justify-center rounded bg-neutral-950 font-serif text-xs font-semibold text-white"
+            className="flex h-7 w-7 items-center justify-center rounded bg-slate-950 font-serif text-xs font-semibold text-white"
           >
             RL
           </span>
@@ -13,13 +13,13 @@ export function Footer() {
         </div>
         <ul className="flex items-center gap-5 text-xs text-slate-600">
           <li>
-            <a href="#" className="transition-colors hover:text-neutral-950">利用規約</a>
+            <a href="#" className="transition-colors hover:text-slate-950">利用規約</a>
           </li>
           <li>
-            <a href="#" className="transition-colors hover:text-neutral-950">プライバシー</a>
+            <a href="#" className="transition-colors hover:text-slate-950">プライバシー</a>
           </li>
           <li>
-            <a href="#" className="transition-colors hover:text-neutral-950">お問い合わせ</a>
+            <a href="#" className="transition-colors hover:text-slate-950">お問い合わせ</a>
           </li>
         </ul>
       </div>
