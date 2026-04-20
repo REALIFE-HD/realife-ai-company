@@ -11,6 +11,7 @@ import {
 } from "@/data/departments";
 import { AppShell } from "@/components/layout/AppShell";
 import { Footer } from "@/components/layout/Footer";
+import { CTASection } from "@/components/dashboard/CTASection";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Dialog,
@@ -340,6 +341,7 @@ function DepartmentDetail() {
             </TabsContent>
           </Tabs>
         </section>
+        <CTASection />
       </div>
       <Footer />
     </AppShell>
