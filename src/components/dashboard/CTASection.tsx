@@ -36,12 +36,12 @@ export function CTASection() {
             部門を選んで指示
             <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
           </Link>
-          <a
-            href="#"
+          <Link
+            to="/docs"
             className="inline-flex items-center justify-center gap-2 rounded-md border border-slate-700 bg-white/5 px-4 py-2.5 text-[13px] font-medium text-white transition-colors hover:border-slate-500 hover:bg-white/10"
           >
             ドキュメント
-          </a>
+          </Link>
         </div>
       </div>
     </section>
