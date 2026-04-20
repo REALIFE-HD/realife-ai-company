@@ -38,8 +38,18 @@ export const STAGE_STYLE: Record<DealStage, string> = {
 
 export const STAGES: DealStage[] = ["見積中", "提案中", "見積提出", "受注", "失注"];
 
-export function formatAmount(n: number) {
-  return `¥${n.toLocaleString("ja-JP")}`;
+/**
+ * 金額を ¥ + カンマ区切りで整形。
+ * compact=true の場合は M(百万)/K(千) で略記。
+ */
+export function formatAmount(n: number, opts?: { compact?: boolean }): string {
+  if (n == null || Number.isNaN(n)) return "¥0";
+  if (opts?.compact) {
+    if (Math.abs(n) >= 100_000_000) return `¥${(n / 100_000_000).toFixed(1)}億`;
+    if (Math.abs(n) >= 10_000) return `¥${(n / 10_000).toFixed(1)}万`;
+    if (Math.abs(n) >= 1_000) return `¥${(n / 1_000).toFixed(1)}K`;
+  }
+  return `¥${Math.round(n).toLocaleString("ja-JP")}`;
 }
 
 export async function listDeals(): Promise<Deal[]> {
