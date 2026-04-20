@@ -181,6 +181,48 @@ export type Database = {
         }
         Relationships: []
       }
+      inbox_messages: {
+        Row: {
+          assigned_department: string | null
+          body: string
+          created_at: string
+          id: string
+          route_confidence: number
+          route_method: Database["public"]["Enums"]["inbox_route_method"]
+          route_reason: string
+          sender: string
+          status: Database["public"]["Enums"]["inbox_status"]
+          subject: string
+          updated_at: string
+        }
+        Insert: {
+          assigned_department?: string | null
+          body?: string
+          created_at?: string
+          id?: string
+          route_confidence?: number
+          route_method?: Database["public"]["Enums"]["inbox_route_method"]
+          route_reason?: string
+          sender?: string
+          status?: Database["public"]["Enums"]["inbox_status"]
+          subject: string
+          updated_at?: string
+        }
+        Update: {
+          assigned_department?: string | null
+          body?: string
+          created_at?: string
+          id?: string
+          route_confidence?: number
+          route_method?: Database["public"]["Enums"]["inbox_route_method"]
+          route_reason?: string
+          sender?: string
+          status?: Database["public"]["Enums"]["inbox_status"]
+          subject?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       instructions: {
         Row: {
           content: string
@@ -254,6 +296,8 @@ export type Database = {
     Enums: {
       deal_activity_kind: "メモ" | "電話" | "訪問" | "メール" | "その他"
       deal_stage: "見積中" | "提案中" | "見積提出" | "受注" | "失注"
+      inbox_route_method: "rule" | "ai" | "manual" | "pending"
+      inbox_status: "unassigned" | "assigned" | "archived"
       instruction_status: "open" | "in_progress" | "completed"
     }
     CompositeTypes: {
@@ -384,6 +428,8 @@ export const Constants = {
     Enums: {
       deal_activity_kind: ["メモ", "電話", "訪問", "メール", "その他"],
       deal_stage: ["見積中", "提案中", "見積提出", "受注", "失注"],
+      inbox_route_method: ["rule", "ai", "manual", "pending"],
+      inbox_status: ["unassigned", "assigned", "archived"],
       instruction_status: ["open", "in_progress", "completed"],
     },
   },
