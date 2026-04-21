@@ -89,6 +89,15 @@ export function SearchHistoryDropdown({
             </span>
           )}
           <span
+            className={`rounded-sm px-1.5 py-px font-mono text-[10px] font-medium tracking-normal ${
+              byteWarn ? "bg-amber-100 text-amber-800" : "bg-slate-100 text-slate-600"
+            }`}
+            title={`履歴データのおおよそのサイズ: ${formatBytes(byteSize)} / 目安 ${formatBytes(BYTE_SOFT_LIMIT)} (${bytePct}%)`}
+            aria-label={`データサイズ ${formatBytes(byteSize)}、目安の${bytePct}パーセント`}
+          >
+            {formatBytes(byteSize)}
+          </span>
+          <span
             tabIndex={0}
             aria-label={HISTORY_DEDUPE_HINT}
             title={HISTORY_DEDUPE_HINT}
