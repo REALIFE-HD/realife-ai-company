@@ -252,6 +252,7 @@ function MetricsDashboard() {
         </ResponsiveContainer>
       </ChartCard>
 
+      <NetworkPanel metrics={metrics} />
       <ErrorsPanel metrics={metrics} />
       <RecentTable metrics={metrics} key={tick} />
     </div>
@@ -399,6 +400,73 @@ function ErrorsPanel({ metrics }: { metrics: CapturedMetric[] }) {
                   {m.stack}
                 </pre>
               ) : null}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+function NetworkPanel({ metrics }: { metrics: CapturedMetric[] }) {
+  const items = useMemo(() => {
+    const list = metrics.filter((m) => m.name === "Resource");
+    // ルート別にグルーピング (id が "<route> ← <url>" 形式)
+    const byRoute = new Map<string, CapturedMetric[]>();
+    for (const m of list) {
+      const route = m.id.split(" ← ")[0] ?? "/";
+      const arr = byRoute.get(route) ?? [];
+      arr.push(m);
+      byRoute.set(route, arr);
+    }
+    return [...byRoute.entries()]
+      .map(([route, arr]) => {
+        const total = arr.reduce((s, m) => s + m.value, 0);
+        const slowest = arr.reduce((a, b) => (a.value > b.value ? a : b));
+        return { route, count: arr.length, total, slowest, recent: arr.slice(-5).reverse() };
+      })
+      .sort((a, b) => b.total - a.total)
+      .slice(0, 6);
+  }, [metrics]);
+
+  return (
+    <div className="rounded-lg border border-border bg-card">
+      <div className="flex items-center justify-between border-b border-border px-4 py-2">
+        <span className="text-sm font-medium">ネットワーク (fetch / XHR) — ルート別</span>
+        <span className="text-xs text-muted-foreground">
+          {items.length === 0 ? "0 件" : `上位 ${items.length} ルート`}
+        </span>
+      </div>
+      {items.length === 0 ? (
+        <div className="px-4 py-6 text-sm text-muted-foreground">
+          まだリクエストが記録されていません。
+        </div>
+      ) : (
+        <ul className="divide-y divide-border">
+          {items.map(({ route, count, total, slowest, recent }) => (
+            <li key={route} className="px-4 py-3">
+              <div className="flex flex-wrap items-center gap-2 text-sm">
+                <span className="font-medium">{route}</span>
+                <span className="text-xs text-muted-foreground">
+                  {count} req ・ 合計 {Math.round(total)}ms ・ 最遅 {Math.round(slowest.value)}ms
+                </span>
+              </div>
+              <ul className="mt-2 space-y-1 text-xs">
+                {recent.map((m, i) => {
+                  const url = m.id.split(" ← ")[1] ?? m.source ?? "";
+                  return (
+                    <li
+                      key={`${m.timestamp}-${i}`}
+                      className="flex items-center justify-between gap-3 text-muted-foreground"
+                    >
+                      <span className="truncate">{url}</span>
+                      <span className={`tabular-nums ${RATING_COLOR[m.rating]}`}>
+                        {Math.round(m.value)}ms
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
             </li>
           ))}
         </ul>

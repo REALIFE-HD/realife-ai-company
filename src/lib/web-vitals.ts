@@ -115,6 +115,73 @@ export function initWebVitals() {
   }
 
   initErrorTracking();
+  initResourceTiming();
+}
+
+/**
+ * fetch / XHR / script / css などのリソース取得時間とサイズを計測し、
+ * 現在ルートと紐付けて記録する。遅いルートと API 呼び出しの相関を取りやすくするため。
+ *
+ * - duration: PerformanceResourceTiming の duration (ms)
+ * - transferSize: Content-Length 相当 (圧縮後)。0 のときは encodedBodySize にフォールバック
+ * - source: リクエスト URL (origin 短縮)
+ * - id: "<METHOD ?> <route> ← <url>" 形式
+ */
+function initResourceTiming() {
+  if (typeof window === "undefined" || !("PerformanceObserver" in window)) return;
+
+  const shortenUrl = (url: string): string => {
+    try {
+      const u = new URL(url, window.location.origin);
+      const path = u.pathname + (u.search ? u.search.slice(0, 40) : "");
+      return u.origin === window.location.origin ? path : `${u.host}${path}`;
+    } catch {
+      return url.slice(0, 120);
+    }
+  };
+
+  try {
+    const obs = new PerformanceObserver((list) => {
+      const route = window.location.pathname;
+      for (const raw of list.getEntries()) {
+        const entry = raw as PerformanceResourceTiming;
+        // fetch / XHR のみに絞る (script, css, img などはノイズになりやすい)
+        if (entry.initiatorType !== "fetch" && entry.initiatorType !== "xmlhttprequest") continue;
+        if (entry.duration < 1) continue;
+
+        const size = entry.transferSize || entry.encodedBodySize || 0;
+        const m: CapturedMetric = {
+          name: "Resource",
+          value: entry.duration,
+          rating:
+            entry.duration < 200 ? "good" : entry.duration < 800 ? "needs-improvement" : "poor",
+          id: `${route} ← ${shortenUrl(entry.name)}${size ? ` (${formatBytes(size)})` : ""}`,
+          timestamp: Date.now(),
+          source: entry.name,
+        };
+        pushMetric(m);
+        if (import.meta.env.DEV) {
+          // eslint-disable-next-line no-console
+          console.log(
+            `%c[net] %c${shortenUrl(entry.name)}%c ${Math.round(entry.duration)}ms${size ? ` ・ ${formatBytes(size)}` : ""} %c(${m.rating})`,
+            "color:#0d9488;font-weight:600",
+            "color:#0f172a;font-weight:600",
+            "color:#0f172a",
+            COLORS[m.rating],
+          );
+        }
+      }
+    });
+    obs.observe({ type: "resource", buffered: true });
+  } catch {
+    // resource timing 未対応は無視
+  }
+}
+
+function formatBytes(bytes: number): string {
+  if (bytes < 1024) return `${bytes}B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)}KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(2)}MB`;
 }
 
 /**
