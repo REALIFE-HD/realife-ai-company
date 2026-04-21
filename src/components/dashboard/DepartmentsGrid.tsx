@@ -12,7 +12,11 @@ import {
 function matches(q: string, ...fields: string[]) {
   const needle = q.trim().toLowerCase();
   if (!needle) return true;
-  return fields.some((f) => f.toLowerCase().includes(needle));
+  // 空白(全角/半角)で分割し、各語をAND条件で評価
+  const tokens = needle.split(/[\s\u3000]+/).filter(Boolean);
+  if (tokens.length === 0) return true;
+  const haystack = fields.map((f) => f.toLowerCase()).join(" \u0001 ");
+  return tokens.every((t) => haystack.includes(t));
 }
 
 export function DepartmentsGrid({
