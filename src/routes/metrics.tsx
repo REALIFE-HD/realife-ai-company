@@ -250,6 +250,7 @@ function MetricsDashboard() {
         </ResponsiveContainer>
       </ChartCard>
 
+      <ErrorsPanel metrics={metrics} />
       <RecentTable metrics={metrics} key={tick} />
     </div>
   );
