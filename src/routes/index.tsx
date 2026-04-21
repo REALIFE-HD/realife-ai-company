@@ -3,15 +3,9 @@ import { useState } from "react";
 import { AppShell } from "@/components/layout/AppShell";
 import { KpiCards } from "@/components/dashboard/KpiCards";
 import { DashboardCharts } from "@/components/dashboard/DashboardCharts";
-import { DepartmentsGrid } from "@/components/dashboard/DepartmentsGrid";
 import { CTASection } from "@/components/dashboard/CTASection";
 import { Footer } from "@/components/layout/Footer";
 import { useRouteMountMark } from "@/lib/web-vitals";
-import {
-  DepartmentFilterDialog,
-  DEFAULT_DEPT_FILTERS,
-  type DeptFilters,
-} from "@/components/dashboard/DepartmentFilterDialog";
 
 export const Route = createFileRoute("/")({
   head: () => ({
