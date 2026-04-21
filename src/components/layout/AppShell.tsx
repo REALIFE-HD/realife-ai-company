@@ -358,6 +358,12 @@ export function AppShell({
     } else if (e.key === "Escape") {
       setHistoryOpen(false);
       setActiveIndex(-1);
+    } else if (e.key === "Tab") {
+      // Tab はフォーカス移動を妨げず、ドロップダウンだけ閉じる
+      if (historyOpen) {
+        setHistoryOpen(false);
+        setActiveIndex(-1);
+      }
     }
   };
 
