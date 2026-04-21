@@ -94,6 +94,16 @@ function RootComponent() {
     });
     initWebVitals();
     exposeMetricsHelpers();
+    // 本番ビルドかつ送信先が設定されているときのみ、オプトイン制でバッチ送信
+    if (import.meta.env.PROD) {
+      const endpoint = import.meta.env.VITE_METRICS_ENDPOINT as string | undefined;
+      if (endpoint) {
+        initMetricsTransport({
+          endpoint,
+          meta: { app: "realife", env: import.meta.env.MODE },
+        });
+      }
+    }
   }, []);
 
   // ルート遷移の所要時間を計測（pending 開始〜idle 復帰）
