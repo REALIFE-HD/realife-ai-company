@@ -55,13 +55,18 @@ export function DepartmentCard({ d }: { d: Department }) {
           <span className="num flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-slate-200 bg-slate-50 text-[13px] font-semibold tracking-tight text-slate-700 transition-colors group-hover:border-blue-600 group-hover:bg-blue-600 group-hover:text-white">
             {d.id}
           </span>
-          {d.status !== "standard" && d.statusLabel && (
-            <span
-              className={`inline-flex max-w-full items-center truncate rounded-full border px-2 py-0.5 text-[10px] font-medium ${STATUS_STYLE[d.status]}`}
-            >
-              {d.statusLabel}
-            </span>
-          )}
+          {(() => {
+            const meta = STATUS_META[d.status];
+            const label = d.statusLabel ?? meta.label;
+            return (
+              <span
+                className={`inline-flex max-w-full items-center gap-1.5 truncate rounded-full border px-2 py-0.5 text-[10px] font-medium ${meta.badge}`}
+              >
+                <span aria-hidden="true" className={`h-1.5 w-1.5 shrink-0 rounded-full ${meta.dot}`} />
+                <span className="truncate">{label}</span>
+              </span>
+            );
+          })()}
         </div>
         {d.unread !== undefined && d.unread > 0 && (
           <span
