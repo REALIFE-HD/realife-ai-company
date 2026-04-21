@@ -303,6 +303,8 @@ export function AppShell({
     }
   };
   const selectHistory = (q: string) => {
+    // 選択した語を即座に履歴の先頭へ繰り上げ（最終使用順を維持）
+    commitHistory(q);
     setSearch(q);
     setHistoryOpen(false);
     setActiveIndex(-1);
