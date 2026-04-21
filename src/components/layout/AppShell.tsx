@@ -139,6 +139,7 @@ export function AppShell({
   onSearchChange,
   searchPlaceholder = "案件・部門・指示を検索…",
   onFilterClick,
+  filterActive = false,
 }: {
   children: ReactNode;
   title: string;
@@ -147,6 +148,7 @@ export function AppShell({
   onSearchChange?: (value: string) => void;
   searchPlaceholder?: string;
   onFilterClick?: () => void;
+  filterActive?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const [localSearch, setLocalSearch] = useState("");
@@ -239,9 +241,19 @@ export function AppShell({
                 type="button"
                 aria-label="絞り込み"
                 onClick={onFilterClick}
-                className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-600 transition-colors hover:border-slate-300 hover:text-slate-900"
+                className={`relative inline-flex h-9 w-9 items-center justify-center rounded-md border bg-white transition-colors ${
+                  filterActive
+                    ? "border-blue-300 text-blue-700"
+                    : "border-slate-200 text-slate-600 hover:border-slate-300 hover:text-slate-900"
+                }`}
               >
                 <SlidersHorizontal className="h-4 w-4" />
+                {filterActive && (
+                  <span
+                    aria-hidden="true"
+                    className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-blue-500"
+                  />
+                )}
               </button>
               <button
                 type="button"

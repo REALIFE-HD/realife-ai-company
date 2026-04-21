@@ -6,6 +6,11 @@ import { DashboardCharts } from "@/components/dashboard/DashboardCharts";
 import { DepartmentsGrid } from "@/components/dashboard/DepartmentsGrid";
 import { CTASection } from "@/components/dashboard/CTASection";
 import { Footer } from "@/components/layout/Footer";
+import {
+  DepartmentFilterDialog,
+  DEFAULT_DEPT_FILTERS,
+  type DeptFilters,
+} from "@/components/dashboard/DepartmentFilterDialog";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -28,21 +33,34 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   const [search, setSearch] = useState("");
+  const [filters, setFilters] = useState<DeptFilters>(DEFAULT_DEPT_FILTERS);
+  const [filterOpen, setFilterOpen] = useState(false);
+
   return (
-    <AppShell
-      title="ダッシュボード"
-      subtitle="Q2 2026 ・ 12部門の業務指揮を一望"
-      search={search}
-      onSearchChange={setSearch}
-      searchPlaceholder="部門名・役割・KPIラベルで検索…"
-    >
-      <div className="space-y-6 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-        <KpiCards />
-        <DashboardCharts />
-        <DepartmentsGrid query={search} />
-        <CTASection />
-      </div>
-      <Footer />
-    </AppShell>
+    <>
+      <AppShell
+        title="ダッシュボード"
+        subtitle="Q2 2026 ・ 12部門の業務指揮を一望"
+        search={search}
+        onSearchChange={setSearch}
+        searchPlaceholder="部門名・役割・KPIラベルで検索…"
+        onFilterClick={() => setFilterOpen(true)}
+        filterActive={filters.statuses.length > 0 || filters.unreadOnly}
+      >
+        <div className="space-y-6 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+          <KpiCards />
+          <DashboardCharts />
+          <DepartmentsGrid query={search} filters={filters} />
+          <CTASection />
+        </div>
+        <Footer />
+      </AppShell>
+      <DepartmentFilterDialog
+        open={filterOpen}
+        onOpenChange={setFilterOpen}
+        value={filters}
+        onChange={setFilters}
+      />
+    </>
   );
 }

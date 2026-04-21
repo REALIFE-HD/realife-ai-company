@@ -3,6 +3,11 @@ import { Link } from "@tanstack/react-router";
 import { useMemo } from "react";
 import { DEPARTMENTS } from "@/data/departments";
 import { DepartmentCard } from "./DepartmentCard";
+import {
+  applyDeptFilters,
+  DEFAULT_DEPT_FILTERS,
+  type DeptFilters,
+} from "./DepartmentFilterDialog";
 
 function matches(q: string, ...fields: string[]) {
   const needle = q.trim().toLowerCase();
@@ -10,15 +15,24 @@ function matches(q: string, ...fields: string[]) {
   return fields.some((f) => f.toLowerCase().includes(needle));
 }
 
-export function DepartmentsGrid({ query }: { query?: string }) {
-  const filtered = useMemo(
-    () =>
-      DEPARTMENTS.filter((d) =>
-        matches(query ?? "", d.name, d.role, d.kpiLabel, d.id),
-      ),
-    [query],
-  );
+export function DepartmentsGrid({
+  query,
+  filters = DEFAULT_DEPT_FILTERS,
+}: {
+  query?: string;
+  filters?: DeptFilters;
+}) {
   const q = query?.trim() ?? "";
+
+  const filtered = useMemo(() => {
+    const byText = DEPARTMENTS.filter((d) =>
+      matches(q, d.name, d.role, d.kpiLabel, d.id),
+    );
+    return applyDeptFilters(byText, filters);
+  }, [q, filters]);
+
+  const hasActiveFilters =
+    filters.statuses.length > 0 || filters.unreadOnly;
 
   return (
     <section id="departments" aria-labelledby="departments-heading">
@@ -28,7 +42,7 @@ export function DepartmentsGrid({ query }: { query?: string }) {
             <span aria-hidden="true" className="h-px w-6 bg-blue-500" />
             <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-blue-700">
               Departments · {filtered.length}
-              {q && ` / ${DEPARTMENTS.length}`}
+              {(q || hasActiveFilters) && ` / ${DEPARTMENTS.length}`}
             </span>
           </div>
           <h2
@@ -49,7 +63,7 @@ export function DepartmentsGrid({ query }: { query?: string }) {
 
       {filtered.length === 0 ? (
         <p className="mt-6 rounded-xl border border-dashed border-slate-300 bg-white/60 px-4 py-10 text-center text-[13px] text-slate-500">
-          「{q}」に一致する部門は見つかりませんでした。
+          条件に一致する部門は見つかりませんでした。
         </p>
       ) : (
         <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
