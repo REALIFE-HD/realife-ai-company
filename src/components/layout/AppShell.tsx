@@ -372,7 +372,7 @@ export function AppShell({
               {searchValue && (
                 <button
                   type="button"
-                  onClick={() => setSearch("")}
+                  onClick={() => clearAndFocus(desktopInputRef)}
                   aria-label="検索をクリア"
                   className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex h-5 w-5 items-center justify-center rounded-full text-slate-400 hover:text-slate-700"
                 >
@@ -463,7 +463,7 @@ export function AppShell({
               {searchValue && (
                 <button
                   type="button"
-                  onClick={() => clearAndFocus(desktopInputRef)}
+                  onClick={() => clearAndFocus(tabletInputRef)}
                   aria-label="検索をクリア"
                   className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex h-5 w-5 items-center justify-center rounded-full text-slate-400 hover:text-slate-700"
                 >
@@ -507,7 +507,7 @@ export function AppShell({
             {searchValue && (
               <button
                 type="button"
-                onClick={() => setSearch("")}
+                onClick={() => clearAndFocus(mobileInputRef)}
                 aria-label="検索をクリア"
                 className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex h-5 w-5 items-center justify-center rounded-full text-slate-400 hover:text-slate-700"
               >
