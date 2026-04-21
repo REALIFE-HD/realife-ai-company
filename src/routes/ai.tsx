@@ -264,10 +264,10 @@ function AiPage() {
             {messages.map((m) => (
               <div key={m.id} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
                 <div
-                  className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
+                  className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed text-foreground ${
                     m.role === "user"
-                      ? "bg-blue-600 text-white"
-                      : "border border-border bg-muted text-foreground"
+                      ? "border border-blue-500/30 bg-blue-500/15 dark:bg-blue-400/15"
+                      : "border border-border bg-muted"
                   }`}
                 >
                   {m.role === "assistant" && (
@@ -276,11 +276,11 @@ function AiPage() {
                     </div>
                   )}
                   {m.role === "assistant" ? (
-                    <div className="prose prose-sm max-w-none text-foreground prose-headings:text-foreground prose-strong:text-foreground prose-a:text-blue-600 prose-code:text-foreground prose-li:text-foreground prose-p:my-1.5 prose-ul:my-1.5 prose-ol:my-1.5 prose-headings:mt-3 prose-headings:mb-1.5 prose-pre:my-2 prose-code:text-[12px] dark:prose-invert dark:prose-a:text-blue-300">
+                    <div className="prose prose-sm max-w-none text-foreground prose-headings:text-foreground prose-strong:text-foreground prose-em:text-foreground prose-li:text-foreground prose-p:text-foreground prose-blockquote:text-foreground prose-a:text-blue-700 prose-a:underline prose-code:text-foreground prose-code:bg-background/60 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none prose-pre:bg-background prose-pre:text-foreground prose-pre:border prose-pre:border-border prose-p:my-1.5 prose-ul:my-1.5 prose-ol:my-1.5 prose-headings:mt-3 prose-headings:mb-1.5 prose-pre:my-2 prose-code:text-[12px] dark:prose-invert dark:prose-a:text-blue-300">
                       <ReactMarkdown>{m.content || "..."}</ReactMarkdown>
                     </div>
                   ) : (
-                    <p className="whitespace-pre-wrap">{m.content}</p>
+                    <p className="whitespace-pre-wrap text-foreground">{m.content}</p>
                   )}
                 </div>
               </div>
