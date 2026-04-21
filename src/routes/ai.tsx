@@ -265,12 +265,12 @@ function AiPage() {
                 <div
                   className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
                     m.role === "user"
-                      ? "bg-teal-600 text-white"
+                      ? "bg-blue-600 text-white"
                       : "border border-slate-200 bg-slate-50 text-slate-800"
                   }`}
                 >
                   {m.role === "assistant" && (
-                    <div className="mb-1 flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-wider text-teal-700">
+                    <div className="mb-1 flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-wider text-blue-700">
                       <Sparkles className="h-3 w-3" /> REALIFE AI
                     </div>
                   )}
@@ -287,7 +287,7 @@ function AiPage() {
             {isLoading && messages[messages.length - 1]?.role === "user" && (
               <div className="flex justify-start">
                 <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
-                  <div className="flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-wider text-teal-700">
+                  <div className="flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-wider text-blue-700">
                     <Sparkles className="h-3 w-3 animate-pulse" /> 思考中...
                   </div>
                 </div>
@@ -309,12 +309,12 @@ function AiPage() {
                 placeholder="指示・質問を入力(Enter送信、Shift+Enter改行)"
                 rows={2}
                 disabled={isLoading}
-                className="flex-1 resize-none rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:border-teal-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-teal-500 disabled:opacity-60"
+                className="flex-1 resize-none rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-60"
               />
               <button
                 type="submit"
                 disabled={!input.trim() || isLoading}
-                className="inline-flex h-10 items-center gap-1.5 rounded-md bg-teal-600 px-4 text-[13px] font-medium text-white hover:bg-teal-700 disabled:bg-slate-300"
+                className="inline-flex h-10 items-center gap-1.5 rounded-md bg-blue-600 px-4 text-[13px] font-medium text-white hover:bg-blue-700 disabled:bg-slate-300"
               >
                 <Send className="h-3.5 w-3.5" /> {isLoading ? "送信中" : "送信"}
               </button>

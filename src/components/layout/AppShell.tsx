@@ -38,17 +38,17 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
                 onClick={onNavigate}
                 className={`group relative flex items-center gap-2.5 rounded-md px-3 py-2 text-[13px] font-medium transition-all ${
                   active
-                    ? "bg-teal-50/70 text-teal-800"
+                    ? "bg-blue-50/70 text-blue-700"
                     : "text-slate-600 hover:bg-slate-100/70 hover:text-slate-900"
                 }`}
               >
                 {active && (
                   <span
                     aria-hidden="true"
-                    className="absolute inset-y-1.5 left-0 w-[2px] rounded-r bg-teal-600"
+                    className="absolute inset-y-1.5 left-0 w-[2px] rounded-r bg-blue-600"
                   />
                 )}
-                <Icon className={`h-4 w-4 transition-colors ${active ? "text-teal-600" : "text-slate-400 group-hover:text-slate-600"}`} aria-hidden="true" />
+                <Icon className={`h-4 w-4 transition-colors ${active ? "text-blue-600" : "text-slate-400 group-hover:text-slate-600"}`} aria-hidden="true" />
                 {item.label}
               </Link>
             </li>
@@ -64,12 +64,12 @@ function Brand() {
     <Link to="/" className="flex items-center gap-2.5 px-5 py-5" aria-label="REALIFE Operations">
       <span
         aria-hidden="true"
-        className="flex h-8 w-8 items-center justify-center rounded-md bg-slate-950 font-serif text-sm font-semibold text-white"
+        className="flex h-8 w-8 items-center justify-center rounded-md bg-slate-950 font-display text-sm font-semibold text-white"
       >
         RL
       </span>
       <span className="flex flex-col leading-none">
-        <span className="font-serif text-[15px] font-semibold tracking-wide text-slate-900">REALIFE</span>
+        <span className="font-display text-[15px] font-semibold tracking-wide text-slate-900">REALIFE</span>
         <span className="mt-1 text-[10px] uppercase tracking-[0.18em] text-slate-500">AI COMPANY</span>
       </span>
     </Link>
@@ -115,7 +115,7 @@ export function AppShell({ children, title, subtitle }: { children: ReactNode; t
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50/80 via-white to-slate-50/40">
+    <div className="min-h-screen bg-[#F5F5F7]">
       {/* Mobile top bar */}
       <div className="sticky top-0 z-40 flex h-14 items-center justify-between border-b border-slate-200 bg-white/90 px-4 backdrop-blur md:hidden">
         <Brand />
@@ -166,13 +166,13 @@ export function AppShell({ children, title, subtitle }: { children: ReactNode; t
                 className="relative inline-flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-600 transition-colors hover:border-slate-300 hover:text-slate-900"
               >
                 <Bell className="h-4 w-4" />
-                <span aria-hidden="true" className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-teal-500" />
+                <span aria-hidden="true" className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-blue-500" />
               </button>
               <NewInstructionDialog
                 trigger={
                   <button
                     type="button"
-                    className="inline-flex items-center gap-1.5 rounded-md bg-teal-600 px-3.5 py-2 text-[13px] font-medium text-white shadow-sm transition-colors hover:bg-teal-700 focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:outline-none"
+                    className="inline-flex items-center gap-1.5 rounded-md bg-blue-600 px-3.5 py-2 text-[13px] font-medium text-white shadow-sm transition-colors hover:bg-blue-700 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
                   >
                     <Plus className="h-3.5 w-3.5" aria-hidden="true" />
                     新規指示
@@ -185,7 +185,7 @@ export function AppShell({ children, title, subtitle }: { children: ReactNode; t
 
         {/* Mobile title */}
         <div className="border-b border-slate-200 bg-white px-4 py-4 md:hidden">
-          <h1 className="font-serif text-lg font-semibold text-slate-900">{title}</h1>
+          <h1 className="font-display text-lg font-semibold text-slate-900">{title}</h1>
           {subtitle && <p className="mt-1.5 text-[11.5px] leading-snug tracking-[0.01em] text-slate-500/90">{subtitle}</p>}
         </div>
 

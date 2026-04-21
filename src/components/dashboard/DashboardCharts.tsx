@@ -3,9 +3,9 @@ import { DEPARTMENTS } from "@/data/departments";
 // Donut chart — status distribution
 function Donut() {
   const segments = [
-    { label: "稼働中", value: 1, color: "#0d9488" },
-    { label: "標準運用", value: 10, color: "#0f172a" },
-    { label: "構築中", value: 1, color: "#cbd5e1" },
+    { label: "稼働中", value: 1, color: "#0071E3" },
+    { label: "標準運用", value: 10, color: "#1D1D1F" },
+    { label: "構築中", value: 1, color: "#D2D2D7" },
   ];
   const total = segments.reduce((a, b) => a + b.value, 0);
   const radius = 56;
@@ -71,7 +71,7 @@ function Bars() {
             <div key={d.name} className="group flex flex-1 flex-col items-center gap-2">
               <div className="relative flex h-full w-full items-end">
                 <div
-                  className="w-full rounded-t-md bg-gradient-to-t from-teal-600 to-teal-400 transition-all duration-300 group-hover:from-teal-700 group-hover:to-teal-500"
+                  className="w-full rounded-t-md bg-gradient-to-t from-blue-600 to-blue-400 transition-all duration-300 group-hover:from-blue-700 group-hover:to-blue-500"
                   style={{ height: `${h}%` }}
                   aria-label={`${d.name} ${d.value} タスク`}
                 />

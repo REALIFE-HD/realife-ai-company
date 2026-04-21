@@ -49,7 +49,7 @@ function SettingsPage() {
         </div>
 
         <section className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
-          <h2 className="font-serif text-xl font-semibold tracking-tight text-slate-900">アカウント</h2>
+          <h2 className="font-display text-xl font-semibold tracking-tight text-slate-900">アカウント</h2>
           <div className="mt-6 space-y-6 max-w-md">
             <div className="space-y-1.5">
               <Label htmlFor="display_name">表示名</Label>

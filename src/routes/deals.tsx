@@ -99,15 +99,15 @@ function DealsPage() {
                   </tr>
                 )}
                 {deals.map((d) => (
-                  <tr key={d.id} className="group cursor-pointer transition-colors hover:bg-teal-50/30">
+                  <tr key={d.id} className="group cursor-pointer transition-colors hover:bg-blue-50/30">
                     <td className="whitespace-nowrap px-4 py-3 num text-xs text-slate-500">
-                      <Link to="/deals/$dealCode" params={{ dealCode: d.code }} className="transition-colors group-hover:text-teal-700">{d.code}</Link>
+                      <Link to="/deals/$dealCode" params={{ dealCode: d.code }} className="transition-colors group-hover:text-blue-700">{d.code}</Link>
                     </td>
                     <td className="whitespace-nowrap px-4 py-3 text-slate-700">
-                      <Link to="/deals/$dealCode" params={{ dealCode: d.code }} className="transition-colors group-hover:text-teal-700">{d.client}</Link>
+                      <Link to="/deals/$dealCode" params={{ dealCode: d.code }} className="transition-colors group-hover:text-blue-700">{d.client}</Link>
                     </td>
                     <td className="px-4 py-3 font-medium text-slate-900">
-                      <Link to="/deals/$dealCode" params={{ dealCode: d.code }} className="transition-colors group-hover:text-teal-700">{d.title}</Link>
+                      <Link to="/deals/$dealCode" params={{ dealCode: d.code }} className="transition-colors group-hover:text-blue-700">{d.title}</Link>
                     </td>
                     <td className="whitespace-nowrap px-4 py-3">
                       <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-medium ${STAGE_STYLE[d.stage]}`}>
@@ -119,7 +119,7 @@ function DealsPage() {
                     <td className="whitespace-nowrap px-4 py-3 text-xs text-slate-700">{d.owner}</td>
                     <td className="px-4 py-3 text-xs text-slate-700">{d.next_action}</td>
                     <td className="whitespace-nowrap px-4 py-3 text-right num text-xs text-slate-700">{d.due ?? "—"}</td>
-                    <td className="whitespace-nowrap px-2 py-3 text-slate-400 transition-colors group-hover:text-teal-600">
+                    <td className="whitespace-nowrap px-2 py-3 text-slate-400 transition-colors group-hover:text-blue-600">
                       <Link to="/deals/$dealCode" params={{ dealCode: d.code }}>
                         <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                       </Link>

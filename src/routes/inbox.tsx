@@ -214,7 +214,7 @@ function InboxPage() {
           {[
             { l: "総数", v: stats.total, accent: "text-slate-950" },
             { l: "未割当", v: stats.unassigned, accent: "text-amber-700" },
-            { l: "割当済", v: stats.assigned, accent: "text-teal-700" },
+            { l: "割当済", v: stats.assigned, accent: "text-blue-700" },
           ].map((s) => (
             <div key={s.l} className="rounded-xl border border-slate-200/80 bg-white px-4 py-3.5 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
               <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-slate-500">{s.l}</p>
@@ -226,8 +226,8 @@ function InboxPage() {
         {/* 投函フォーム */}
         <section className="rounded-2xl border border-slate-200 bg-white p-6">
           <div className="flex items-center gap-2">
-            <Send className="h-4 w-4 text-teal-600" />
-            <h2 className="font-serif text-lg font-semibold tracking-tight text-slate-900">新規メッセージ投函</h2>
+            <Send className="h-4 w-4 text-blue-600" />
+            <h2 className="font-display text-lg font-semibold tracking-tight text-slate-900">新規メッセージ投函</h2>
           </div>
           <p className="mt-1 text-[12px] text-slate-500">
             投函すると、まずキーワードルール、次にAIで自動的に12部門のいずれかに振り分けます。
@@ -249,7 +249,7 @@ function InboxPage() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="inline-flex items-center gap-1.5 rounded-md bg-teal-600 px-4 py-2 text-sm font-medium text-white hover:bg-teal-700 disabled:opacity-60"
+                className="inline-flex items-center gap-1.5 rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-60"
               >
                 <Sparkles className="h-3.5 w-3.5" />
                 {submitting ? "振り分け中..." : "投函して自動振り分け"}
@@ -267,7 +267,7 @@ function InboxPage() {
               onClick={() => setFilter(f.v)}
               className={`rounded-full border px-3 py-1 text-[12px] font-medium transition-colors ${
                 filter === f.v
-                  ? "border-teal-600 bg-teal-600 text-white"
+                  ? "border-blue-600 bg-blue-600 text-white"
                   : "border-slate-200 bg-white text-slate-600 hover:border-slate-300"
               }`}
             >
@@ -295,7 +295,7 @@ function InboxPage() {
                       type="button"
                       onClick={() => setSelectedId(m.id)}
                       className={`block w-full px-4 py-3 text-left transition-colors hover:bg-slate-50 ${
-                        selected?.id === m.id ? "bg-teal-50/60" : ""
+                        selected?.id === m.id ? "bg-blue-50/60" : ""
                       }`}
                     >
                       <div className="flex items-center justify-between gap-2">
@@ -305,7 +305,7 @@ function InboxPage() {
                       <p className="mt-0.5 truncate text-[11px] text-slate-500">{m.sender || "(差出人なし)"}</p>
                       <div className="mt-1 flex items-center gap-1.5">
                         {m.assigned_department && (
-                          <span className="rounded border border-teal-200 bg-teal-50 px-1.5 py-0.5 text-[10px] font-medium text-teal-700">
+                          <span className="rounded border border-blue-100 bg-blue-50 px-1.5 py-0.5 text-[10px] font-medium text-blue-700">
                             {m.assigned_department} {getDeptName(m.assigned_department)}
                           </span>
                         )}
@@ -330,7 +330,7 @@ function InboxPage() {
               <div className="p-6">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0 flex-1">
-                    <h3 className="font-serif text-lg font-semibold tracking-tight text-slate-900">
+                    <h3 className="font-display text-lg font-semibold tracking-tight text-slate-900">
                       {selected.subject}
                     </h3>
                     <p className="mt-1 text-[12px] text-slate-500">

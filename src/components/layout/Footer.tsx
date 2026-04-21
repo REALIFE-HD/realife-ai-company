@@ -5,7 +5,7 @@ export function Footer() {
         <div className="flex items-center gap-2.5">
           <span
             aria-hidden="true"
-            className="flex h-6 w-6 items-center justify-center rounded bg-slate-950 font-serif text-[10px] font-semibold text-white"
+            className="flex h-6 w-6 items-center justify-center rounded bg-slate-950 font-display text-[10px] font-semibold text-white"
           >
             RL
           </span>

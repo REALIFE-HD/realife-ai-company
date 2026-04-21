@@ -9,18 +9,18 @@ export function DepartmentsGrid() {
       <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-end">
         <div>
           <div className="flex items-center gap-2.5">
-            <span aria-hidden="true" className="h-px w-6 bg-teal-500" />
-            <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-teal-700">
+            <span aria-hidden="true" className="h-px w-6 bg-blue-500" />
+            <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-blue-700">
               Departments · 12
             </span>
           </div>
-          <h2 id="departments-heading" className="mt-2 font-serif text-2xl font-semibold tracking-tight text-slate-900 sm:text-[1.75rem]">
+          <h2 id="departments-heading" className="mt-2 font-display text-2xl font-semibold tracking-tight text-slate-900 sm:text-[1.75rem]">
             組織一覧
           </h2>
         </div>
         <Link
           to="/departments"
-          className="inline-flex items-center gap-1.5 text-[13px] font-medium text-teal-700 transition-colors hover:text-teal-800"
+          className="inline-flex items-center gap-1.5 text-[13px] font-medium text-blue-700 transition-colors hover:text-blue-700"
         >
           全部門を表示
           <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />

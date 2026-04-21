@@ -36,7 +36,7 @@ export const Route = createFileRoute("/deals/$dealCode")({
     <div className="flex min-h-screen items-center justify-center">
       <div className="text-center">
         <p className="text-sm text-slate-600">案件が見つかりません。</p>
-        <Link to="/deals" className="mt-3 inline-block text-sm text-teal-700 hover:underline">案件一覧へ戻る</Link>
+        <Link to="/deals" className="mt-3 inline-block text-sm text-blue-700 hover:underline">案件一覧へ戻る</Link>
       </div>
     </div>
   ),
@@ -198,7 +198,7 @@ function DealDetailPage() {
         <div className="px-4 py-12 text-center text-sm text-slate-400">
           案件が見つかりませんでした。
           <div className="mt-3">
-            <Link to="/deals" className="text-teal-700 hover:underline">案件一覧へ</Link>
+            <Link to="/deals" className="text-blue-700 hover:underline">案件一覧へ</Link>
           </div>
         </div>
         <Footer />
@@ -217,7 +217,7 @@ function DealDetailPage() {
             type="button"
             onClick={onSave}
             disabled={saving}
-            className="inline-flex items-center gap-1.5 rounded-md bg-teal-600 px-3 py-1.5 text-[12px] font-medium text-white hover:bg-teal-700 disabled:bg-slate-300"
+            className="inline-flex items-center gap-1.5 rounded-md bg-blue-600 px-3 py-1.5 text-[12px] font-medium text-white hover:bg-blue-700 disabled:bg-slate-300"
           >
             <Save className="h-3.5 w-3.5" /> {saving ? "保存中..." : "変更を保存"}
           </button>
@@ -271,9 +271,9 @@ function DealDetailPage() {
                         isLost
                           ? "border-red-300 bg-red-100 text-red-700"
                           : active
-                            ? "border-teal-500 bg-teal-600 text-white"
+                            ? "border-blue-500 bg-blue-600 text-white"
                             : reached
-                              ? "border-teal-200 bg-teal-50 text-teal-700"
+                              ? "border-blue-100 bg-blue-50 text-blue-700"
                               : "border-slate-200 bg-white text-slate-400"
                       }`}
                     >
@@ -282,7 +282,7 @@ function DealDetailPage() {
                     <span className={`text-[11px] ${active ? "font-semibold text-slate-900" : "text-slate-500"}`}>{s}</span>
                   </button>
                   {i < STAGES.length - 1 && (
-                    <div className={`mx-2 h-px flex-1 ${i < stageIndex && stage !== "失注" ? "bg-teal-300" : "bg-slate-200"}`} />
+                    <div className={`mx-2 h-px flex-1 ${i < stageIndex && stage !== "失注" ? "bg-blue-200" : "bg-slate-200"}`} />
                   )}
                 </div>
               );
@@ -299,7 +299,7 @@ function DealDetailPage() {
                 max={100}
                 value={probability}
                 onChange={(e) => setProbability(Math.max(0, Math.min(100, Number(e.target.value) || 0)))}
-                className="mt-1 w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:border-teal-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-teal-500"
+                className="mt-1 w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
               />
             </div>
             <div>
@@ -308,7 +308,7 @@ function DealDetailPage() {
                 type="date"
                 value={due}
                 onChange={(e) => setDue(e.target.value)}
-                className="mt-1 w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:border-teal-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-teal-500"
+                className="mt-1 w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
               />
             </div>
             <div className="sm:col-span-2">
@@ -317,7 +317,7 @@ function DealDetailPage() {
                 type="text"
                 value={nextAction}
                 onChange={(e) => setNextAction(e.target.value)}
-                className="mt-1 w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:border-teal-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-teal-500"
+                className="mt-1 w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
               />
             </div>
             <div className="sm:col-span-2">
@@ -327,7 +327,7 @@ function DealDetailPage() {
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="案件の背景・要件・特記事項など"
-                className="mt-1 w-full resize-none rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:border-teal-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-teal-500"
+                className="mt-1 w-full resize-none rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
               />
             </div>
           </div>
@@ -340,7 +340,7 @@ function DealDetailPage() {
             <Link
               to="/departments/$id"
               params={{ id: "02" }}
-              className="text-[11px] font-medium text-teal-700 hover:underline"
+              className="text-[11px] font-medium text-blue-700 hover:underline"
             >
               営業本部ページへ →
             </Link>
@@ -378,7 +378,7 @@ function DealDetailPage() {
               <select
                 value={actKind}
                 onChange={(e) => setActKind(e.target.value as DealActivityKind)}
-                className="rounded-md border border-slate-200 bg-slate-50 px-2 py-2 text-sm focus:border-teal-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-teal-500"
+                className="rounded-md border border-slate-200 bg-slate-50 px-2 py-2 text-sm focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
               >
                 {(["メモ", "電話", "訪問", "メール", "その他"] as DealActivityKind[]).map((k) => (
                   <option key={k} value={k}>{k}</option>
@@ -389,7 +389,7 @@ function DealDetailPage() {
                 value={actContent}
                 onChange={(e) => setActContent(e.target.value)}
                 placeholder="活動内容を記録..."
-                className="flex-1 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:border-teal-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-teal-500"
+                className="flex-1 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
               />
               <button
                 type="submit"

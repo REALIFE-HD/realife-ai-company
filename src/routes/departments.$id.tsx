@@ -44,7 +44,7 @@ export const Route = createFileRoute("/departments/$id")({
     <div className="flex min-h-screen items-center justify-center bg-white px-4">
       <div className="text-center">
         <p className="font-mono text-xs uppercase tracking-wider text-slate-500">404</p>
-        <h1 className="mt-3 font-serif text-2xl font-semibold text-slate-950">部門が見つかりません</h1>
+        <h1 className="mt-3 font-display text-2xl font-semibold text-slate-950">部門が見つかりません</h1>
         <Link
           to="/"
           className="mt-6 inline-flex items-center gap-2 rounded-md bg-slate-950 px-4 py-2 text-sm font-medium text-white"
@@ -58,7 +58,7 @@ export const Route = createFileRoute("/departments/$id")({
 });
 
 const STATUS_STYLE: Record<Department["status"], string> = {
-  active: "border-teal-200 bg-teal-50 text-teal-700",
+  active: "border-blue-100 bg-blue-50 text-blue-700",
   setup: "border-amber-200 bg-amber-50 text-amber-700",
   standard: "",
 };
@@ -114,7 +114,7 @@ function DepartmentDetail() {
                       {d.statusLabel}
                     </span>
                   )}
-                  <h1 className="mt-2 font-serif text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">
+                  <h1 className="mt-2 font-display text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">
                     {d.name}
                   </h1>
                   <p className="mt-2 max-w-2xl text-sm text-slate-600">{d.role}</p>
@@ -127,7 +127,7 @@ function DepartmentDetail() {
                 trigger={
                   <button
                     type="button"
-                    className="inline-flex items-center justify-center gap-2 rounded-md bg-teal-600 px-4 py-2.5 text-[13px] font-medium text-white shadow-sm transition-colors hover:bg-teal-700 focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:outline-none"
+                    className="inline-flex items-center justify-center gap-2 rounded-md bg-blue-600 px-4 py-2.5 text-[13px] font-medium text-white shadow-sm transition-colors hover:bg-blue-700 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
                   >
                     <Plus className="h-3.5 w-3.5" />
                     この部門へ指示を出す
@@ -165,7 +165,7 @@ function DepartmentDetail() {
               <TabsContent value="overview" className="mt-6">
                 <div className="grid gap-4 lg:grid-cols-3">
                   <div className="rounded-xl border border-slate-200 bg-white p-6 lg:col-span-2">
-                    <h3 className="font-serif text-lg font-semibold text-slate-950">最近のアクティビティ</h3>
+                    <h3 className="font-display text-lg font-semibold text-slate-950">最近のアクティビティ</h3>
                     <ul className="mt-4 divide-y divide-slate-100">
                       {DUMMY_TASKS.slice(0, 5).map((t) => (
                         <li key={t.id} className="flex items-center justify-between py-3 text-sm">
@@ -179,7 +179,7 @@ function DepartmentDetail() {
                     </ul>
                   </div>
                   <div className="rounded-xl border border-slate-200 bg-white p-6">
-                    <h3 className="font-serif text-lg font-semibold text-slate-950">関連部門</h3>
+                    <h3 className="font-display text-lg font-semibold text-slate-950">関連部門</h3>
                     <ul className="mt-4 space-y-2">
                       {DEPARTMENTS.filter((x) => x.id !== d.id)
                         .slice(0, 4)

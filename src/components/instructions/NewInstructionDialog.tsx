@@ -102,7 +102,7 @@ export function NewInstructionDialog({
       <DialogContent className="sm:max-w-lg">
         <form onSubmit={submit}>
           <DialogHeader>
-            <DialogTitle className="font-serif text-xl">
+            <DialogTitle className="font-display text-xl">
               {fixedDept ? `${fixedDept.name} へ指示` : "新規指示"}
             </DialogTitle>
             <DialogDescription>
@@ -190,7 +190,7 @@ export function NewInstructionDialog({
             <button
               type="submit"
               disabled={submitting}
-              className="rounded-md bg-teal-600 px-4 py-2 text-sm font-medium text-white hover:bg-teal-700 disabled:opacity-60"
+              className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-60"
             >
               {submitting ? "保存中..." : "指示を保存"}
             </button>
