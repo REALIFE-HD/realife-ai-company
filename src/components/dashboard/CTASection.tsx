@@ -39,14 +39,22 @@ export function CTASection() {
         <div className="flex flex-col gap-2.5 lg:col-span-4 lg:items-stretch lg:justify-end">
           <Link
             to="/departments"
-            className="group inline-flex h-11 items-center justify-center gap-2 rounded-md bg-blue-600 px-4 text-[13px] font-semibold text-white shadow-[0_8px_24px_-12px_rgba(13,148,136,0.6)] transition-all hover:bg-blue-700 hover:shadow-[0_12px_28px_-12px_rgba(13,148,136,0.7)] focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:outline-none"
+            className="group/cta relative inline-flex h-11 items-center justify-center gap-2 overflow-hidden rounded-md bg-gradient-to-b from-blue-500 to-blue-600 px-4 text-[13px] font-semibold text-white shadow-[0_8px_24px_-12px_rgba(13,148,136,0.55),inset_0_1px_0_rgba(255,255,255,0.18)] ring-1 ring-inset ring-white/10 transition-all duration-200 hover:-translate-y-0.5 hover:from-blue-500 hover:to-blue-700 hover:shadow-[0_14px_32px_-12px_rgba(13,148,136,0.7),inset_0_1px_0_rgba(255,255,255,0.22)] active:translate-y-0 active:shadow-[0_4px_12px_-6px_rgba(13,148,136,0.6),inset_0_1px_0_rgba(255,255,255,0.18)] focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:outline-none"
           >
-            部門を選んで指示
-            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+            {/* Sheen sweep on hover */}
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 ease-out group-hover/cta:translate-x-full"
+            />
+            <span className="relative">部門を選んで指示</span>
+            <ArrowRight
+              className="relative h-3.5 w-3.5 transition-transform duration-200 ease-out group-hover/cta:translate-x-1"
+              aria-hidden="true"
+            />
           </Link>
           <Link
             to="/docs"
-            className="inline-flex h-11 items-center justify-center gap-2 rounded-md border border-border/80 bg-card/60 px-4 text-[13px] font-medium text-muted-foreground backdrop-blur transition-colors hover:border-border hover:bg-card focus-visible:ring-2 focus-visible:ring-border focus-visible:ring-offset-2 focus-visible:outline-none"
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-md border border-border/80 bg-card/60 px-4 text-[13px] font-medium text-muted-foreground backdrop-blur transition-colors hover:border-border hover:bg-card hover:text-foreground focus-visible:ring-2 focus-visible:ring-border focus-visible:ring-offset-2 focus-visible:outline-none"
           >
             <BookOpen className="h-3.5 w-3.5" aria-hidden="true" />
             ドキュメント
