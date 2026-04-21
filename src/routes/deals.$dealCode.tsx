@@ -30,19 +30,31 @@ export const Route = createFileRoute("/deals/$dealCode")({
       { property: "og:description", content: "案件の進捗・関連指示・活動ログ。" },
     ],
   }),
-  // 案件本体・活動ログ・関連指示を並列取得して loader 1 往復で完結
+  // 案件本体だけ await。activities / 関連指示は重いので並列取得しつつ Promise のまま返し、
+  // 画面表示後に解決させる(Suspense で部分描画)。これによりクリック→新ページ表示までの
+  // 待ち時間を最小化。
   loader: async ({ params }) => {
     try {
       const deal = await getDealByCode(params.dealCode);
       if (!deal) return { deal: null, activities: [], instructions: [] };
-      const [activities, allInstrs] = await Promise.all([
-        listActivities(deal.id),
-        getInstructionsForDepartment("02"),
-      ]);
-      const instructions = allInstrs.filter(
-        (i: Instruction) => i.title.includes(deal.code) || i.content.includes(deal.code),
-      );
-      return { deal, activities, instructions };
+      // 並列発火するが、await はしない (deferred)
+      const activitiesPromise = listActivities(deal.id).catch(() => [] as DealActivity[]);
+      const instructionsPromise = getInstructionsForDepartment("02")
+        .then((all) =>
+          all.filter(
+            (i: Instruction) => i.title.includes(deal.code) || i.content.includes(deal.code),
+          ),
+        )
+        .catch(() => [] as Instruction[]);
+      return {
+        deal,
+        // 後段の useState 初期化との互換のため空配列で初期化し、
+        // 解決後に useEffect で反映する。
+        activities: [] as DealActivity[],
+        instructions: [] as Instruction[],
+        activitiesPromise,
+        instructionsPromise,
+      };
     } catch (e) {
       console.error("[deal.$dealCode.loader]", e);
       return { deal: null, activities: [], instructions: [] };
@@ -106,6 +118,24 @@ function DealDetailPage() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dealCode]);
+
+  // deferred 関連データの解決を待って反映 (画面表示後に追従)
+  useEffect(() => {
+    const ld = loaderData as {
+      activitiesPromise?: Promise<DealActivity[]>;
+      instructionsPromise?: Promise<Instruction[]>;
+    } | null | undefined;
+    let mounted = true;
+    if (ld?.activitiesPromise) {
+      ld.activitiesPromise.then((a: DealActivity[]) => mounted && setActivities(a)).catch(() => {});
+    }
+    if (ld?.instructionsPromise) {
+      ld.instructionsPromise.then((i: Instruction[]) => mounted && setInstructions(i)).catch(() => {});
+    }
+    return () => {
+      mounted = false;
+    };
+  }, [loaderData]);
 
   // realtime activities
   useEffect(() => {
