@@ -180,15 +180,15 @@
   .tabular,
   .num {
     font-family: var(--font-numeric);
-    font-variant-numeric: tabular-nums slashed-zero;
-    font-feature-settings: "tnum" 1, "zero" 1, "ss01" 1;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1, "ss01" 1;
     letter-spacing: -0.005em;
     font-weight: 500;
   }
 
   .font-mono {
     font-family: var(--font-mono);
-    font-variant-numeric: tabular-nums slashed-zero;
+    font-variant-numeric: tabular-nums;
   }
 }
 
