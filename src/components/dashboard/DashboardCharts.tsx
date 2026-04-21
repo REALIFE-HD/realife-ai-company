@@ -71,7 +71,7 @@ function Bars() {
             <div key={d.name} className="group flex flex-1 flex-col items-center gap-2">
               <div className="relative flex h-full w-full items-end">
                 <div
-                  className="w-full rounded-t-md bg-gradient-to-t from-teal-600 to-teal-400 transition-all duration-300 group-hover:from-teal-700 group-hover:to-teal-500"
+                  className="w-full rounded-t-md bg-gradient-to-t from-blue-600 to-blue-400 transition-all duration-300 group-hover:from-blue-700 group-hover:to-blue-500"
                   style={{ height: `${h}%` }}
                   aria-label={`${d.name} ${d.value} タスク`}
                 />

@@ -28,7 +28,7 @@ export function KpiCards() {
           >
             <div className="flex items-start justify-between">
               <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-slate-500">{k.label}</p>
-              <span className="flex h-7 w-7 items-center justify-center rounded-md bg-slate-50 text-slate-600 ring-1 ring-inset ring-slate-200/70 transition-colors group-hover:bg-teal-50 group-hover:text-teal-600 group-hover:ring-teal-200">
+              <span className="flex h-7 w-7 items-center justify-center rounded-md bg-slate-50 text-slate-600 ring-1 ring-inset ring-slate-200/70 transition-colors group-hover:bg-blue-50 group-hover:text-blue-600 group-hover:ring-blue-100">
                 <Icon className="h-3.5 w-3.5" aria-hidden="true" />
               </span>
             </div>
@@ -40,7 +40,7 @@ export function KpiCards() {
                 <span
                   className={`num inline-flex items-center gap-0.5 rounded-md px-1.5 py-0.5 text-[11px] font-semibold ${
                     k.delta.positive
-                      ? "bg-teal-50 text-teal-700 ring-1 ring-inset ring-teal-100"
+                      ? "bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-100"
                       : "bg-red-50 text-red-700 ring-1 ring-inset ring-red-100"
                   }`}
                 >

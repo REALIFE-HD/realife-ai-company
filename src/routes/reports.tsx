@@ -71,7 +71,7 @@ function ReportsPage() {
         </section>
 
         <section className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
-          <h2 className="font-serif text-xl font-semibold tracking-tight text-slate-900">月次成約推移</h2>
+          <h2 className="font-display text-xl font-semibold tracking-tight text-slate-900">月次成約推移</h2>
           <p className="mt-1 text-[13px] text-slate-500">単位:百万円(¥M)・件数</p>
           <div className="mt-6 h-72 w-full">
             <ClientOnly fallback={<div className="h-full w-full animate-pulse rounded-md bg-slate-50" />}>
@@ -92,7 +92,7 @@ function ReportsPage() {
         </section>
 
         <section className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
-          <h2 className="font-serif text-xl font-semibold tracking-tight text-slate-900">部門別タスク消化率</h2>
+          <h2 className="font-display text-xl font-semibold tracking-tight text-slate-900">部門別タスク消化率</h2>
           <p className="mt-1 text-[13px] text-slate-500">単位:%</p>
           <div className="mt-6 h-96 w-full">
             <ClientOnly fallback={<div className="h-full w-full animate-pulse rounded-md bg-slate-50" />}>

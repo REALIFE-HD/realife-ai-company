@@ -51,14 +51,14 @@ function DepartmentsIndex() {
           className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8"
         >
           <div className="flex items-center gap-2.5">
-            <span aria-hidden="true" className="h-px w-6 bg-teal-500" />
-            <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-teal-700">
+            <span aria-hidden="true" className="h-px w-6 bg-blue-500" />
+            <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-blue-700">
               Departments · {total}
             </span>
           </div>
           <h2
             id="dept-summary"
-            className="mt-2 font-serif text-2xl font-semibold tracking-tight text-slate-900 sm:text-[1.75rem]"
+            className="mt-2 font-display text-2xl font-semibold tracking-tight text-slate-900 sm:text-[1.75rem]"
           >
             すべての部門を、一望する。
           </h2>

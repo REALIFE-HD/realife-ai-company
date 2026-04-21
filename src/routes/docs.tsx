@@ -150,12 +150,12 @@ function DocsPage() {
         {/* Hero */}
         <section className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 sm:p-10">
           <div className="flex items-center gap-2.5">
-            <span aria-hidden="true" className="h-px w-6 bg-teal-500" />
-            <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-teal-700">
+            <span aria-hidden="true" className="h-px w-6 bg-blue-500" />
+            <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-blue-700">
               Documentation
             </span>
           </div>
-          <h2 className="mt-3 max-w-2xl font-serif text-[1.875rem] font-semibold leading-[1.2] tracking-tight text-slate-900 sm:text-[2.25rem]">
+          <h2 className="mt-3 max-w-2xl font-display text-[1.875rem] font-semibold leading-[1.2] tracking-tight text-slate-900 sm:text-[2.25rem]">
             REALIFE Operations の使い方
           </h2>
           <p className="mt-3 max-w-2xl text-[14px] leading-relaxed text-slate-600">
@@ -175,10 +175,10 @@ function DocsPage() {
                   <a
                     key={s.id}
                     href={`#${s.slug}`}
-                    className="group flex items-center gap-2.5 rounded-md border border-slate-200 bg-slate-50/60 px-3 py-2.5 text-[13px] font-medium text-slate-700 transition-colors hover:border-teal-300 hover:bg-white hover:text-teal-700"
+                    className="group flex items-center gap-2.5 rounded-md border border-slate-200 bg-slate-50/60 px-3 py-2.5 text-[13px] font-medium text-slate-700 transition-colors hover:border-blue-200 hover:bg-white hover:text-blue-700"
                   >
                     <Icon
-                      className="h-4 w-4 text-slate-400 group-hover:text-teal-600"
+                      className="h-4 w-4 text-slate-400 group-hover:text-blue-600"
                       aria-hidden="true"
                     />
                     {s.title}
@@ -208,7 +208,7 @@ function DocsPage() {
             {editMode && (
               <button
                 onClick={handleAddSection}
-                className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-slate-300 bg-white/40 p-6 text-sm font-medium text-slate-500 transition-colors hover:border-teal-400 hover:text-teal-700"
+                className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-slate-300 bg-white/40 p-6 text-sm font-medium text-slate-500 transition-colors hover:border-blue-400 hover:text-blue-700"
               >
                 <Plus className="h-4 w-4" />
                 セクションを追加
@@ -222,12 +222,12 @@ function DocsPage() {
               className="scroll-mt-24 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8"
             >
               <div className="flex items-center gap-3">
-                <span className="flex h-9 w-9 items-center justify-center rounded-md bg-teal-50 text-teal-700">
+                <span className="flex h-9 w-9 items-center justify-center rounded-md bg-blue-50 text-blue-700">
                   <BookOpen className="h-4.5 w-4.5" aria-hidden="true" />
                 </span>
                 <h3
                   id="faq-heading"
-                  className="font-serif text-xl font-semibold tracking-tight text-slate-900 sm:text-[1.5rem]"
+                  className="font-display text-xl font-semibold tracking-tight text-slate-900 sm:text-[1.5rem]"
                 >
                   よくある質問
                 </h3>
@@ -240,7 +240,7 @@ function DocsPage() {
               {editMode && (
                 <button
                   onClick={handleAddFaq}
-                  className="mt-4 flex w-full items-center justify-center gap-2 rounded-md border-2 border-dashed border-slate-300 p-3 text-sm font-medium text-slate-500 transition-colors hover:border-teal-400 hover:text-teal-700"
+                  className="mt-4 flex w-full items-center justify-center gap-2 rounded-md border-2 border-dashed border-slate-300 p-3 text-sm font-medium text-slate-500 transition-colors hover:border-blue-400 hover:text-blue-700"
                 >
                   <Plus className="h-4 w-4" />
                   FAQを追加
@@ -254,7 +254,7 @@ function DocsPage() {
         <section className="rounded-2xl border border-slate-200 bg-slate-50/60 p-6 sm:p-8">
           <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
             <div>
-              <h3 className="font-serif text-lg font-semibold tracking-tight text-slate-900">
+              <h3 className="font-display text-lg font-semibold tracking-tight text-slate-900">
                 さあ、12部門を動かしましょう。
               </h3>
               <p className="mt-1 text-[13px] text-slate-500">
@@ -263,7 +263,7 @@ function DocsPage() {
             </div>
             <Link
               to="/departments"
-              className="inline-flex items-center gap-2 rounded-md bg-teal-600 px-4 py-2.5 text-[13px] font-medium text-white transition-colors hover:bg-teal-700"
+              className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-4 py-2.5 text-[13px] font-medium text-white transition-colors hover:bg-blue-700"
             >
               部門を選んで指示
               <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
@@ -335,19 +335,19 @@ function SectionCard({
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
-          <span className="flex h-9 w-9 items-center justify-center rounded-md bg-teal-50 text-teal-700">
+          <span className="flex h-9 w-9 items-center justify-center rounded-md bg-blue-50 text-blue-700">
             <Icon className="h-4.5 w-4.5" aria-hidden="true" />
           </span>
           {editing ? (
             <Input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="font-serif text-xl font-semibold"
+              className="font-display text-xl font-semibold"
             />
           ) : (
             <h3
               id={`${section.slug}-heading`}
-              className="font-serif text-xl font-semibold tracking-tight text-slate-900 sm:text-[1.5rem]"
+              className="font-display text-xl font-semibold tracking-tight text-slate-900 sm:text-[1.5rem]"
             >
               {section.title}
             </h3>
@@ -420,7 +420,7 @@ function SectionCard({
               <li key={i} className="flex gap-2.5">
                 <span
                   aria-hidden="true"
-                  className="mt-2 h-1 w-1 flex-shrink-0 rounded-full bg-teal-500"
+                  className="mt-2 h-1 w-1 flex-shrink-0 rounded-full bg-blue-500"
                 />
                 <span>{line}</span>
               </li>

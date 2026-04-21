@@ -3,7 +3,7 @@ import { ChevronRight } from "lucide-react";
 import type { Department } from "@/data/departments";
 
 const STATUS_STYLE: Record<Department["status"], string> = {
-  active: "border-teal-200 bg-teal-50 text-teal-700",
+  active: "border-blue-100 bg-blue-50 text-blue-700",
   setup: "border-amber-200 bg-amber-50 text-amber-700",
   standard: "",
 };
@@ -14,17 +14,17 @@ export function DepartmentCard({ d }: { d: Department }) {
       to="/departments/$id"
       params={{ id: d.id }}
       aria-label={`${d.name} の詳細`}
-      className="group relative flex flex-col rounded-xl border border-slate-200/80 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)] outline-none transition-all duration-200 hover:-translate-y-0.5 hover:border-teal-300/80 hover:shadow-[0_18px_32px_-18px_rgba(13,148,136,0.28)] focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2"
+      className="group relative flex flex-col rounded-xl border border-slate-200/80 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)] outline-none transition-all duration-200 hover:-translate-y-0.5 hover:border-blue-200/80 hover:shadow-[0_18px_32px_-18px_rgba(13,148,136,0.28)] focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
     >
       {/* Hover accent rail */}
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute inset-y-3 left-0 w-[2px] origin-top scale-y-0 rounded-r bg-teal-500 transition-transform duration-200 group-hover:scale-y-100"
+        className="pointer-events-none absolute inset-y-3 left-0 w-[2px] origin-top scale-y-0 rounded-r bg-blue-500 transition-transform duration-200 group-hover:scale-y-100"
       />
 
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-2.5">
-          <span className="num flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 bg-slate-50 text-[13px] font-semibold tracking-tight text-slate-700 transition-colors group-hover:border-teal-600 group-hover:bg-teal-600 group-hover:text-white">
+          <span className="num flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 bg-slate-50 text-[13px] font-semibold tracking-tight text-slate-700 transition-colors group-hover:border-blue-600 group-hover:bg-blue-600 group-hover:text-white">
             {d.id}
           </span>
           {d.status !== "standard" && d.statusLabel && (
@@ -38,7 +38,7 @@ export function DepartmentCard({ d }: { d: Department }) {
         {d.unread !== undefined && d.unread > 0 && (
           <span
             aria-label={`未読 ${d.unread} 件`}
-            className="num inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-teal-600 px-1.5 text-[10px] font-semibold text-white shadow-[0_4px_12px_-4px_rgba(13,148,136,0.6)]"
+            className="num inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-blue-600 px-1.5 text-[10px] font-semibold text-white shadow-[0_4px_12px_-4px_rgba(13,148,136,0.6)]"
           >
             {d.unread}
           </span>
@@ -63,7 +63,7 @@ export function DepartmentCard({ d }: { d: Department }) {
         </div>
         <span
           aria-hidden="true"
-          className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition-all group-hover:border-teal-600 group-hover:bg-teal-600 group-hover:text-white"
+          className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition-all group-hover:border-blue-600 group-hover:bg-blue-600 group-hover:text-white"
         >
           <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
         </span>

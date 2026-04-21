@@ -84,17 +84,17 @@ function AuthPage() {
     <div className="min-h-screen bg-slate-50/70 flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
         <Link to="/" className="flex items-center justify-center gap-2.5 mb-8">
-          <span className="flex h-9 w-9 items-center justify-center rounded-md bg-slate-950 font-serif text-sm font-semibold text-white">
+          <span className="flex h-9 w-9 items-center justify-center rounded-md bg-slate-950 font-display text-sm font-semibold text-white">
             RL
           </span>
           <span className="flex flex-col leading-none">
-            <span className="font-serif text-base font-semibold tracking-wide text-slate-900">REALIFE</span>
+            <span className="font-display text-base font-semibold tracking-wide text-slate-900">REALIFE</span>
             <span className="mt-1 text-[10px] uppercase tracking-[0.18em] text-slate-500">AI COMPANY</span>
           </span>
         </Link>
 
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h1 className="font-serif text-xl font-semibold text-slate-900">
+          <h1 className="font-display text-xl font-semibold text-slate-900">
             {mode === "signin" ? "ログイン" : "新規アカウント作成"}
           </h1>
           <p className="mt-1 text-[12.5px] text-slate-500">
@@ -131,7 +131,7 @@ function AuthPage() {
                   value={displayName}
                   onChange={(e) => setDisplayName(e.target.value)}
                   placeholder="山田太郎"
-                  className="mt-1 w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:border-teal-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-teal-500"
+                  className="mt-1 w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
                 />
               </div>
             )}
@@ -143,7 +143,7 @@ function AuthPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 autoComplete="email"
-                className="mt-1 w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:border-teal-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-teal-500"
+                className="mt-1 w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
               />
             </div>
             <div>
@@ -155,13 +155,13 @@ function AuthPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 autoComplete={mode === "signin" ? "current-password" : "new-password"}
-                className="mt-1 w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:border-teal-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-teal-500"
+                className="mt-1 w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
               />
             </div>
             <button
               type="submit"
               disabled={submitting}
-              className="mt-2 w-full rounded-md bg-teal-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-teal-700 disabled:bg-slate-300"
+              className="mt-2 w-full rounded-md bg-blue-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-700 disabled:bg-slate-300"
             >
               {submitting ? "処理中..." : mode === "signin" ? "ログイン" : "アカウント作成"}
             </button>
@@ -171,14 +171,14 @@ function AuthPage() {
             {mode === "signin" ? (
               <>
                 アカウントをお持ちでない場合は{" "}
-                <button type="button" onClick={() => setMode("signup")} className="font-medium text-teal-700 hover:underline">
+                <button type="button" onClick={() => setMode("signup")} className="font-medium text-blue-700 hover:underline">
                   新規登録
                 </button>
               </>
             ) : (
               <>
                 既にアカウントをお持ちの場合は{" "}
-                <button type="button" onClick={() => setMode("signin")} className="font-medium text-teal-700 hover:underline">
+                <button type="button" onClick={() => setMode("signin")} className="font-medium text-blue-700 hover:underline">
                   ログイン
                 </button>
               </>
