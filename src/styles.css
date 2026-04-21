@@ -232,3 +232,86 @@
   background-size: 64px 64px;
   mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, black 30%, transparent 100%);
 }
+
+/*
+ * Dark mode 互換レイヤー
+ * 既存コンポーネントは bg-white / text-slate-* / border-slate-* / bg-slate-* /
+ * text-blue-* / bg-blue-* といった固定色クラスを直接使用している。
+ * 全ファイルを semantic token に書き換える代わりに、ダーク時のみ
+ * 同等のトークン色で上書きすることで一括対応する。
+ *
+ * 対応はメンテ容易性を優先し、よく使われる階調のみを定義する。
+ * 個別調整が必要な箇所は dark:bg-* クラスを後付けで追加すれば優先される。
+ */
+.dark {
+  /* ベース背景: index.tsx などで bg-[#F5F5F7] を直書きしている箇所 */
+  & .bg-\[\#F5F5F7\] { background-color: var(--background); }
+
+  /* white 系背景 → card */
+  & .bg-white,
+  & .bg-white\/90,
+  & .bg-white\/80,
+  & .bg-white\/75,
+  & .bg-white\/70,
+  & .bg-white\/60,
+  & .bg-white\/50 { background-color: var(--card); }
+
+  /* slate 背景階調 */
+  & .bg-slate-50,
+  & .bg-slate-50\/70,
+  & .bg-slate-50\/50,
+  & .bg-slate-100,
+  & .bg-slate-100\/70 { background-color: var(--muted); }
+  & .bg-slate-200 { background-color: color-mix(in oklab, var(--muted) 80%, var(--foreground) 20%); }
+  & .bg-slate-900,
+  & .bg-slate-950 { background-color: color-mix(in oklab, var(--background) 60%, black 40%); }
+
+  /* slate ボーダー階調 → border */
+  & .border-slate-100,
+  & .border-slate-100\/70,
+  & .border-slate-200,
+  & .border-slate-200\/80,
+  & .border-slate-200\/60,
+  & .border-slate-300 { border-color: var(--border); }
+
+  /* slate テキスト階調 → foreground / muted-foreground */
+  & .text-slate-950,
+  & .text-slate-900 { color: var(--foreground); }
+  & .text-slate-800,
+  & .text-slate-700 { color: color-mix(in oklab, var(--foreground) 92%, var(--muted-foreground) 8%); }
+  & .text-slate-600,
+  & .text-slate-500,
+  & .text-slate-500\/90 { color: var(--muted-foreground); }
+  & .text-slate-400 { color: color-mix(in oklab, var(--muted-foreground) 80%, var(--background) 20%); }
+
+  /* placeholder */
+  & .placeholder\:text-slate-400::placeholder { color: color-mix(in oklab, var(--muted-foreground) 70%, var(--background) 30%); }
+
+  /* blue アクセント (primary 帯) */
+  & .text-blue-600,
+  & .text-blue-700 { color: var(--primary); }
+  & .bg-blue-50,
+  & .bg-blue-50\/70,
+  & .bg-blue-100 { background-color: color-mix(in oklab, var(--primary) 18%, transparent); }
+  & .bg-blue-600,
+  & .bg-blue-700 { background-color: var(--primary); }
+  & .hover\:bg-blue-700:hover { background-color: color-mix(in oklab, var(--primary) 85%, white 15%); }
+  & .border-blue-300,
+  & .border-blue-400 { border-color: color-mix(in oklab, var(--primary) 70%, transparent); }
+  & .focus\:border-blue-400:focus { border-color: var(--primary); }
+  & .focus\:ring-blue-100:focus { --tw-ring-color: color-mix(in oklab, var(--primary) 30%, transparent); }
+  & .bg-blue-500,
+  & .bg-blue-500\/90 { background-color: var(--primary); }
+
+  /* hover 系の slate */
+  & .hover\:bg-slate-50:hover,
+  & .hover\:bg-slate-100\/70:hover { background-color: color-mix(in oklab, var(--muted) 70%, var(--foreground) 8%); }
+  & .hover\:text-slate-900:hover { color: var(--foreground); }
+  & .hover\:text-slate-700:hover { color: color-mix(in oklab, var(--foreground) 90%, var(--muted-foreground) 10%); }
+  & .hover\:border-slate-300:hover { border-color: color-mix(in oklab, var(--border) 60%, var(--foreground) 40%); }
+
+  /* 区切り線などの divide */
+  & .divide-slate-100 > :not([hidden]) ~ :not([hidden]),
+  & .divide-slate-200 > :not([hidden]) ~ :not([hidden]) { border-color: var(--border); }
+}
+
