@@ -15,7 +15,7 @@ export const DEFAULT_DEPT_FILTERS: DeptFilters = {
 const STATUS_OPTIONS: { value: DeptStatusFilter; label: string; dot: string }[] = [
   { value: "active", label: "稼働中", dot: "bg-blue-500" },
   { value: "setup", label: "構築中", dot: "bg-amber-500" },
-  { value: "standard", label: "通常運用", dot: "bg-slate-400" },
+  { value: "standard", label: "通常運用", dot: "bg-muted-foreground" },
 ];
 
 export function DepartmentFilterDialog({
@@ -88,7 +88,7 @@ export function DepartmentFilterDialog({
                 checked={value.unreadOnly}
                 onChange={(e) => onChange({ ...value, unreadOnly: e.target.checked })}
               />
-              <span className="h-5 w-9 rounded-full bg-slate-300 transition-colors peer-checked:bg-blue-600" />
+              <span className="h-5 w-9 rounded-full bg-muted transition-colors peer-checked:bg-primary" />
               <span className="absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-card shadow transition-transform peer-checked:translate-x-4" />
             </label>
           </div>

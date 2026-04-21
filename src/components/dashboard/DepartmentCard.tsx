@@ -19,7 +19,7 @@ const STATUS_META: Record<Department["status"], StatusMeta> = {
   standard: {
     label: "通常運用",
     badge: "border-border bg-muted text-muted-foreground",
-    dot: "bg-slate-400",
+    dot: "bg-muted-foreground",
   },
 };
 

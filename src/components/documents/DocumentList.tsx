@@ -170,7 +170,7 @@ export function DocumentList({ departmentCode }: { departmentCode: string }) {
         </div>
       ) : items.length === 0 ? (
         <div className="rounded-xl border border-dashed border-border bg-card p-10 text-center">
-          <FileText className="mx-auto h-8 w-8 text-slate-300" aria-hidden="true" />
+          <FileText className="mx-auto h-8 w-8 text-muted-foreground/60" aria-hidden="true" />
           <p className="mt-3 text-sm font-medium text-muted-foreground">
             ドキュメントはまだありません
           </p>
