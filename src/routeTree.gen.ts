@@ -21,6 +21,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as DepartmentsIndexRouteImport } from './routes/departments.index'
 import { Route as DepartmentsIdRouteImport } from './routes/departments.$id'
 import { Route as DealsDealCodeRouteImport } from './routes/deals.$dealCode'
+import { Route as AiPreviewRouteImport } from './routes/ai.preview'
 
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
@@ -82,10 +83,15 @@ const DealsDealCodeRoute = DealsDealCodeRouteImport.update({
   path: '/$dealCode',
   getParentRoute: () => DealsRoute,
 } as any)
+const AiPreviewRoute = AiPreviewRouteImport.update({
+  id: '/preview',
+  path: '/preview',
+  getParentRoute: () => AiRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/ai': typeof AiRoute
+  '/ai': typeof AiRouteWithChildren
   '/auth': typeof AuthRoute
   '/deals': typeof DealsRouteWithChildren
   '/docs': typeof DocsRoute
@@ -93,13 +99,14 @@ export interface FileRoutesByFullPath {
   '/metrics': typeof MetricsRoute
   '/reports': typeof ReportsRoute
   '/settings': typeof SettingsRoute
+  '/ai/preview': typeof AiPreviewRoute
   '/deals/$dealCode': typeof DealsDealCodeRoute
   '/departments/$id': typeof DepartmentsIdRoute
   '/departments/': typeof DepartmentsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/ai': typeof AiRoute
+  '/ai': typeof AiRouteWithChildren
   '/auth': typeof AuthRoute
   '/deals': typeof DealsRouteWithChildren
   '/docs': typeof DocsRoute
@@ -107,6 +114,7 @@ export interface FileRoutesByTo {
   '/metrics': typeof MetricsRoute
   '/reports': typeof ReportsRoute
   '/settings': typeof SettingsRoute
+  '/ai/preview': typeof AiPreviewRoute
   '/deals/$dealCode': typeof DealsDealCodeRoute
   '/departments/$id': typeof DepartmentsIdRoute
   '/departments': typeof DepartmentsIndexRoute
@@ -114,7 +122,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/ai': typeof AiRoute
+  '/ai': typeof AiRouteWithChildren
   '/auth': typeof AuthRoute
   '/deals': typeof DealsRouteWithChildren
   '/docs': typeof DocsRoute
@@ -122,6 +130,7 @@ export interface FileRoutesById {
   '/metrics': typeof MetricsRoute
   '/reports': typeof ReportsRoute
   '/settings': typeof SettingsRoute
+  '/ai/preview': typeof AiPreviewRoute
   '/deals/$dealCode': typeof DealsDealCodeRoute
   '/departments/$id': typeof DepartmentsIdRoute
   '/departments/': typeof DepartmentsIndexRoute
@@ -138,6 +147,7 @@ export interface FileRouteTypes {
     | '/metrics'
     | '/reports'
     | '/settings'
+    | '/ai/preview'
     | '/deals/$dealCode'
     | '/departments/$id'
     | '/departments/'
@@ -152,6 +162,7 @@ export interface FileRouteTypes {
     | '/metrics'
     | '/reports'
     | '/settings'
+    | '/ai/preview'
     | '/deals/$dealCode'
     | '/departments/$id'
     | '/departments'
@@ -166,6 +177,7 @@ export interface FileRouteTypes {
     | '/metrics'
     | '/reports'
     | '/settings'
+    | '/ai/preview'
     | '/deals/$dealCode'
     | '/departments/$id'
     | '/departments/'
@@ -173,7 +185,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AiRoute: typeof AiRoute
+  AiRoute: typeof AiRouteWithChildren
   AuthRoute: typeof AuthRoute
   DealsRoute: typeof DealsRouteWithChildren
   DocsRoute: typeof DocsRoute
@@ -271,8 +283,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DealsDealCodeRouteImport
       parentRoute: typeof DealsRoute
     }
+    '/ai/preview': {
+      id: '/ai/preview'
+      path: '/preview'
+      fullPath: '/ai/preview'
+      preLoaderRoute: typeof AiPreviewRouteImport
+      parentRoute: typeof AiRoute
+    }
   }
 }
+
+interface AiRouteChildren {
+  AiPreviewRoute: typeof AiPreviewRoute
+}
+
+const AiRouteChildren: AiRouteChildren = {
+  AiPreviewRoute: AiPreviewRoute,
+}
+
+const AiRouteWithChildren = AiRoute._addFileChildren(AiRouteChildren)
 
 interface DealsRouteChildren {
   DealsDealCodeRoute: typeof DealsDealCodeRoute
@@ -286,7 +315,7 @@ const DealsRouteWithChildren = DealsRoute._addFileChildren(DealsRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AiRoute: AiRoute,
+  AiRoute: AiRouteWithChildren,
   AuthRoute: AuthRoute,
   DealsRoute: DealsRouteWithChildren,
   DocsRoute: DocsRoute,
