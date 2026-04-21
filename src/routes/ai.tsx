@@ -328,10 +328,10 @@ function AiPage() {
                 </div>
               </div>
             ))}
-            {isLoading && messages[messages.length - 1]?.role === "user" && (
-              <div className="flex justify-start">
+            {isLoading && messages[messages.length - 1]?.role !== "assistant" && (
+              <div className="flex justify-start" aria-live="polite">
                 <div className="rounded-2xl border border-border bg-muted px-4 py-3">
-                  <div className="flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-wider text-blue-700">
+                  <div className="flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-wider text-blue-700 dark:text-blue-300">
                     <Sparkles className="h-3 w-3 animate-pulse" /> 思考中...
                   </div>
                 </div>
