@@ -231,11 +231,24 @@ export function AppShell({
     }
   }, [historyKey]);
 
+  // 検索文字列の正規化:
+  //  - Unicode 互換正規化(NFKC): 全角英数 → 半角、全角記号 → 半角
+  //  - 全角空白(U+3000)・タブ等 → 半角スペース
+  //  - 連続空白を 1 つにまとめ、前後スペースを除去
+  const normalizeQuery = (q: string) =>
+    q
+      .normalize("NFKC")
+      .replace(/[\s\u3000]+/g, " ")
+      .trim();
+
   const commitHistory = (q: string) => {
-    const v = q.trim();
+    const v = normalizeQuery(q);
     if (!v || v.length < 2) return;
     setHistory((prev) => {
-      const next = [v, ...prev.filter((x) => x !== v)].slice(0, HISTORY_LIMIT);
+      // 大文字小文字の違いも重複扱いし、初出の表記を保持
+      const lower = v.toLowerCase();
+      const filtered = prev.filter((x) => x.toLowerCase() !== lower);
+      const next = [v, ...filtered].slice(0, HISTORY_LIMIT);
       try {
         window.sessionStorage.setItem(historyKey, JSON.stringify(next));
       } catch {
