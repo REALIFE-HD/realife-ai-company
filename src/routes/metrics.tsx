@@ -2,7 +2,6 @@ import { createFileRoute, Link, ClientOnly } from "@tanstack/react-router";
 import { ArrowLeft, RefreshCw, Trash2 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { AppShell } from "@/components/layout/AppShell";
-import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import {
   CartesianGrid,
@@ -82,7 +81,6 @@ function MetricsPage() {
           <MetricsDashboard />
         </ClientOnly>
 
-        <Footer />
       </div>
     </AppShell>
   );

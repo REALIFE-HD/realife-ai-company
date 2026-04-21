@@ -3,7 +3,6 @@ import { useEffect, useMemo, useState } from "react";
 import { ArrowLeft, Calendar, Mail, MessageSquare, Phone, Save, Sparkles, Trash2, User } from "lucide-react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/layout/AppShell";
-import { Footer } from "@/components/layout/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import {
   STAGES,
@@ -183,7 +182,6 @@ function DealDetailPage() {
     return (
       <AppShell title="案件詳細" subtitle="Loading...">
         <div className="px-4 py-12 text-center text-sm text-muted-foreground">読み込み中...</div>
-        <Footer />
       </AppShell>
     );
   }
@@ -197,7 +195,6 @@ function DealDetailPage() {
             <Link to="/deals" className="text-blue-700 hover:underline">案件一覧へ</Link>
           </div>
         </div>
-        <Footer />
       </AppShell>
     );
   }
@@ -441,7 +438,6 @@ function DealDetailPage() {
           </div>
         </section>
       </div>
-      <Footer />
     </AppShell>
   );
 }

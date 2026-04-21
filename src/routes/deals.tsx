@@ -2,7 +2,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ArrowLeft, ChevronRight } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
-import { Footer } from "@/components/layout/Footer";
 import { useRouteMountMark } from "@/lib/web-vitals";
 import { listDeals, STAGE_STYLE, type Deal } from "@/lib/deals";
 import { Money } from "@/components/ui/money";
@@ -160,7 +159,6 @@ function DealsPage() {
           </div>
         </section>
       </div>
-      <Footer />
     </AppShell>
   );
 }
