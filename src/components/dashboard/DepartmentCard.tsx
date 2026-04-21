@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ChevronRight } from "lucide-react";
 import type { Department } from "@/data/departments";
+import { Highlight } from "@/components/ui/highlight";
 
 type StatusMeta = { label: string; badge: string; dot: string };
 
@@ -22,7 +23,7 @@ const STATUS_META: Record<Department["status"], StatusMeta> = {
   },
 };
 
-export function DepartmentCard({ d }: { d: Department }) {
+export function DepartmentCard({ d, query }: { d: Department; query?: string }) {
   return (
     <Link
       to="/departments/$id"
@@ -80,10 +81,10 @@ export function DepartmentCard({ d }: { d: Department }) {
 
       <div className="mt-4 min-w-0">
         <h3 className="truncate text-[15px] font-semibold tracking-tight text-slate-950 sm:text-base">
-          {d.name}
+          <Highlight text={d.name} query={query} />
         </h3>
         <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-slate-500">
-          {d.role}
+          <Highlight text={d.role} query={query} />
         </p>
       </div>
 
@@ -91,7 +92,7 @@ export function DepartmentCard({ d }: { d: Department }) {
         <div className="flex min-w-0 flex-1 gap-5 sm:gap-6">
           <div className="min-w-0">
             <p className="truncate text-[10px] font-medium uppercase tracking-[0.14em] text-slate-500">
-              {d.kpiLabel}
+              <Highlight text={d.kpiLabel} query={query} />
             </p>
             <p className="kpi-value mt-1 text-lg text-slate-950 sm:text-xl">{d.kpiValue}</p>
           </div>
