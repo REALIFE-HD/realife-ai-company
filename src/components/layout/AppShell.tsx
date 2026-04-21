@@ -337,6 +337,8 @@ export function AppShell({
   const mobileInputRef = useRef<HTMLInputElement>(null);
   const clearAndFocus = (ref: React.RefObject<HTMLInputElement | null>) => {
     setSearch("");
+    setHistoryOpen(false);
+    setActiveIndex(-1);
     requestAnimationFrame(() => ref.current?.focus());
   };
 
