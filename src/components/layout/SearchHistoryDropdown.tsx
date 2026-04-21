@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { Clock, Info, X } from "lucide-react";
 import { HISTORY_DEDUPE_HINT } from "@/lib/normalize-query";
 
@@ -16,6 +17,25 @@ export function SearchHistoryDropdown({
   onClear: () => void;
   onHover?: (index: number) => void;
 }) {
+  const listRef = useRef<HTMLUListElement>(null);
+  const activeItemRef = useRef<HTMLLIElement>(null);
+
+  // ↑↓ で activeIndex が変わったら、その項目をリスト内で確実に表示する
+  useEffect(() => {
+    const list = listRef.current;
+    const item = activeItemRef.current;
+    if (!list || !item || activeIndex < 0) return;
+    const itemTop = item.offsetTop;
+    const itemBottom = itemTop + item.offsetHeight;
+    const viewTop = list.scrollTop;
+    const viewBottom = viewTop + list.clientHeight;
+    if (itemTop < viewTop) {
+      list.scrollTop = itemTop;
+    } else if (itemBottom > viewBottom) {
+      list.scrollTop = itemBottom - list.clientHeight;
+    }
+  }, [activeIndex]);
+
   if (history.length === 0) {
     return (
       <div className="absolute left-0 right-0 top-full z-30 mt-1 rounded-md border border-slate-200 bg-white p-3 text-[12px] text-slate-500 shadow-lg">
@@ -53,7 +73,7 @@ export function SearchHistoryDropdown({
           履歴を消去
         </button>
       </div>
-      <ul className="max-h-64 overflow-y-auto py-1">
+      <ul ref={listRef} className="max-h-64 overflow-y-auto py-1">
         {history.map((q, i) => {
           const isActive = i === activeIndex;
           return (
@@ -61,6 +81,7 @@ export function SearchHistoryDropdown({
               key={q}
               role="option"
               aria-selected={isActive}
+              ref={isActive ? activeItemRef : undefined}
               onMouseEnter={() => onHover?.(i)}
               className={`group flex items-center ${
                 isActive ? "bg-blue-50" : ""
