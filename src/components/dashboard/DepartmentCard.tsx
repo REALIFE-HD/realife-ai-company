@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { ChevronRight } from "lucide-react";
+import { memo } from "react";
 import type { Department } from "@/data/departments";
 import { Highlight } from "@/components/ui/highlight";
 
@@ -23,15 +24,19 @@ const STATUS_META: Record<Department["status"], StatusMeta> = {
   },
 };
 
-export function DepartmentCard({ d, query }: { d: Department; query?: string }) {
+function DepartmentCardImpl({ d, query }: { d: Department; query?: string }) {
+  const meta = STATUS_META[d.status];
+  const statusLabel = d.statusLabel ?? meta.label;
+  const showUnread = d.unread !== undefined && d.unread > 0;
+
   return (
     <Link
       to="/departments/$id"
       params={{ id: d.id }}
       aria-label={`${d.name} の詳細`}
-      className="group relative flex flex-col rounded-xl border border-border/80 bg-card p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)] outline-none transition-[transform,box-shadow,border-color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:border-blue-300 hover:shadow-[0_24px_48px_-24px_rgba(37,99,235,0.35)] focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+      className="group relative flex flex-col rounded-xl border border-border/80 bg-card p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)] outline-none transition-[transform,box-shadow,border-color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] [contain:layout_paint] [content-visibility:auto] hover:-translate-y-1 hover:border-blue-300 hover:shadow-[0_24px_48px_-24px_rgba(37,99,235,0.35)] focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
     >
-      {/* Animated gradient border on hover (一周回転) */}
+      {/* Animated gradient border on hover (一周回転 / hover 時のみ生成) */}
       <span
         aria-hidden="true"
         className="dept-card-border pointer-events-none absolute inset-0 rounded-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
@@ -48,20 +53,14 @@ export function DepartmentCard({ d, query }: { d: Department; query?: string }) 
           <span className="num flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-border bg-muted text-[13px] font-semibold tracking-tight text-muted-foreground transition-colors group-hover:border-blue-600 group-hover:bg-blue-600 group-hover:text-white">
             {d.id}
           </span>
-          {(() => {
-            const meta = STATUS_META[d.status];
-            const label = d.statusLabel ?? meta.label;
-            return (
-              <span
-                className={`inline-flex max-w-full items-center gap-1.5 truncate rounded-full border px-2 py-0.5 text-[10px] font-medium ${meta.badge}`}
-              >
-                <span aria-hidden="true" className={`h-1.5 w-1.5 shrink-0 rounded-full ${meta.dot}`} />
-                <span className="truncate">{label}</span>
-              </span>
-            );
-          })()}
+          <span
+            className={`inline-flex max-w-full items-center gap-1.5 truncate rounded-full border px-2 py-0.5 text-[10px] font-medium ${meta.badge}`}
+          >
+            <span aria-hidden="true" className={`h-1.5 w-1.5 shrink-0 rounded-full ${meta.dot}`} />
+            <span className="truncate">{statusLabel}</span>
+          </span>
         </div>
-        {d.unread !== undefined && d.unread > 0 && (
+        {showUnread && (
           <span
             aria-label={`未読 ${d.unread} 件`}
             className="num inline-flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full bg-blue-600 px-1.5 text-[10px] font-semibold text-white shadow-[0_4px_12px_-4px_rgba(13,148,136,0.6)]"
@@ -103,3 +102,6 @@ export function DepartmentCard({ d, query }: { d: Department; query?: string }) 
     </Link>
   );
 }
+
+// 親 (DepartmentsGrid) の再レンダリング時に props 同一なら再描画スキップ
+export const DepartmentCard = memo(DepartmentCardImpl);
