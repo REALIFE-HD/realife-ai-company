@@ -65,7 +65,7 @@ function DealsPage() {
           ].map((s) => (
             <div key={s.l} className="rounded-xl border border-slate-200/80 bg-white px-4 py-3.5 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
               <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-slate-500">{s.l}</p>
-              <p className="num mt-1.5 text-[1.625rem] font-semibold leading-none tracking-tight text-slate-950">{s.v}</p>
+              <p className="kpi-value mt-1.5 text-right text-[1.625rem] leading-none text-slate-950">{s.v}</p>
             </div>
           ))}
         </section>
@@ -75,15 +75,15 @@ function DealsPage() {
             <table className="w-full text-sm">
               <thead className="border-b border-slate-200 bg-slate-50/60 text-[10px] font-medium uppercase tracking-[0.14em] text-slate-500">
                 <tr>
-                  <th className="px-4 py-3 text-left font-medium">ID</th>
+                  <th className="num-cell px-4 py-3 font-medium">ID</th>
                   <th className="px-4 py-3 text-left font-medium">クライアント</th>
                   <th className="px-4 py-3 text-left font-medium">案件名</th>
                   <th className="px-4 py-3 text-left font-medium">ステージ</th>
-                  <th className="px-4 py-3 text-right font-medium">金額</th>
-                  <th className="px-4 py-3 text-right font-medium">確度</th>
+                  <th className="num-cell px-4 py-3 font-medium">金額</th>
+                  <th className="num-cell px-4 py-3 font-medium">確度</th>
                   <th className="px-4 py-3 text-left font-medium">担当</th>
                   <th className="px-4 py-3 text-left font-medium">次のアクション</th>
-                  <th className="px-4 py-3 text-right font-medium">期日</th>
+                  <th className="num-cell px-4 py-3 font-medium">期日</th>
                   <th className="px-4 py-3" />
                 </tr>
               </thead>
@@ -100,7 +100,7 @@ function DealsPage() {
                 )}
                 {deals.map((d) => (
                   <tr key={d.id} className="group cursor-pointer transition-colors hover:bg-blue-50/30">
-                    <td className="whitespace-nowrap px-4 py-3 num text-xs text-slate-500">
+                    <td className="num-cell px-4 py-3 text-xs text-slate-500">
                       <Link to="/deals/$dealCode" params={{ dealCode: d.code }} className="transition-colors group-hover:text-blue-700">{d.code}</Link>
                     </td>
                     <td className="whitespace-nowrap px-4 py-3 text-slate-700">
@@ -114,11 +114,11 @@ function DealsPage() {
                         {d.stage}
                       </span>
                     </td>
-                    <td className="whitespace-nowrap px-4 py-3 text-right num font-semibold text-slate-950"><Money amount={d.amount} /></td>
-                    <td className="whitespace-nowrap px-4 py-3 text-right num text-slate-700">{d.probability}%</td>
+                    <td className="num-cell px-4 py-3 font-semibold text-slate-950"><Money amount={d.amount} /></td>
+                    <td className="num-cell px-4 py-3 text-slate-700">{d.probability}%</td>
                     <td className="whitespace-nowrap px-4 py-3 text-xs text-slate-700">{d.owner}</td>
                     <td className="px-4 py-3 text-xs text-slate-700">{d.next_action}</td>
-                    <td className="whitespace-nowrap px-4 py-3 text-right num text-xs text-slate-700">{d.due ?? "—"}</td>
+                    <td className="num-cell px-4 py-3 text-xs text-slate-700">{d.due ?? "—"}</td>
                     <td className="whitespace-nowrap px-2 py-3 text-slate-400 transition-colors group-hover:text-blue-600">
                       <Link to="/deals/$dealCode" params={{ dealCode: d.code }}>
                         <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />

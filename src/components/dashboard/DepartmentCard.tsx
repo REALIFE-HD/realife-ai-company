@@ -68,11 +68,11 @@ export function DepartmentCard({ d }: { d: Department }) {
         <div className="flex gap-6">
           <div>
             <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-slate-500">{d.kpiLabel}</p>
-            <p className="num mt-1 text-lg font-semibold tracking-tight text-slate-950">{d.kpiValue}</p>
+            <p className="kpi-value mt-1 text-lg text-slate-950">{d.kpiValue}</p>
           </div>
           <div>
             <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-slate-500">タスク</p>
-            <p className="num mt-1 text-lg font-semibold tracking-tight text-slate-950">{d.tasks}</p>
+            <p className="kpi-value mt-1 text-lg text-slate-950">{d.tasks}</p>
           </div>
         </div>
         <span

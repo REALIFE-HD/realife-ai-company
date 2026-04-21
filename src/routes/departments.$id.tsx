@@ -145,9 +145,9 @@ function DepartmentDetail() {
                 { l: "案件金額", v: "¥12,500,000" },
                 { l: "指示履歴", v: String(instructions.length) },
               ].map((m) => (
-                <div key={m.l}>
+                <div key={m.l} className="text-right">
                   <dt className="text-[10px] uppercase tracking-[0.18em] text-slate-500">{m.l}</dt>
-                  <dd className="mt-2 font-mono text-2xl font-semibold text-slate-950">{m.v}</dd>
+                  <dd className="kpi-value mt-2 text-2xl text-slate-950">{m.v}</dd>
                 </div>
               ))}
             </dl>
@@ -210,17 +210,17 @@ function DepartmentDetail() {
                   <table className="w-full text-sm">
                     <thead className="border-b border-slate-200 bg-slate-50 text-[10px] uppercase tracking-wider text-slate-500">
                       <tr>
-                        <th className="px-4 py-3 text-left font-medium">ID</th>
+                        <th className="num-cell px-4 py-3 font-medium">ID</th>
                         <th className="px-4 py-3 text-left font-medium">タイトル</th>
                         <th className="px-4 py-3 text-left font-medium">優先度</th>
                         <th className="px-4 py-3 text-left font-medium">ステータス</th>
-                        <th className="px-4 py-3 text-right font-medium">期日</th>
+                        <th className="num-cell px-4 py-3 font-medium">期日</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
                       {DUMMY_TASKS.map((t) => (
                         <tr key={t.id} className="hover:bg-slate-50">
-                          <td className="px-4 py-3 font-mono text-xs text-slate-500">{t.id}</td>
+                          <td className="num-cell px-4 py-3 text-xs text-slate-500">{t.id}</td>
                           <td className="px-4 py-3 text-slate-800">{t.title}</td>
                           <td className="px-4 py-3">
                             <span
@@ -230,7 +230,7 @@ function DepartmentDetail() {
                             </span>
                           </td>
                           <td className="px-4 py-3 text-xs text-slate-700">{t.status}</td>
-                          <td className="px-4 py-3 text-right font-mono text-xs text-slate-700">{t.due}</td>
+                          <td className="num-cell px-4 py-3 text-xs text-slate-700">{t.due}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -256,11 +256,11 @@ function DepartmentDetail() {
                       <div className="mt-4 flex items-end justify-between border-t border-slate-100 pt-4">
                         <div>
                           <p className="text-[10px] uppercase tracking-wider text-slate-500">金額</p>
-                          <p className="mt-0.5 font-mono text-lg font-semibold text-slate-950">{deal.amount}</p>
+                          <p className="kpi-value mt-0.5 text-lg text-slate-950">{deal.amount}</p>
                         </div>
                         <div className="text-right">
                           <p className="text-[10px] uppercase tracking-wider text-slate-500">確度</p>
-                          <p className="mt-0.5 font-mono text-lg font-semibold text-slate-950">{deal.probability}%</p>
+                          <p className="kpi-value mt-0.5 text-lg text-slate-950">{deal.probability}%</p>
                         </div>
                       </div>
                     </div>
