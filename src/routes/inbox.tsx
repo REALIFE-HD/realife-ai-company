@@ -218,7 +218,7 @@ function InboxPage() {
           ].map((s) => (
             <div key={s.l} className="rounded-xl border border-slate-200/80 bg-white px-4 py-3.5 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
               <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-slate-500">{s.l}</p>
-              <p className={`num mt-1.5 text-[1.625rem] font-semibold leading-none tracking-tight ${s.accent}`}>{s.v}</p>
+              <p className={`kpi-value mt-1.5 text-right text-[1.625rem] leading-none ${s.accent}`}>{s.v}</p>
             </div>
           ))}
         </section>
