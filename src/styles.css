@@ -471,6 +471,7 @@
   & .text-muted-foreground\/70 { color: oklch(0.72 0.012 264); }
   & .text-muted-foreground\/80,
   & .text-muted-foreground\/90 { color: oklch(0.8 0.012 264); }
+}
 
 /* ============================================================
  * DepartmentCard 用 アニメーション枠 (conic gradient 一周回転)
