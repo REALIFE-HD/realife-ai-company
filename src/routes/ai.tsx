@@ -4,6 +4,7 @@ import { ArrowLeft, Send, Sparkles, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import ReactMarkdown from "react-markdown";
 import { AppShell } from "@/components/layout/AppShell";
+import { CodeBlock } from "@/components/ai/CodeBlock";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { useRouteMountMark } from "@/lib/web-vitals";
