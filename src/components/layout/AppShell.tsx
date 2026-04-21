@@ -227,6 +227,7 @@ export function AppShell({
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // 履歴ロード(壊れた値や上限超過の値は読み込み時に切り詰め)
+  // 上限値(HISTORY_LIMIT)が設定変更で減った場合にも追従する
   useEffect(() => {
     if (typeof window === "undefined") return;
     try {
@@ -239,10 +240,18 @@ export function AppShell({
             .slice(0, HISTORY_LIMIT)
         : [];
       setHistory(arr);
+      // 上限縮小に追従して保存し直す
+      if (Array.isArray(parsed) && parsed.length > HISTORY_LIMIT) {
+        try {
+          window.sessionStorage.setItem(historyKey, JSON.stringify(arr));
+        } catch {
+          /* ignore */
+        }
+      }
     } catch {
       setHistory([]);
     }
-  }, [historyKey]);
+  }, [historyKey, HISTORY_LIMIT]);
 
   // 検索文字列の正規化は src/lib/normalize-query.ts を使用
 
