@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import { AppShell } from "@/components/layout/AppShell";
 import { KpiCards } from "@/components/dashboard/KpiCards";
 import { DashboardCharts } from "@/components/dashboard/DashboardCharts";
@@ -26,12 +27,19 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const [search, setSearch] = useState("");
   return (
-    <AppShell title="ダッシュボード" subtitle="Q2 2026 ・ 12部門の業務指揮を一望">
+    <AppShell
+      title="ダッシュボード"
+      subtitle="Q2 2026 ・ 12部門の業務指揮を一望"
+      search={search}
+      onSearchChange={setSearch}
+      searchPlaceholder="部門名・役割・KPIラベルで検索…"
+    >
       <div className="space-y-6 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
         <KpiCards />
         <DashboardCharts />
-        <DepartmentsGrid />
+        <DepartmentsGrid query={search} />
         <CTASection />
       </div>
       <Footer />
