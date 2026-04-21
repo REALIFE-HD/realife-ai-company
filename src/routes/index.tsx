@@ -29,34 +29,21 @@ export const Route = createFileRoute("/")({
 function Index() {
   useRouteMountMark("/");
   const [search, setSearch] = useState("");
-  const [filters, setFilters] = useState<DeptFilters>(DEFAULT_DEPT_FILTERS);
-  const [filterOpen, setFilterOpen] = useState(false);
 
   return (
-    <>
-      <AppShell
-        title="ダッシュボード"
-        subtitle="AI COMPANY 統合プラットフォーム"
-        search={search}
-        onSearchChange={setSearch}
-        searchPlaceholder="部門名・役割・KPIラベルで検索…"
-        onFilterClick={() => setFilterOpen(true)}
-        filterActive={filters.statuses.length > 0 || filters.unreadOnly}
-      >
-        <div className="space-y-6 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-          <KpiCards />
-          <DashboardCharts />
-          <CTASection />
-          <DepartmentsGrid query={search} filters={filters} />
-        </div>
-        <Footer />
-      </AppShell>
-      <DepartmentFilterDialog
-        open={filterOpen}
-        onOpenChange={setFilterOpen}
-        value={filters}
-        onChange={setFilters}
-      />
-    </>
+    <AppShell
+      title="ダッシュボード"
+      subtitle="AI COMPANY 統合プラットフォーム"
+      search={search}
+      onSearchChange={setSearch}
+      searchPlaceholder="KPI・指標で検索…"
+    >
+      <div className="space-y-6 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+        <KpiCards />
+        <DashboardCharts />
+        <CTASection />
+      </div>
+      <Footer />
+    </AppShell>
   );
 }
