@@ -116,7 +116,7 @@ function Brand() {
     <Link to="/" className="flex items-center gap-2.5 px-5 py-5" aria-label="REALIFE Operations">
       <span
         aria-hidden="true"
-        className="flex h-8 w-8 items-center justify-center rounded-md bg-foreground font-display text-sm font-semibold text-white"
+        className="flex h-8 w-8 items-center justify-center rounded-md bg-foreground font-display text-sm font-semibold text-background"
       >
         RL
       </span>

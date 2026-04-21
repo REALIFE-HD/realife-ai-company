@@ -394,7 +394,7 @@ function DealDetailPage() {
               <button
                 type="submit"
                 disabled={!actContent.trim()}
-                className="rounded-md bg-foreground px-3 py-2 text-[12px] font-medium text-white hover:bg-foreground/90 disabled:bg-muted"
+                className="rounded-md bg-foreground px-3 py-2 text-[12px] font-medium text-background hover:bg-foreground/90 disabled:bg-muted"
               >
                 記録
               </button>

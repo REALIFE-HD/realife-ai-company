@@ -48,7 +48,7 @@ export const Route = createFileRoute("/departments/$id")({
         <h1 className="mt-3 font-display text-2xl font-semibold text-foreground">部門が見つかりません</h1>
         <Link
           to="/"
-          className="mt-6 inline-flex items-center gap-2 rounded-md bg-foreground px-4 py-2 text-sm font-medium text-white"
+          className="mt-6 inline-flex items-center gap-2 rounded-md bg-foreground px-4 py-2 text-sm font-medium text-background"
         >
           <ArrowLeft className="h-4 w-4" />
           ダッシュボードへ
