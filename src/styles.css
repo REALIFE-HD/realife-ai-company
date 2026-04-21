@@ -163,18 +163,26 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* palt: 和文プロポーショナル / kern: カーニング / tnum: 等幅数字 */
-    font-feature-settings: "palt", "kern", "tnum";
-    font-variant-numeric: tabular-nums;
-    letter-spacing: 0.01em;
+    /* 日本語SaaS最適化:
+       - palt: 和文プロポーショナル詰め (記号類の余白を整える)
+       - pkna: 約物半角 (「」、。 などの空きを最適化)
+       - kern: カーニング
+       - cv11: Inter の一文字代替 (a/g 等の可読性向上)
+       - ss03: Inter の曲線最適化 */
+    font-feature-settings: "palt" 1, "pkna" 1, "kern" 1, "cv11" 1, "ss03" 1;
+    letter-spacing: 0.012em; /* 和文混在で読みやすい程度のトラッキング */
+    line-height: 1.65; /* 和文読書性: 1.6-1.7 が最適 */
     text-rendering: optimizeLegibility;
+    font-size: 14px; /* SaaSダッシュボードの標準サイズ */
   }
 
   h1, h2, h3, h4, h5, h6,
   .font-display {
     font-family: var(--font-display);
-    font-feature-settings: "palt", "kern", "ss01";
-    letter-spacing: -0.02em;
+    /* 見出しは詰めを強めに、約物半角で和文タイトルが締まる */
+    font-feature-settings: "palt" 1, "pkna" 1, "kern" 1, "cv11" 1, "ss01" 1, "ss03" 1;
+    letter-spacing: -0.018em;
+    line-height: 1.35; /* 見出しは1.3-1.4が和文に最適 */
     font-weight: 700;
   }
 
@@ -184,16 +192,16 @@
   .num {
     font-family: var(--font-numeric);
     font-variant-numeric: tabular-nums;
-    /* "zero" 0 で斜線ゼロを明示的にOFF (IBM Plex Mono の ss01 は斜線ゼロ) */
-    font-feature-settings: "tnum" 1, "zero" 0;
-    letter-spacing: -0.005em;
+    /* JetBrains Mono は標準で斜線ゼロ。日本語UIで「0/O」誤読防止に有効 */
+    font-feature-settings: "tnum" 1, "zero" 1, "ss02" 1;
+    letter-spacing: 0;
     font-weight: 500;
   }
 
   .font-mono {
     font-family: var(--font-mono);
     font-variant-numeric: tabular-nums;
-    font-feature-settings: "tnum" 1, "zero" 0;
+    font-feature-settings: "tnum" 1, "zero" 1;
   }
 
   /* 数値セル: テーブル内の金額・件数・日付などに使用。
@@ -203,19 +211,40 @@
   .num-cell {
     font-family: var(--font-numeric);
     font-variant-numeric: tabular-nums;
-    font-feature-settings: "tnum" 1, "zero" 0;
+    font-feature-settings: "tnum" 1, "zero" 1;
     text-align: right;
     white-space: nowrap;
-    letter-spacing: -0.005em;
+    letter-spacing: 0;
   }
 
   /* KPI カードの数値: 大きい表示でも桁が揃うように */
   .kpi-value {
     font-family: var(--font-numeric);
     font-variant-numeric: tabular-nums;
-    font-feature-settings: "tnum" 1, "zero" 0;
-    letter-spacing: -0.01em;
+    font-feature-settings: "tnum" 1, "zero" 1, "ss02" 1;
+    letter-spacing: -0.015em;
     font-weight: 600;
+    line-height: 1.1;
+  }
+
+  /* テーブル: 和文の約物半角を強めに適用、行間を密に */
+  table {
+    font-feature-settings: "palt" 1, "pkna" 1, "halt" 1, "kern" 1, "tnum" 1;
+    letter-spacing: 0.005em;
+    line-height: 1.5;
+  }
+
+  /* フォーム入力: ユーザー入力中のカーニングは控えめに (IME 干渉回避) */
+  input, textarea, select {
+    font-family: var(--font-sans);
+    font-feature-settings: "palt" 1, "kern" 1;
+    letter-spacing: 0.01em;
+  }
+
+  /* コードブロック: 斜線ゼロ ON で 0/O/o の誤読を防ぐ */
+  code, pre, kbd, samp {
+    font-family: var(--font-mono);
+    font-feature-settings: "tnum" 1, "zero" 1, "ss02" 1;
   }
 
   /* 表示密度: <html data-density="compact"> でテーブル/カードのパディングを縮小 */
