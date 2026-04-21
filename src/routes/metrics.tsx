@@ -252,6 +252,7 @@ function MetricsDashboard() {
         </ResponsiveContainer>
       </ChartCard>
 
+      <NetworkPanel metrics={metrics} />
       <ErrorsPanel metrics={metrics} />
       <RecentTable metrics={metrics} key={tick} />
     </div>
