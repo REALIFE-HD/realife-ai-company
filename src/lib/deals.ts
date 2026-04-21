@@ -111,3 +111,55 @@ export async function deleteActivity(id: string): Promise<void> {
   const { error } = await supabase.from("deal_activities").delete().eq("id", id);
   if (error) throw error;
 }
+
+export type MonthlyRevenueStat = {
+  month: string; // "YYYY-MM"
+  revenue: number; // 百万円単位
+  deals: number; // 件数
+};
+
+/**
+ * 直近 `months` ヶ月の受注案件を月別に集計して返す。
+ * データが存在しない月は revenue=0, deals=0 で補完する。
+ */
+export async function aggregateMonthlyRevenue(months = 6): Promise<MonthlyRevenueStat[]> {
+  const since = new Date();
+  since.setMonth(since.getMonth() - (months - 1));
+  since.setDate(1);
+  since.setHours(0, 0, 0, 0);
+
+  const { data, error } = await supabase
+    .from("deals")
+    .select("amount, created_at")
+    .eq("stage", "受注")
+    .gte("created_at", since.toISOString())
+    .order("created_at", { ascending: true });
+  if (error) throw error;
+
+  // 直近 months ヶ月のキーを先に生成（空補完のため）
+  const map = new Map<string, { revenue: number; deals: number }>();
+  for (let i = months - 1; i >= 0; i--) {
+    const d = new Date();
+    d.setMonth(d.getMonth() - i);
+    const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+    map.set(key, { revenue: 0, deals: 0 });
+  }
+
+  for (const row of data ?? []) {
+    const d = new Date(row.created_at);
+    const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+    const cur = map.get(key);
+    if (cur) {
+      map.set(key, {
+        revenue: cur.revenue + (row.amount ?? 0) / 1_000_000,
+        deals: cur.deals + 1,
+      });
+    }
+  }
+
+  return Array.from(map.entries()).map(([month, v]) => ({
+    month,
+    revenue: Math.round(v.revenue * 10) / 10,
+    deals: v.deals,
+  }));
+}

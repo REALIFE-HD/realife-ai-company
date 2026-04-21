@@ -1,7 +1,8 @@
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
-import { ArrowLeft, Calendar, Mail, MessageSquare, Phone, Save, Sparkles, Trash2, User } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { ArrowLeft, Calendar, Mail, MessageSquare, Phone, RefreshCw, Save, Sparkles, Trash2, User } from "lucide-react";
 import { toast } from "sonner";
+import ReactMarkdown from "react-markdown";
 import { AppShell } from "@/components/layout/AppShell";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -20,6 +21,8 @@ import {
 } from "@/lib/deals";
 import { getInstructionsForDepartment, type Instruction } from "@/lib/instructions";
 import { useUserSettings } from "@/hooks/use-user-settings";
+
+const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`;
 
 export const Route = createFileRoute("/deals/$dealCode")({
   head: ({ params }) => ({
@@ -104,11 +107,18 @@ function DealDetailPage() {
   const [actKind, setActKind] = useState<DealActivityKind>("メモ");
   const [actContent, setActContent] = useState("");
 
+  // AI サマリー
+  const [aiSummary, setAiSummary] = useState("");
+  const [aiLoading, setAiLoading] = useState(false);
+  const aiSummaryRef = useRef<string>("");
+
   // dealCode が変わった (別案件への遷移) ときは loader データで再同期
   useEffect(() => {
     setDeal(initial.deal);
     setActivities(initial.activities);
     setInstructions(initial.instructions);
+    setAiSummary("");
+    aiSummaryRef.current = "";
     if (initial.deal) {
       setStage(initial.deal.stage);
       setProbability(initial.deal.probability);
@@ -179,8 +189,99 @@ function DealDetailPage() {
     }
   };
 
+  const generateAiSummary = async () => {
+    if (!deal || aiLoading) return;
+    setAiLoading(true);
+    setAiSummary("");
+    aiSummaryRef.current = "";
+
+    const prompt = [
+      `以下の案件情報と活動履歴を分析して、**商談状況・次のアクション・リスク** の3点を箇条書きで簡潔にまとめてください。`,
+      ``,
+      `## 案件情報`,
+      `- コード: ${deal.code}`,
+      `- 案件名: ${deal.title}`,
+      `- クライアント: ${deal.client}`,
+      `- 金額: ${formatAmount(deal.amount)}`,
+      `- ステージ: ${deal.stage}`,
+      `- 確度: ${deal.probability}%`,
+      `- 担当: ${deal.owner || "—"}`,
+      `- 期日: ${deal.due ?? "—"}`,
+      `- 次のアクション: ${deal.next_action || "—"}`,
+      `- メモ: ${deal.notes || "—"}`,
+      ``,
+      `## 活動履歴 (直近${activities.length}件)`,
+      ...activities.slice(0, 10).map(
+        (a) =>
+          `- [${a.kind}] ${new Date(a.created_at).toLocaleDateString("ja-JP")}: ${a.content}`,
+      ),
+    ].join("\n");
+
+    try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const accessToken = sessionData.session?.access_token;
+      if (!accessToken) {
+        toast.error("ログインが必要です");
+        setAiLoading(false);
+        return;
+      }
+
+      const resp = await fetch(CHAT_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+          apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+        },
+        body: JSON.stringify({ messages: [{ role: "user", content: prompt }] }),
+      });
+
+      if (!resp.ok) {
+        toast.error("AIサマリーの生成に失敗しました");
+        setAiLoading(false);
+        return;
+      }
+      if (!resp.body) throw new Error("No response body");
+
+      const reader = resp.body.getReader();
+      const decoder = new TextDecoder();
+      let textBuffer = "";
+      let streamDone = false;
+
+      const upsert = (chunk: string) => {
+        aiSummaryRef.current += chunk;
+        setAiSummary(aiSummaryRef.current);
+      };
+
+      while (!streamDone) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        textBuffer += decoder.decode(value, { stream: true });
+        let newlineIndex: number;
+        while ((newlineIndex = textBuffer.indexOf("\n")) !== -1) {
+          let line = textBuffer.slice(0, newlineIndex);
+          textBuffer = textBuffer.slice(newlineIndex + 1);
+          if (line.endsWith("\r")) line = line.slice(0, -1);
+          if (line.startsWith(":") || line.trim() === "") continue;
+          if (!line.startsWith("data: ")) continue;
+          const jsonStr = line.slice(6).trim();
+          if (jsonStr === "[DONE]") { streamDone = true; break; }
+          try {
+            const parsed = JSON.parse(jsonStr);
+            const content = parsed.choices?.[0]?.delta?.content as string | undefined;
+            if (content) upsert(content);
+          } catch { textBuffer = line + "\n" + textBuffer; break; }
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("通信エラーが発生しました");
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
   const onAddActivity = async (e: React.FormEvent) => {
-    e.preventDefault();
     if (!deal || !actContent.trim()) return;
     try {
       await addActivity({
@@ -272,6 +373,37 @@ function DealDetailPage() {
               </span>
             </KV>
           </div>
+        </section>
+
+        {/* AI サマリー */}
+        <section className="rounded-2xl border border-border bg-card p-5">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-blue-600" />
+              <h3 className="text-sm font-semibold text-foreground">AI 案件サマリー</h3>
+            </div>
+            <button
+              type="button"
+              onClick={generateAiSummary}
+              disabled={aiLoading}
+              className="inline-flex items-center gap-1.5 rounded-md border border-border bg-card px-2.5 py-1.5 text-[11px] font-medium text-muted-foreground hover:border-blue-400 hover:text-blue-700 disabled:opacity-60"
+            >
+              {aiLoading ? (
+                <><RefreshCw className="h-3 w-3 animate-spin" /> 生成中...</>
+              ) : (
+                <><Sparkles className="h-3 w-3" /> {aiSummary ? "再生成" : "サマリーを生成"}</>
+              )}
+            </button>
+          </div>
+          {aiSummary ? (
+            <div className="mt-3 prose prose-sm max-w-none text-foreground prose-headings:text-foreground prose-strong:text-foreground prose-li:text-foreground prose-p:text-foreground prose-p:my-1 prose-ul:my-1 prose-ol:my-1 prose-headings:mt-2 prose-headings:mb-1">
+              <ReactMarkdown>{aiSummary}</ReactMarkdown>
+            </div>
+          ) : (
+            <p className="mt-2 text-[12px] text-muted-foreground">
+              「サマリーを生成」を押すと、案件情報と活動履歴をもとにAIが商談状況・次のアクション・リスクを要約します。
+            </p>
+          )}
         </section>
 
         {/* Progress timeline */}

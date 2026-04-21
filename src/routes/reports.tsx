@@ -1,5 +1,6 @@
 import { createFileRoute, Link, ClientOnly } from "@tanstack/react-router";
-import { ArrowLeft } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ArrowLeft, RefreshCw } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
 import { useRouteMountMark } from "@/lib/web-vitals";
 import {
@@ -16,6 +17,8 @@ import {
   YAxis,
 } from "recharts";
 import { DEPARTMENTS } from "@/data/departments";
+import { aggregateMonthlyRevenue, type MonthlyRevenueStat } from "@/lib/deals";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/reports")({
   head: () => ({
@@ -26,17 +29,17 @@ export const Route = createFileRoute("/reports")({
       { property: "og:description", content: "月次成約推移と部門別タスク消化率を可視化。" },
     ],
   }),
+  loader: async () => {
+    try {
+      return { monthly: await aggregateMonthlyRevenue(6) };
+    } catch (e) {
+      console.error("[reports.loader]", e);
+      return { monthly: [] as MonthlyRevenueStat[] };
+    }
+  },
+  staleTime: 30_000,
   component: ReportsPage,
 });
-
-const MONTHLY = [
-  { month: "2025-11", revenue: 9.8, deals: 6 },
-  { month: "2025-12", revenue: 12.4, deals: 8 },
-  { month: "2026-01", revenue: 14.1, deals: 9 },
-  { month: "2026-02", revenue: 11.7, deals: 7 },
-  { month: "2026-03", revenue: 16.5, deals: 11 },
-  { month: "2026-04", revenue: 18.4, deals: 12 },
-];
 
 const DEPT_PROGRESS = DEPARTMENTS.map((d, i) => ({
   name: d.name,
@@ -45,9 +48,29 @@ const DEPT_PROGRESS = DEPARTMENTS.map((d, i) => ({
 
 function ReportsPage() {
   useRouteMountMark("/reports");
-  const ytd = MONTHLY.reduce((acc, m) => acc + m.revenue, 0);
-  const avg = (ytd / MONTHLY.length).toFixed(1);
-  const peak = MONTHLY.reduce((m, c) => (c.revenue > m.revenue ? c : m));
+  const initial = Route.useLoaderData();
+  const [monthly, setMonthly] = useState<MonthlyRevenueStat[]>(initial.monthly);
+
+  // Realtime: deals テーブルが更新されたら再集計
+  useEffect(() => {
+    let mounted = true;
+    const channel = supabase
+      .channel("reports-deals")
+      .on("postgres_changes", { event: "*", schema: "public", table: "deals" }, () => {
+        aggregateMonthlyRevenue(6)
+          .then((d) => mounted && setMonthly(d))
+          .catch(console.error);
+      })
+      .subscribe();
+    return () => {
+      mounted = false;
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
+  const ytd = monthly.reduce((acc, m) => acc + m.revenue, 0);
+  const avg = monthly.length > 0 ? (ytd / monthly.length).toFixed(1) : "0.0";
+  const peak = monthly.length > 0 ? monthly.reduce((m, c) => (c.revenue > m.revenue ? c : m)) : null;
 
   return (
     <AppShell title="レポート" subtitle="月次成約推移と部門別タスク消化率">
@@ -62,7 +85,7 @@ function ReportsPage() {
           {[
             { l: "直近6ヶ月 累計", v: `¥${ytd.toFixed(1)}M` },
             { l: "月平均", v: `¥${avg}M` },
-            { l: "ピーク月", v: peak.month },
+            { l: "ピーク月", v: peak ? peak.month : "—" },
           ].map((s) => (
             <div key={s.l} className="rounded-xl border border-border bg-card px-4 py-3">
               <p className="text-[11px] uppercase tracking-wider text-muted-foreground">{s.l}</p>
@@ -72,23 +95,41 @@ function ReportsPage() {
         </section>
 
         <section className="rounded-2xl border border-border bg-card p-6 sm:p-8">
-          <h2 className="font-display text-xl font-semibold tracking-tight text-foreground">月次成約推移</h2>
-          <p className="mt-1 text-[13px] text-muted-foreground">単位:百万円(¥M)・件数</p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="font-display text-xl font-semibold tracking-tight text-foreground">月次成約推移</h2>
+              <p className="mt-1 text-[13px] text-muted-foreground">単位:百万円(¥M)・件数 / ステージ「受注」の案件を集計</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => aggregateMonthlyRevenue(6).then(setMonthly).catch(console.error)}
+              className="inline-flex items-center gap-1.5 rounded-md border border-border bg-card px-2.5 py-1.5 text-[11px] font-medium text-muted-foreground hover:text-foreground"
+              title="再読み込み"
+            >
+              <RefreshCw className="h-3 w-3" />
+            </button>
+          </div>
           <div className="mt-6 h-72 w-full">
-            <ClientOnly fallback={<div className="h-full w-full animate-pulse rounded-md bg-muted" />}>
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={MONTHLY} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                  <XAxis dataKey="month" stroke="#64748b" fontSize={12} />
-                  <YAxis yAxisId="left" stroke="#64748b" fontSize={12} />
-                  <YAxis yAxisId="right" orientation="right" stroke="#64748b" fontSize={12} />
-                  <Tooltip />
-                  <Legend />
-                  <Line yAxisId="left" type="monotone" dataKey="revenue" name="成約額(¥M)" stroke="#0d9488" strokeWidth={2} dot={{ r: 3 }} />
-                  <Line yAxisId="right" type="monotone" dataKey="deals" name="件数" stroke="#f59e0b" strokeWidth={2} dot={{ r: 3 }} />
-                </LineChart>
-              </ResponsiveContainer>
-            </ClientOnly>
+            {monthly.length === 0 ? (
+              <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
+                受注案件のデータがありません
+              </div>
+            ) : (
+              <ClientOnly fallback={<div className="h-full w-full animate-pulse rounded-md bg-muted" />}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={monthly} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                    <XAxis dataKey="month" stroke="#64748b" fontSize={12} />
+                    <YAxis yAxisId="left" stroke="#64748b" fontSize={12} />
+                    <YAxis yAxisId="right" orientation="right" stroke="#64748b" fontSize={12} />
+                    <Tooltip />
+                    <Legend />
+                    <Line yAxisId="left" type="monotone" dataKey="revenue" name="成約額(¥M)" stroke="#0d9488" strokeWidth={2} dot={{ r: 3 }} />
+                    <Line yAxisId="right" type="monotone" dataKey="deals" name="件数" stroke="#f59e0b" strokeWidth={2} dot={{ r: 3 }} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </ClientOnly>
+            )}
           </div>
         </section>
 
