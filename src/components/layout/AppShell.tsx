@@ -245,7 +245,7 @@ export function AppShell({
   // 検索文字列の正規化は src/lib/normalize-query.ts を使用
 
   const commitHistory = (q: string) => {
-    const v = normalizeQuery(q);
+    const v = normalizeQuery(q, HISTORY_ITEM_MAX);
     if (!v || v.length < 2) return;
     setHistory((prev) => {
       // 大文字小文字の違いも重複扱いし、初出の表記を保持
