@@ -1,6 +1,6 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { LayoutGrid, Building2, Briefcase, BarChart3, MessageSquare, Settings, Bell, Plus, Menu, X, BookOpen, Inbox, LogOut, Search, SlidersHorizontal, XCircle } from "lucide-react";
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { toast } from "sonner";
 import { NewInstructionDialog } from "@/components/instructions/NewInstructionDialog";
 import { useUserSettings } from "@/hooks/use-user-settings";
