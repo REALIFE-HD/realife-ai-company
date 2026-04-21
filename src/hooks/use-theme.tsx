@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 export type Theme = "light" | "dark";
+export type ThemePreference = Theme | "system";
 const STORAGE_KEY = "realife:theme";
 
 function getSystemTheme(): Theme {
@@ -8,13 +9,13 @@ function getSystemTheme(): Theme {
   return window.matchMedia?.("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
 
-function readStored(): Theme | null {
-  if (typeof window === "undefined") return null;
+function readStored(): ThemePreference {
+  if (typeof window === "undefined") return "system";
   try {
     const v = window.localStorage.getItem(STORAGE_KEY);
-    return v === "light" || v === "dark" ? v : null;
+    return v === "light" || v === "dark" || v === "system" ? v : "system";
   } catch {
-    return null;
+    return "system";
   }
 }
 
@@ -25,42 +26,51 @@ function applyTheme(theme: Theme) {
   root.style.colorScheme = theme;
 }
 
+function resolve(pref: ThemePreference): Theme {
+  return pref === "system" ? getSystemTheme() : pref;
+}
+
 /**
  * テーマ管理フック。
- * - 明示的に保存された値があればそれを使用
- * - なければ OS の設定に追従
- * - 同タブ内・他タブ間で同期
+ * - preference: ユーザーが選んだ値(light / dark / system)
+ * - theme: 実際に適用されている色(light / dark)
+ * - system 選択時は OS の prefers-color-scheme に追従
  */
 export function useTheme() {
-  const [theme, setThemeState] = useState<Theme>(() => readStored() ?? getSystemTheme());
+  const [preference, setPreferenceState] = useState<ThemePreference>(() => readStored());
+  const [theme, setThemeState] = useState<Theme>(() => resolve(readStored()));
 
-  // 初期適用
+  // 初期適用 / preference 変更時の反映
   useEffect(() => {
-    applyTheme(theme);
-  }, [theme]);
+    const next = resolve(preference);
+    setThemeState(next);
+    applyTheme(next);
+  }, [preference]);
 
-  // OS 設定の変更に追従(明示保存がない場合のみ)
+  // OS 設定の変更に追従(system のときのみ)
   useEffect(() => {
     if (typeof window === "undefined") return;
     const mq = window.matchMedia("(prefers-color-scheme: dark)");
     const onChange = () => {
-      if (readStored() === null) setThemeState(mq.matches ? "dark" : "light");
+      if (preference === "system") {
+        const next = mq.matches ? "dark" : "light";
+        setThemeState(next);
+        applyTheme(next);
+      }
     };
     mq.addEventListener?.("change", onChange);
     return () => mq.removeEventListener?.("change", onChange);
-  }, []);
+  }, [preference]);
 
-  // 他タブとの同期
+  // 他タブ・同タブ間の同期
   useEffect(() => {
     if (typeof window === "undefined") return;
     const onStorage = (e: StorageEvent) => {
-      if (e.key === STORAGE_KEY) {
-        setThemeState(readStored() ?? getSystemTheme());
-      }
+      if (e.key === STORAGE_KEY) setPreferenceState(readStored());
     };
     const onCustom = (e: Event) => {
-      const t = (e as CustomEvent<Theme>).detail;
-      if (t === "light" || t === "dark") setThemeState(t);
+      const t = (e as CustomEvent<ThemePreference>).detail;
+      if (t === "light" || t === "dark" || t === "system") setPreferenceState(t);
     };
     window.addEventListener("storage", onStorage);
     window.addEventListener("realife:theme-change", onCustom as EventListener);
@@ -70,13 +80,13 @@ export function useTheme() {
     };
   }, []);
 
-  const setTheme = useCallback((next: Theme) => {
+  const setPreference = useCallback((next: ThemePreference) => {
     try {
       window.localStorage.setItem(STORAGE_KEY, next);
     } catch {
       /* ignore */
     }
-    setThemeState(next);
+    setPreferenceState(next);
     try {
       window.dispatchEvent(new CustomEvent("realife:theme-change", { detail: next }));
     } catch {
@@ -85,8 +95,9 @@ export function useTheme() {
   }, []);
 
   const toggle = useCallback(() => {
-    setTheme(theme === "dark" ? "light" : "dark");
-  }, [theme, setTheme]);
+    // ヘッダーボタン用: 現在の表示を見て反転(systemも明示値に固定する)
+    setPreference(theme === "dark" ? "light" : "dark");
+  }, [theme, setPreference]);
 
-  return { theme, setTheme, toggle };
+  return { theme, preference, setPreference, toggle };
 }
