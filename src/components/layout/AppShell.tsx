@@ -139,6 +139,7 @@ export function AppShell({
   onSearchChange,
   searchPlaceholder = "案件・部門・指示を検索…",
   onFilterClick,
+  filterActive = false,
 }: {
   children: ReactNode;
   title: string;
@@ -147,6 +148,7 @@ export function AppShell({
   onSearchChange?: (value: string) => void;
   searchPlaceholder?: string;
   onFilterClick?: () => void;
+  filterActive?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const [localSearch, setLocalSearch] = useState("");
