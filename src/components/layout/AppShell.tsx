@@ -150,11 +150,39 @@ export function AppShell({
   onFilterClick?: () => void;
   filterActive?: boolean;
 }) {
+  const { pathname } = useLocation();
+  const storageKey = `realife:search:${pathname}`;
   const [open, setOpen] = useState(false);
   const [localSearch, setLocalSearch] = useState("");
   const searchValue = search ?? localSearch;
   const setSearch = onSearchChange ?? setLocalSearch;
   const now = useNow();
+
+  // Rehydrate persisted search on mount / route change
+  const hydratedRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (hydratedRef.current === pathname) return;
+    hydratedRef.current = pathname;
+    try {
+      const saved = window.sessionStorage.getItem(storageKey);
+      if (saved && saved !== searchValue) setSearch(saved);
+    } catch {
+      /* ignore */
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
+
+  // Persist on change
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      if (searchValue) window.sessionStorage.setItem(storageKey, searchValue);
+      else window.sessionStorage.removeItem(storageKey);
+    } catch {
+      /* ignore */
+    }
+  }, [storageKey, searchValue]);
 
   return (
     <div className="min-h-screen bg-[#F5F5F7]">
