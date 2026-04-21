@@ -64,11 +64,17 @@ export async function saveUserSettings(patch: Partial<UserSettings>): Promise<vo
     .maybeSingle();
 
   if (existing) {
-    const { error } = await supabase
-      .from("user_settings")
-      .update(patch)
-      .eq("user_id", userId);
-    if (error) throw error;
+    const settingsPatch: { display_name?: string; notifications?: boolean; theme?: string } = {};
+    if (patch.display_name !== undefined) settingsPatch.display_name = patch.display_name;
+    if (patch.notifications !== undefined) settingsPatch.notifications = patch.notifications;
+    if (patch.theme !== undefined) settingsPatch.theme = patch.theme;
+    if (Object.keys(settingsPatch).length > 0) {
+      const { error } = await supabase
+        .from("user_settings")
+        .update(settingsPatch)
+        .eq("user_id", userId);
+      if (error) throw error;
+    }
   } else {
     const { error } = await supabase.from("user_settings").insert({
       user_id: userId,
