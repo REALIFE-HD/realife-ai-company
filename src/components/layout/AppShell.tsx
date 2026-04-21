@@ -6,7 +6,7 @@ import { NewInstructionDialog } from "@/components/instructions/NewInstructionDi
 import { useUserSettings } from "@/hooks/use-user-settings";
 import { useAuth } from "@/hooks/use-auth";
 import { SearchHistoryDropdown } from "./SearchHistoryDropdown";
-import { ThemeToggle } from "./ThemeToggle";
+
 import { normalizeQuery } from "@/lib/normalize-query";
 import { useSearchPrefs } from "@/lib/search-prefs";
 
@@ -479,7 +479,6 @@ export function AppShell({
       <div className="sticky top-0 z-40 flex h-14 items-center justify-between border-b border-border bg-card/90 px-4 backdrop-blur md:hidden">
         <Brand />
         <div className="flex items-center gap-2">
-          <ThemeToggle />
           <button
             type="button"
             aria-label={open ? "メニューを閉じる" : "メニューを開く"}
@@ -587,7 +586,6 @@ export function AppShell({
             </div>
 
             <div className="flex shrink-0 items-center gap-2">
-              <ThemeToggle />
               <button
                 type="button"
                 aria-label="絞り込み"

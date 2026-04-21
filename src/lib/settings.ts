@@ -11,7 +11,7 @@ export const DEFAULT_SETTINGS: UserSettings = {
   display_name: "",
   department: "",
   notifications: true,
-  theme: "light",
+  theme: "dark",
 };
 
 async function getUserId(): Promise<string | null> {
@@ -40,7 +40,7 @@ export async function loadUserSettings(): Promise<UserSettings> {
     display_name: profile?.display_name || settings?.display_name || "",
     department: profile?.department || "",
     notifications: settings?.notifications ?? true,
-    theme: (settings?.theme as "light" | "dark") ?? "light",
+    theme: (settings?.theme as "light" | "dark") ?? "dark",
   };
 }
 
@@ -81,7 +81,7 @@ export async function saveUserSettings(patch: Partial<UserSettings>): Promise<vo
       key: userId,
       display_name: patch.display_name ?? "",
       notifications: patch.notifications ?? true,
-      theme: patch.theme ?? "light",
+      theme: patch.theme ?? "dark",
     });
     if (error) throw error;
   }

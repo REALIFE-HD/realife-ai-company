@@ -9,13 +9,14 @@ function getSystemTheme(): Theme {
   return window.matchMedia?.("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
 
+// デフォルトはダーク。設定画面でユーザーが明示的に変更した場合のみ尊重する。
 function readStored(): ThemePreference {
-  if (typeof window === "undefined") return "system";
+  if (typeof window === "undefined") return "dark";
   try {
     const v = window.localStorage.getItem(STORAGE_KEY);
-    return v === "light" || v === "dark" || v === "system" ? v : "system";
+    return v === "light" || v === "dark" || v === "system" ? v : "dark";
   } catch {
-    return "system";
+    return "dark";
   }
 }
 
