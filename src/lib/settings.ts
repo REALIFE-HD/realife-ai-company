@@ -2,12 +2,14 @@ import { supabase } from "@/integrations/supabase/client";
 
 export type UserSettings = {
   display_name: string;
+  department: string;
   notifications: boolean;
   theme: "light" | "dark";
 };
 
 export const DEFAULT_SETTINGS: UserSettings = {
   display_name: "",
+  department: "",
   notifications: true,
   theme: "light",
 };
@@ -24,7 +26,7 @@ export async function loadUserSettings(): Promise<UserSettings> {
   // try profiles first for display_name
   const { data: profile } = await supabase
     .from("profiles")
-    .select("display_name")
+    .select("display_name, department")
     .eq("id", userId)
     .maybeSingle();
 
@@ -36,6 +38,7 @@ export async function loadUserSettings(): Promise<UserSettings> {
 
   return {
     display_name: profile?.display_name || settings?.display_name || "",
+    department: profile?.department || "",
     notifications: settings?.notifications ?? true,
     theme: (settings?.theme as "light" | "dark") ?? "light",
   };
@@ -45,9 +48,12 @@ export async function saveUserSettings(patch: Partial<UserSettings>): Promise<vo
   const userId = await getUserId();
   if (!userId) throw new Error("Not authenticated");
 
-  // sync display_name to profiles
-  if (patch.display_name !== undefined) {
-    await supabase.from("profiles").update({ display_name: patch.display_name }).eq("id", userId);
+  // sync display_name / department to profiles
+  const profilePatch: { display_name?: string; department?: string } = {};
+  if (patch.display_name !== undefined) profilePatch.display_name = patch.display_name;
+  if (patch.department !== undefined) profilePatch.department = patch.department;
+  if (Object.keys(profilePatch).length > 0) {
+    await supabase.from("profiles").update(profilePatch).eq("id", userId);
   }
 
   // upsert user_settings
