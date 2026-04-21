@@ -31,20 +31,12 @@ export function DepartmentCard({ d, query }: { d: Department; query?: string }) 
       aria-label={`${d.name} の詳細`}
       className="group relative flex flex-col rounded-xl border border-border/80 bg-card p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)] outline-none transition-[transform,box-shadow,border-color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:border-blue-300 hover:shadow-[0_24px_48px_-24px_rgba(37,99,235,0.35)] focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
     >
-      {/* Animated gradient border on hover */}
+      {/* Animated gradient border on hover (一周回転) */}
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 rounded-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-        style={{
-          background:
-            "linear-gradient(135deg, rgba(59,130,246,0.6), rgba(37,99,235,0) 40%, rgba(37,99,235,0) 60%, rgba(59,130,246,0.6))",
-          padding: "1px",
-          WebkitMask:
-            "linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)",
-          WebkitMaskComposite: "xor",
-          maskComposite: "exclude",
-        }}
+        className="dept-card-border pointer-events-none absolute inset-0 rounded-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
       />
+
       {/* Hover accent rail */}
       <span
         aria-hidden="true"
