@@ -7,6 +7,7 @@ import { useUserSettings } from "@/hooks/use-user-settings";
 import { useAuth } from "@/hooks/use-auth";
 import { SearchHistoryDropdown } from "./SearchHistoryDropdown";
 import { normalizeQuery } from "@/lib/normalize-query";
+import { useSearchPrefs } from "@/lib/search-prefs";
 
 function useNow(intervalMs = 30_000) {
   const [now, setNow] = useState(() => new Date());
