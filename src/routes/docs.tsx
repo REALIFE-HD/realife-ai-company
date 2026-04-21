@@ -125,7 +125,7 @@ function DocsPage() {
         <div className="flex items-center justify-between">
           <Link
             to="/"
-            className="inline-flex items-center gap-1.5 text-[12px] font-medium text-slate-500 transition-colors hover:text-slate-900"
+            className="inline-flex items-center gap-1.5 text-[12px] font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
             <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
             ダッシュボードへ戻る
@@ -148,17 +148,17 @@ function DocsPage() {
         </div>
 
         {/* Hero */}
-        <section className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 sm:p-10">
+        <section className="relative overflow-hidden rounded-2xl border border-border bg-card p-6 sm:p-10">
           <div className="flex items-center gap-2.5">
             <span aria-hidden="true" className="h-px w-6 bg-blue-500" />
             <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-blue-700">
               Documentation
             </span>
           </div>
-          <h2 className="mt-3 max-w-2xl font-display text-[1.875rem] font-semibold leading-[1.2] tracking-tight text-slate-900 sm:text-[2.25rem]">
+          <h2 className="mt-3 max-w-2xl font-display text-[1.875rem] font-semibold leading-[1.2] tracking-tight text-foreground sm:text-[2.25rem]">
             REALIFE Operations の使い方
           </h2>
-          <p className="mt-3 max-w-2xl text-[14px] leading-relaxed text-slate-600">
+          <p className="mt-3 max-w-2xl text-[14px] leading-relaxed text-muted-foreground">
             ダッシュボード・部門・指示出し・AIチャットの基本操作と、12部門を横断的に動かすための
             運用ベストプラクティスをまとめています。
           </p>
@@ -175,10 +175,10 @@ function DocsPage() {
                   <a
                     key={s.id}
                     href={`#${s.slug}`}
-                    className="group flex items-center gap-2.5 rounded-md border border-slate-200 bg-slate-50/60 px-3 py-2.5 text-[13px] font-medium text-slate-700 transition-colors hover:border-blue-200 hover:bg-white hover:text-blue-700"
+                    className="group flex items-center gap-2.5 rounded-md border border-border bg-muted/60 px-3 py-2.5 text-[13px] font-medium text-muted-foreground transition-colors hover:border-blue-200 hover:bg-card hover:text-blue-700"
                   >
                     <Icon
-                      className="h-4 w-4 text-slate-400 group-hover:text-blue-600"
+                      className="h-4 w-4 text-muted-foreground group-hover:text-blue-600"
                       aria-hidden="true"
                     />
                     {s.title}
@@ -191,7 +191,7 @@ function DocsPage() {
 
         {/* Sections */}
         {loading ? (
-          <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-sm text-slate-500">
+          <div className="rounded-2xl border border-border bg-card p-8 text-center text-sm text-muted-foreground">
             読み込み中...
           </div>
         ) : (
@@ -208,7 +208,7 @@ function DocsPage() {
             {editMode && (
               <button
                 onClick={handleAddSection}
-                className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-slate-300 bg-white/40 p-6 text-sm font-medium text-slate-500 transition-colors hover:border-blue-400 hover:text-blue-700"
+                className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border bg-card/40 p-6 text-sm font-medium text-muted-foreground transition-colors hover:border-blue-400 hover:text-blue-700"
               >
                 <Plus className="h-4 w-4" />
                 セクションを追加
@@ -219,7 +219,7 @@ function DocsPage() {
             <section
               id="faq"
               aria-labelledby="faq-heading"
-              className="scroll-mt-24 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8"
+              className="scroll-mt-24 rounded-2xl border border-border bg-card p-6 sm:p-8"
             >
               <div className="flex items-center gap-3">
                 <span className="flex h-9 w-9 items-center justify-center rounded-md bg-blue-50 text-blue-700">
@@ -227,12 +227,12 @@ function DocsPage() {
                 </span>
                 <h3
                   id="faq-heading"
-                  className="font-display text-xl font-semibold tracking-tight text-slate-900 sm:text-[1.5rem]"
+                  className="font-display text-xl font-semibold tracking-tight text-foreground sm:text-[1.5rem]"
                 >
                   よくある質問
                 </h3>
               </div>
-              <dl className="mt-5 divide-y divide-slate-200">
+              <dl className="mt-5 divide-y divide-border">
                 {faqs.map((item) => (
                   <FaqRow key={item.id} faq={item} editMode={editMode} onChanged={refresh} />
                 ))}
@@ -240,7 +240,7 @@ function DocsPage() {
               {editMode && (
                 <button
                   onClick={handleAddFaq}
-                  className="mt-4 flex w-full items-center justify-center gap-2 rounded-md border-2 border-dashed border-slate-300 p-3 text-sm font-medium text-slate-500 transition-colors hover:border-blue-400 hover:text-blue-700"
+                  className="mt-4 flex w-full items-center justify-center gap-2 rounded-md border-2 border-dashed border-border p-3 text-sm font-medium text-muted-foreground transition-colors hover:border-blue-400 hover:text-blue-700"
                 >
                   <Plus className="h-4 w-4" />
                   FAQを追加
@@ -251,13 +251,13 @@ function DocsPage() {
         )}
 
         {/* CTA back */}
-        <section className="rounded-2xl border border-slate-200 bg-slate-50/60 p-6 sm:p-8">
+        <section className="rounded-2xl border border-border bg-muted/60 p-6 sm:p-8">
           <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
             <div>
-              <h3 className="font-display text-lg font-semibold tracking-tight text-slate-900">
+              <h3 className="font-display text-lg font-semibold tracking-tight text-foreground">
                 さあ、12部門を動かしましょう。
               </h3>
-              <p className="mt-1 text-[13px] text-slate-500">
+              <p className="mt-1 text-[13px] text-muted-foreground">
                 部門一覧から、今日指示を出す部門を選択します。
               </p>
             </div>
@@ -331,7 +331,7 @@ function SectionCard({
     <section
       id={section.slug}
       aria-labelledby={`${section.slug}-heading`}
-      className="scroll-mt-24 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8"
+      className="scroll-mt-24 rounded-2xl border border-border bg-card p-6 sm:p-8"
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
@@ -347,7 +347,7 @@ function SectionCard({
           ) : (
             <h3
               id={`${section.slug}-heading`}
-              className="font-display text-xl font-semibold tracking-tight text-slate-900 sm:text-[1.5rem]"
+              className="font-display text-xl font-semibold tracking-tight text-foreground sm:text-[1.5rem]"
             >
               {section.title}
             </h3>
@@ -396,11 +396,11 @@ function SectionCard({
       {editing ? (
         <div className="mt-4 space-y-3">
           <div>
-            <label className="text-xs font-medium text-slate-500">リード文</label>
+            <label className="text-xs font-medium text-muted-foreground">リード文</label>
             <Textarea value={lead} onChange={(e) => setLead(e.target.value)} rows={2} />
           </div>
           <div>
-            <label className="text-xs font-medium text-slate-500">
+            <label className="text-xs font-medium text-muted-foreground">
               本文(1行=1箇条書き)
             </label>
             <Textarea
@@ -412,10 +412,10 @@ function SectionCard({
         </div>
       ) : (
         <>
-          <p className="mt-4 max-w-3xl text-[14px] leading-relaxed text-slate-700">
+          <p className="mt-4 max-w-3xl text-[14px] leading-relaxed text-muted-foreground">
             {section.lead}
           </p>
-          <ul className="mt-4 space-y-2 text-[13px] leading-relaxed text-slate-600">
+          <ul className="mt-4 space-y-2 text-[13px] leading-relaxed text-muted-foreground">
             {section.body.map((line, i) => (
               <li key={i} className="flex gap-2.5">
                 <span
@@ -486,8 +486,8 @@ function FaqRow({
           </div>
         ) : (
           <div className="flex-1">
-            <dt className="text-[14px] font-medium text-slate-900">Q. {faq.question}</dt>
-            <dd className="mt-2 text-[13px] leading-relaxed text-slate-600">A. {faq.answer}</dd>
+            <dt className="text-[14px] font-medium text-foreground">Q. {faq.question}</dt>
+            <dd className="mt-2 text-[13px] leading-relaxed text-muted-foreground">A. {faq.answer}</dd>
           </div>
         )}
         {editMode && (

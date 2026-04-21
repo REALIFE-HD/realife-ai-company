@@ -25,8 +25,8 @@ const CATEGORY_STYLE: Record<string, string> = {
   規程: "bg-violet-50 text-violet-700 border-violet-200",
   テンプレート: "bg-emerald-50 text-emerald-700 border-emerald-200",
   議事録: "bg-amber-50 text-amber-700 border-amber-200",
-  外部リンク: "bg-slate-100 text-slate-700 border-slate-200",
-  その他: "bg-slate-100 text-slate-700 border-slate-200",
+  外部リンク: "bg-muted text-muted-foreground border-border",
+  その他: "bg-muted text-muted-foreground border-border",
 };
 
 function formatHost(url: string): string {
@@ -94,10 +94,10 @@ export function DocumentList({ departmentCode }: { departmentCode: string }) {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="font-display text-lg font-semibold text-slate-950">
+          <h3 className="font-display text-lg font-semibold text-foreground">
             関連ドキュメント
           </h3>
-          <p className="mt-0.5 text-xs text-slate-500">
+          <p className="mt-0.5 text-xs text-muted-foreground">
             この部門に関連する資料・規程・マニュアルへのリンク集
           </p>
         </div>
@@ -165,16 +165,16 @@ export function DocumentList({ departmentCode }: { departmentCode: string }) {
       )}
 
       {loading ? (
-        <div className="rounded-xl border border-slate-200 bg-white p-8 text-center text-sm text-slate-500">
+        <div className="rounded-xl border border-border bg-card p-8 text-center text-sm text-muted-foreground">
           読み込み中...
         </div>
       ) : items.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-slate-300 bg-white p-10 text-center">
+        <div className="rounded-xl border border-dashed border-border bg-card p-10 text-center">
           <FileText className="mx-auto h-8 w-8 text-slate-300" aria-hidden="true" />
-          <p className="mt-3 text-sm font-medium text-slate-700">
+          <p className="mt-3 text-sm font-medium text-muted-foreground">
             ドキュメントはまだありません
           </p>
-          <p className="mt-1 text-xs text-slate-500">
+          <p className="mt-1 text-xs text-muted-foreground">
             「追加」ボタンから関連資料へのリンクを登録してください。
           </p>
         </div>
@@ -250,7 +250,7 @@ function DocumentRow({
 
   if (editing) {
     return (
-      <li className="space-y-2 rounded-xl border-2 border-blue-300 bg-white p-4">
+      <li className="space-y-2 rounded-xl border-2 border-blue-300 bg-card p-4">
         <Input
           value={draft.title}
           onChange={(e) => setDraft({ ...draft, title: e.target.value })}
@@ -298,7 +298,7 @@ function DocumentRow({
   }
 
   return (
-    <li className="group relative flex flex-col rounded-xl border border-slate-200 bg-white p-4 transition-all hover:border-blue-300 hover:shadow-[0_8px_24px_-12px_rgba(37,99,235,0.25)]">
+    <li className="group relative flex flex-col rounded-xl border border-border bg-card p-4 transition-all hover:border-blue-300 hover:shadow-[0_8px_24px_-12px_rgba(37,99,235,0.25)]">
       <div className="flex items-start justify-between gap-3">
         <span
           className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-medium ${
@@ -331,22 +331,22 @@ function DocumentRow({
         href={item.url}
         target="_blank"
         rel="noopener noreferrer"
-        className="mt-2.5 flex items-start gap-2 text-[14px] font-semibold text-slate-900 hover:text-blue-700"
+        className="mt-2.5 flex items-start gap-2 text-[14px] font-semibold text-foreground hover:text-blue-700"
       >
         <span className="flex-1">{item.title}</span>
         <ExternalLink
-          className="mt-0.5 h-3.5 w-3.5 shrink-0 text-slate-400"
+          className="mt-0.5 h-3.5 w-3.5 shrink-0 text-muted-foreground"
           aria-hidden="true"
         />
       </a>
 
       {item.description && (
-        <p className="mt-1.5 text-[12px] leading-relaxed text-slate-600">
+        <p className="mt-1.5 text-[12px] leading-relaxed text-muted-foreground">
           {item.description}
         </p>
       )}
 
-      <div className="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 text-[11px] text-slate-500">
+      <div className="mt-3 flex items-center justify-between border-t border-border pt-2.5 text-[11px] text-muted-foreground">
         <span className="truncate font-mono">{formatHost(item.url)}</span>
         <span className="num shrink-0 pl-2">
           {new Date(item.updated_at).toLocaleDateString("ja-JP")}

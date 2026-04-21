@@ -52,7 +52,7 @@ function ReportsPage() {
     <AppShell title="レポート" subtitle="月次成約推移と部門別タスク消化率">
       <div className="space-y-6 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
         <div>
-          <Link to="/" className="inline-flex items-center gap-1.5 text-[12px] font-medium text-slate-500 hover:text-slate-900">
+          <Link to="/" className="inline-flex items-center gap-1.5 text-[12px] font-medium text-muted-foreground hover:text-foreground">
             <ArrowLeft className="h-3.5 w-3.5" /> ダッシュボードへ戻る
           </Link>
         </div>
@@ -63,18 +63,18 @@ function ReportsPage() {
             { l: "月平均", v: `¥${avg}M` },
             { l: "ピーク月", v: peak.month },
           ].map((s) => (
-            <div key={s.l} className="rounded-xl border border-slate-200 bg-white px-4 py-3">
-              <p className="text-[11px] uppercase tracking-wider text-slate-500">{s.l}</p>
-              <p className="kpi-value mt-1 text-right text-2xl text-slate-900">{s.v}</p>
+            <div key={s.l} className="rounded-xl border border-border bg-card px-4 py-3">
+              <p className="text-[11px] uppercase tracking-wider text-muted-foreground">{s.l}</p>
+              <p className="kpi-value mt-1 text-right text-2xl text-foreground">{s.v}</p>
             </div>
           ))}
         </section>
 
-        <section className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
-          <h2 className="font-display text-xl font-semibold tracking-tight text-slate-900">月次成約推移</h2>
-          <p className="mt-1 text-[13px] text-slate-500">単位:百万円(¥M)・件数</p>
+        <section className="rounded-2xl border border-border bg-card p-6 sm:p-8">
+          <h2 className="font-display text-xl font-semibold tracking-tight text-foreground">月次成約推移</h2>
+          <p className="mt-1 text-[13px] text-muted-foreground">単位:百万円(¥M)・件数</p>
           <div className="mt-6 h-72 w-full">
-            <ClientOnly fallback={<div className="h-full w-full animate-pulse rounded-md bg-slate-50" />}>
+            <ClientOnly fallback={<div className="h-full w-full animate-pulse rounded-md bg-muted" />}>
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={MONTHLY} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
@@ -91,11 +91,11 @@ function ReportsPage() {
           </div>
         </section>
 
-        <section className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
-          <h2 className="font-display text-xl font-semibold tracking-tight text-slate-900">部門別タスク消化率</h2>
-          <p className="mt-1 text-[13px] text-slate-500">単位:%</p>
+        <section className="rounded-2xl border border-border bg-card p-6 sm:p-8">
+          <h2 className="font-display text-xl font-semibold tracking-tight text-foreground">部門別タスク消化率</h2>
+          <p className="mt-1 text-[13px] text-muted-foreground">単位:%</p>
           <div className="mt-6 h-96 w-full">
-            <ClientOnly fallback={<div className="h-full w-full animate-pulse rounded-md bg-slate-50" />}>
+            <ClientOnly fallback={<div className="h-full w-full animate-pulse rounded-md bg-muted" />}>
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={DEPT_PROGRESS} margin={{ top: 10, right: 20, left: 0, bottom: 60 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />

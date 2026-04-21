@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 
 export function CTASection() {
   return (
-    <section className="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-gradient-to-br from-white via-white to-blue-50/30 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+    <section className="relative overflow-hidden rounded-2xl border border-border/80 bg-gradient-to-br from-white via-white to-blue-50/30 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
       {/* Subtle accent rail */}
       <div
         aria-hidden="true"
@@ -28,10 +28,10 @@ export function CTASection() {
               Next Action
             </span>
           </div>
-          <h2 className="mt-3 font-display text-2xl font-semibold leading-[1.2] tracking-tight text-slate-950 sm:text-[1.75rem] lg:text-[2rem]">
+          <h2 className="mt-3 font-display text-2xl font-semibold leading-[1.2] tracking-tight text-foreground sm:text-[1.75rem] lg:text-[2rem]">
             今日、どの部門に指示を出しますか?
           </h2>
-          <p className="mt-2.5 max-w-2xl text-[13px] leading-relaxed text-slate-600">
+          <p className="mt-2.5 max-w-2xl text-[13px] leading-relaxed text-muted-foreground">
             Cowork プロジェクトと連携し、各部門への業務指示をワンクリックで起動。見積・発注・採用・経理まで、すべての業務を横断的に動かせます。
           </p>
         </div>
@@ -46,7 +46,7 @@ export function CTASection() {
           </Link>
           <Link
             to="/docs"
-            className="inline-flex h-11 items-center justify-center gap-2 rounded-md border border-slate-300/80 bg-white/60 px-4 text-[13px] font-medium text-slate-800 backdrop-blur transition-colors hover:border-slate-400 hover:bg-white focus-visible:ring-2 focus-visible:ring-slate-300 focus-visible:ring-offset-2 focus-visible:outline-none"
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-md border border-border/80 bg-card/60 px-4 text-[13px] font-medium text-muted-foreground backdrop-blur transition-colors hover:border-slate-400 hover:bg-card focus-visible:ring-2 focus-visible:ring-slate-300 focus-visible:ring-offset-2 focus-visible:outline-none"
           >
             <BookOpen className="h-3.5 w-3.5" aria-hidden="true" />
             ドキュメント

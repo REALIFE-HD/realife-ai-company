@@ -49,7 +49,7 @@ export function DepartmentFilterDialog({
 
         <div className="space-y-5 py-2">
           <div>
-            <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-500">
+            <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
               ステータス
             </p>
             <div className="flex flex-wrap gap-2">
@@ -64,7 +64,7 @@ export function DepartmentFilterDialog({
                     className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[12px] font-medium transition-colors ${
                       checked
                         ? "border-blue-600 bg-blue-50 text-blue-700"
-                        : "border-slate-200 bg-white text-slate-600 hover:border-slate-300"
+                        : "border-border bg-card text-muted-foreground hover:border-border"
                     }`}
                   >
                     <span aria-hidden="true" className={`h-1.5 w-1.5 rounded-full ${opt.dot}`} />
@@ -73,13 +73,13 @@ export function DepartmentFilterDialog({
                 );
               })}
             </div>
-            <p className="mt-1.5 text-[11px] text-slate-400">未選択の場合はすべて表示</p>
+            <p className="mt-1.5 text-[11px] text-muted-foreground">未選択の場合はすべて表示</p>
           </div>
 
-          <div className="flex items-center justify-between rounded-lg border border-slate-200 bg-slate-50/60 px-3 py-2.5">
+          <div className="flex items-center justify-between rounded-lg border border-border bg-muted/60 px-3 py-2.5">
             <div className="min-w-0">
-              <p className="text-[13px] font-medium text-slate-900">未読あり のみ</p>
-              <p className="text-[11px] text-slate-500">未読件数が1件以上の部門だけを表示</p>
+              <p className="text-[13px] font-medium text-foreground">未読あり のみ</p>
+              <p className="text-[11px] text-muted-foreground">未読件数が1件以上の部門だけを表示</p>
             </div>
             <label className="relative inline-flex shrink-0 cursor-pointer items-center">
               <input
@@ -89,7 +89,7 @@ export function DepartmentFilterDialog({
                 onChange={(e) => onChange({ ...value, unreadOnly: e.target.checked })}
               />
               <span className="h-5 w-9 rounded-full bg-slate-300 transition-colors peer-checked:bg-blue-600" />
-              <span className="absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-white shadow transition-transform peer-checked:translate-x-4" />
+              <span className="absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-card shadow transition-transform peer-checked:translate-x-4" />
             </label>
           </div>
         </div>
@@ -98,7 +98,7 @@ export function DepartmentFilterDialog({
           <button
             type="button"
             onClick={reset}
-            className="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-[12px] font-medium text-slate-600 hover:border-slate-300"
+            className="rounded-md border border-border bg-card px-3 py-1.5 text-[12px] font-medium text-muted-foreground hover:border-border"
           >
             リセット
           </button>

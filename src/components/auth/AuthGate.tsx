@@ -22,16 +22,16 @@ export function AuthGate({ children }: { children: ReactNode }) {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-50/70">
-        <p className="text-sm text-slate-500">読み込み中...</p>
+      <div className="flex min-h-screen items-center justify-center bg-muted/70">
+        <p className="text-sm text-muted-foreground">読み込み中...</p>
       </div>
     );
   }
 
   if (!user) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-50/70">
-        <p className="text-sm text-slate-500">ログインページへ移動しています...</p>
+      <div className="flex min-h-screen items-center justify-center bg-muted/70">
+        <p className="text-sm text-muted-foreground">ログインページへ移動しています...</p>
       </div>
     );
   }

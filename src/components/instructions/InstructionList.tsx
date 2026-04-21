@@ -46,9 +46,9 @@ export function InstructionList({ instructions, onChange }: Props) {
 
   if (instructions.length === 0) {
     return (
-      <div className="rounded-xl border border-dashed border-slate-300 bg-white p-10 text-center">
-        <p className="text-sm text-slate-600">まだ指示はありません</p>
-        <p className="mt-1 text-xs text-slate-500">
+      <div className="rounded-xl border border-dashed border-border bg-card p-10 text-center">
+        <p className="text-sm text-muted-foreground">まだ指示はありません</p>
+        <p className="mt-1 text-xs text-muted-foreground">
           上の「この部門へ指示を出す」ボタンから最初の指示を作成しましょう。
         </p>
       </div>
@@ -65,7 +65,7 @@ export function InstructionList({ instructions, onChange }: Props) {
         return (
           <li
             key={i.id}
-            className="rounded-xl border border-slate-200 bg-white p-5"
+            className="rounded-xl border border-border bg-card p-5"
           >
             <div className="flex items-start justify-between gap-3">
               <div className="flex flex-wrap items-center gap-2">
@@ -74,21 +74,21 @@ export function InstructionList({ instructions, onChange }: Props) {
                 >
                   {STATUS_LABEL[i.status]}
                 </span>
-                <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[10px] font-medium text-slate-600">
+                <span className="rounded-full border border-border bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
                   {deptLabel}
                 </span>
               </div>
-              <span className="font-mono text-[11px] text-slate-500 whitespace-nowrap">
+              <span className="font-mono text-[11px] text-muted-foreground whitespace-nowrap">
                 {formatDateTime(i.created_at)}
               </span>
             </div>
 
-            <h4 className="mt-3 text-base font-semibold text-slate-950">{i.title}</h4>
+            <h4 className="mt-3 text-base font-semibold text-foreground">{i.title}</h4>
             {i.content && (
               <button
                 type="button"
                 onClick={() => toggle(i.id)}
-                className={`mt-1.5 block w-full text-left text-sm leading-relaxed text-slate-600 ${
+                className={`mt-1.5 block w-full text-left text-sm leading-relaxed text-muted-foreground ${
                   isExpanded ? "" : "line-clamp-2"
                 }`}
                 title={isExpanded ? "折りたたむ" : "全文表示"}
@@ -97,14 +97,14 @@ export function InstructionList({ instructions, onChange }: Props) {
               </button>
             )}
 
-            <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-3">
-              <p className="text-[11px] text-slate-500">発信: {i.created_by}</p>
+            <div className="mt-4 flex items-center justify-between border-t border-border pt-3">
+              <p className="text-[11px] text-muted-foreground">発信: {i.created_by}</p>
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button
                     type="button"
-                    className="inline-flex items-center gap-1 rounded-md border border-slate-200 bg-white px-2.5 py-1.5 text-[11px] font-medium text-slate-700 transition-colors hover:border-slate-400"
+                    className="inline-flex items-center gap-1 rounded-md border border-border bg-card px-2.5 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:border-slate-400"
                   >
                     ステータス変更
                     <ChevronDown className="h-3 w-3" aria-hidden="true" />

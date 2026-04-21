@@ -29,7 +29,7 @@ export type DealActivity = {
 };
 
 export const STAGE_STYLE: Record<DealStage, string> = {
-  見積中: "border-slate-200 bg-slate-50 text-slate-700",
+  見積中: "border-border bg-muted text-muted-foreground",
   提案中: "border-blue-200 bg-blue-50 text-blue-700",
   見積提出: "border-amber-200 bg-amber-50 text-amber-700",
   受注: "border-emerald-200 bg-emerald-50 text-emerald-700",

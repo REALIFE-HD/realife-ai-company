@@ -67,7 +67,7 @@ function DealsPage() {
     >
       <div className="space-y-6 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
         <div>
-          <Link to="/" className="inline-flex items-center gap-1.5 text-[12px] font-medium text-slate-500 hover:text-slate-900">
+          <Link to="/" className="inline-flex items-center gap-1.5 text-[12px] font-medium text-muted-foreground hover:text-foreground">
             <ArrowLeft className="h-3.5 w-3.5" /> ダッシュボードへ戻る
           </Link>
         </div>
@@ -79,17 +79,17 @@ function DealsPage() {
             { l: "受注済", v: String(won) },
             { l: "案件総額", v: `¥${(total / 1_000_000).toFixed(1)}M` },
           ].map((s) => (
-            <div key={s.l} className="rounded-xl border border-slate-200/80 bg-white px-4 py-3.5 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-              <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-slate-500">{s.l}</p>
-              <p className="kpi-value mt-1.5 text-right text-[1.625rem] leading-none text-slate-950">{s.v}</p>
+            <div key={s.l} className="rounded-xl border border-border/80 bg-card px-4 py-3.5 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+              <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-muted-foreground">{s.l}</p>
+              <p className="kpi-value mt-1.5 text-right text-[1.625rem] leading-none text-foreground">{s.v}</p>
             </div>
           ))}
         </section>
 
-        <section className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+        <section className="overflow-hidden rounded-2xl border border-border/80 bg-card shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="border-b border-slate-200 bg-slate-50/60 text-[10px] font-medium uppercase tracking-[0.14em] text-slate-500">
+              <thead className="border-b border-border bg-muted/60 text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
                 <tr>
                   <th className="num-cell px-4 py-3 font-medium">ID</th>
                   <th className="px-4 py-3 text-left font-medium">クライアント</th>
@@ -103,28 +103,28 @@ function DealsPage() {
                   <th className="px-4 py-3" />
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-border">
                 {loading && (
                   <tr>
-                    <td colSpan={10} className="px-4 py-8 text-center text-xs text-slate-400">読み込み中...</td>
+                    <td colSpan={10} className="px-4 py-8 text-center text-xs text-muted-foreground">読み込み中...</td>
                   </tr>
                 )}
                 {!loading && filteredDeals.length === 0 && (
                   <tr>
-                    <td colSpan={10} className="px-4 py-8 text-center text-xs text-slate-400">
+                    <td colSpan={10} className="px-4 py-8 text-center text-xs text-muted-foreground">
                       {q ? `「${search}」に一致する案件はありません` : "案件がありません"}
                     </td>
                   </tr>
                 )}
                 {filteredDeals.map((d) => (
                   <tr key={d.id} className="group cursor-pointer transition-colors hover:bg-blue-50/30">
-                    <td className="num-cell px-4 py-3 text-xs text-slate-500">
+                    <td className="num-cell px-4 py-3 text-xs text-muted-foreground">
                       <Link to="/deals/$dealCode" params={{ dealCode: d.code }} className="transition-colors group-hover:text-blue-700">{d.code}</Link>
                     </td>
-                    <td className="whitespace-nowrap px-4 py-3 text-slate-700">
+                    <td className="whitespace-nowrap px-4 py-3 text-muted-foreground">
                       <Link to="/deals/$dealCode" params={{ dealCode: d.code }} className="transition-colors group-hover:text-blue-700">{d.client}</Link>
                     </td>
-                    <td className="px-4 py-3 font-medium text-slate-900">
+                    <td className="px-4 py-3 font-medium text-foreground">
                       <Link to="/deals/$dealCode" params={{ dealCode: d.code }} className="transition-colors group-hover:text-blue-700">{d.title}</Link>
                     </td>
                     <td className="whitespace-nowrap px-4 py-3">
@@ -132,12 +132,12 @@ function DealsPage() {
                         {d.stage}
                       </span>
                     </td>
-                    <td className="num-cell px-4 py-3 font-semibold text-slate-950"><Money amount={d.amount} /></td>
-                    <td className="num-cell px-4 py-3 text-slate-700">{d.probability}%</td>
-                    <td className="whitespace-nowrap px-4 py-3 text-xs text-slate-700">{d.owner}</td>
-                    <td className="px-4 py-3 text-xs text-slate-700">{d.next_action}</td>
-                    <td className="num-cell px-4 py-3 text-xs text-slate-700">{d.due ?? "—"}</td>
-                    <td className="whitespace-nowrap px-2 py-3 text-slate-400 transition-colors group-hover:text-blue-600">
+                    <td className="num-cell px-4 py-3 font-semibold text-foreground"><Money amount={d.amount} /></td>
+                    <td className="num-cell px-4 py-3 text-muted-foreground">{d.probability}%</td>
+                    <td className="whitespace-nowrap px-4 py-3 text-xs text-muted-foreground">{d.owner}</td>
+                    <td className="px-4 py-3 text-xs text-muted-foreground">{d.next_action}</td>
+                    <td className="num-cell px-4 py-3 text-xs text-muted-foreground">{d.due ?? "—"}</td>
+                    <td className="whitespace-nowrap px-2 py-3 text-muted-foreground transition-colors group-hover:text-blue-600">
                       <Link to="/deals/$dealCode" params={{ dealCode: d.code }}>
                         <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                       </Link>

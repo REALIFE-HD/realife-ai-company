@@ -51,7 +51,7 @@ export function DepartmentsGrid({
           </div>
           <h2
             id="departments-heading"
-            className="mt-2 font-display text-2xl font-semibold tracking-tight text-slate-900 sm:text-[1.75rem]"
+            className="mt-2 font-display text-2xl font-semibold tracking-tight text-foreground sm:text-[1.75rem]"
           >
             組織一覧
           </h2>
@@ -69,28 +69,28 @@ export function DepartmentsGrid({
         <div
           role="status"
           aria-live="polite"
-          className="mt-4 flex flex-wrap items-center gap-2 rounded-md border border-blue-100 bg-blue-50/60 px-3 py-2 text-[12px] text-slate-700"
+          className="mt-4 flex flex-wrap items-center gap-2 rounded-md border border-blue-100 bg-blue-50/60 px-3 py-2 text-[12px] text-muted-foreground"
         >
           <span className="num font-semibold text-blue-800">{filtered.length}</span>
-          <span className="text-slate-500">/ {DEPARTMENTS.length} 件表示</span>
+          <span className="text-muted-foreground">/ {DEPARTMENTS.length} 件表示</span>
           {q && (
-            <span className="ml-1 inline-flex items-center gap-1 text-slate-600">
+            <span className="ml-1 inline-flex items-center gap-1 text-muted-foreground">
               ・ 検索:
-              <span className="rounded bg-white px-1.5 py-0.5 font-medium text-slate-800 ring-1 ring-slate-200">
+              <span className="rounded bg-card px-1.5 py-0.5 font-medium text-muted-foreground ring-1 ring-border">
                 {q}
               </span>
             </span>
           )}
           {hasActiveFilters && (
-            <span className="inline-flex items-center gap-1 text-slate-600">
+            <span className="inline-flex items-center gap-1 text-muted-foreground">
               ・ フィルタ:
               {filters.statuses.length > 0 && (
-                <span className="rounded bg-white px-1.5 py-0.5 font-medium text-slate-800 ring-1 ring-slate-200">
+                <span className="rounded bg-card px-1.5 py-0.5 font-medium text-muted-foreground ring-1 ring-border">
                   {filters.statuses.join(" / ")}
                 </span>
               )}
               {filters.unreadOnly && (
-                <span className="rounded bg-white px-1.5 py-0.5 font-medium text-slate-800 ring-1 ring-slate-200">
+                <span className="rounded bg-card px-1.5 py-0.5 font-medium text-muted-foreground ring-1 ring-border">
                   未読のみ
                 </span>
               )}
@@ -100,7 +100,7 @@ export function DepartmentsGrid({
       )}
 
       {filtered.length === 0 ? (
-        <p className="mt-6 rounded-xl border border-dashed border-slate-300 bg-white/60 px-4 py-10 text-center text-[13px] text-slate-500">
+        <p className="mt-6 rounded-xl border border-dashed border-border bg-card/60 px-4 py-10 text-center text-[13px] text-muted-foreground">
           条件に一致する部門は見つかりませんでした。
         </p>
       ) : (

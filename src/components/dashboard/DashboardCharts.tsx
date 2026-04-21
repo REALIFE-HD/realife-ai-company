@@ -38,16 +38,16 @@ function Donut() {
           })}
         </svg>
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-          <span className="num text-[1.75rem] font-semibold leading-none tracking-tight text-slate-950">{total}</span>
-          <span className="mt-1 text-[10px] font-medium uppercase tracking-[0.14em] text-slate-500">部門</span>
+          <span className="num text-[1.75rem] font-semibold leading-none tracking-tight text-foreground">{total}</span>
+          <span className="mt-1 text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground">部門</span>
         </div>
       </div>
       <ul className="space-y-2.5 text-[13px]">
         {segments.map((s) => (
           <li key={s.label} className="flex items-center gap-2.5">
             <span className="h-2.5 w-2.5 rounded-sm" style={{ background: s.color }} aria-hidden="true" />
-            <span className="text-slate-700">{s.label}</span>
-            <span className="num ml-auto pl-3 font-semibold text-slate-900">{s.value}</span>
+            <span className="text-muted-foreground">{s.label}</span>
+            <span className="num ml-auto pl-3 font-semibold text-foreground">{s.value}</span>
           </li>
         ))}
       </ul>
@@ -76,14 +76,14 @@ function Bars() {
                   aria-label={`${d.name} ${d.value} タスク`}
                 />
               </div>
-              <span className="num text-[10px] font-medium text-slate-600 transition-colors group-hover:text-slate-900">{d.value}</span>
+              <span className="num text-[10px] font-medium text-muted-foreground transition-colors group-hover:text-foreground">{d.value}</span>
             </div>
           );
         })}
       </div>
       <div className="mt-2 flex gap-3">
         {data.map((d) => (
-          <span key={d.name} className="flex-1 truncate text-center text-[10px] text-slate-500">
+          <span key={d.name} className="flex-1 truncate text-center text-[10px] text-muted-foreground">
             {d.name}
           </span>
         ))}
@@ -95,19 +95,19 @@ function Bars() {
 export function DashboardCharts() {
   return (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-      <div className="rounded-xl border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+      <div className="rounded-xl border border-border/80 bg-card p-6 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
         <div className="flex items-center justify-between">
-          <h3 className="text-[13px] font-semibold tracking-tight text-slate-900">部門ステータス分布</h3>
-          <span className="text-[10px] font-medium uppercase tracking-[0.16em] text-slate-400">12 Departments</span>
+          <h3 className="text-[13px] font-semibold tracking-tight text-foreground">部門ステータス分布</h3>
+          <span className="text-[10px] font-medium uppercase tracking-[0.16em] text-muted-foreground">12 Departments</span>
         </div>
         <div className="mt-6">
           <Donut />
         </div>
       </div>
-      <div className="rounded-xl border border-slate-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+      <div className="rounded-xl border border-border/80 bg-card p-6 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
         <div className="flex items-center justify-between">
-          <h3 className="text-[13px] font-semibold tracking-tight text-slate-900">部門別タスク負荷</h3>
-          <span className="text-[10px] font-medium uppercase tracking-[0.16em] text-slate-400">Top 8</span>
+          <h3 className="text-[13px] font-semibold tracking-tight text-foreground">部門別タスク負荷</h3>
+          <span className="text-[10px] font-medium uppercase tracking-[0.16em] text-muted-foreground">Top 8</span>
         </div>
         <div className="mt-6">
           <Bars />
