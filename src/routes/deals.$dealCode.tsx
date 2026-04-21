@@ -121,16 +121,16 @@ function DealDetailPage() {
 
   // deferred 関連データの解決を待って反映 (画面表示後に追従)
   useEffect(() => {
-    const ld = loaderData as typeof loaderData & {
+    const ld = loaderData as {
       activitiesPromise?: Promise<DealActivity[]>;
       instructionsPromise?: Promise<Instruction[]>;
-    };
+    } | null | undefined;
     let mounted = true;
     if (ld?.activitiesPromise) {
-      ld.activitiesPromise.then((a) => mounted && setActivities(a)).catch(() => {});
+      ld.activitiesPromise.then((a: DealActivity[]) => mounted && setActivities(a)).catch(() => {});
     }
     if (ld?.instructionsPromise) {
-      ld.instructionsPromise.then((i) => mounted && setInstructions(i)).catch(() => {});
+      ld.instructionsPromise.then((i: Instruction[]) => mounted && setInstructions(i)).catch(() => {});
     }
     return () => {
       mounted = false;
