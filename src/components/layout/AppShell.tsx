@@ -686,10 +686,6 @@ export function AppShell({
                 </p>
               )}
             </div>
-            <div className="num shrink-0 rounded-md border border-border bg-muted px-2 py-1 text-right text-[11px] leading-tight text-muted-foreground">
-              <div>{DATE_FMT.format(now)}</div>
-              <div className="font-semibold text-foreground">{TIME_FMT.format(now)}</div>
-            </div>
           </div>
           <div className="relative">
             <Search
