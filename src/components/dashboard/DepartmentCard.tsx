@@ -2,10 +2,24 @@ import { Link } from "@tanstack/react-router";
 import { ChevronRight } from "lucide-react";
 import type { Department } from "@/data/departments";
 
-const STATUS_STYLE: Record<Department["status"], string> = {
-  active: "border-blue-100 bg-blue-50 text-blue-700",
-  setup: "border-amber-200 bg-amber-50 text-amber-700",
-  standard: "",
+type StatusMeta = { label: string; badge: string; dot: string };
+
+const STATUS_META: Record<Department["status"], StatusMeta> = {
+  active: {
+    label: "稼働中",
+    badge: "border-blue-100 bg-blue-50 text-blue-700",
+    dot: "bg-blue-500 shadow-[0_0_0_3px_rgba(59,130,246,0.18)] animate-pulse",
+  },
+  setup: {
+    label: "構築中",
+    badge: "border-amber-200 bg-amber-50 text-amber-700",
+    dot: "bg-amber-500 shadow-[0_0_0_3px_rgba(245,158,11,0.18)]",
+  },
+  standard: {
+    label: "通常運用",
+    badge: "border-slate-200 bg-slate-50 text-slate-600",
+    dot: "bg-slate-400",
+  },
 };
 
 export function DepartmentCard({ d }: { d: Department }) {
