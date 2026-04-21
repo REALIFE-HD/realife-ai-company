@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { NewInstructionDialog } from "@/components/instructions/NewInstructionDialog";
 import { useUserSettings } from "@/hooks/use-user-settings";
 import { useAuth } from "@/hooks/use-auth";
+import { SearchHistoryDropdown } from "./SearchHistoryDropdown";
 
 function useNow(intervalMs = 30_000) {
   const [now, setNow] = useState(() => new Date());
