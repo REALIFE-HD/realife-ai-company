@@ -96,15 +96,27 @@ export async function deleteInboxMessage(id: string): Promise<void> {
   if (error) throw error;
 }
 
-/** AI振り分け呼び出し(エッジ関数) */
-export async function classifyWithAI(subject: string, body: string): Promise<{
+export type ActionSuggestion = { title: string; detail: string };
+
+export type ClassifyResult = {
   department: string | null;
   confidence: number;
   reason: string;
-}> {
+  title: string;
+  suggestions: ActionSuggestion[];
+};
+
+/** AI振り分け呼び出し(エッジ関数) */
+export async function classifyWithAI(subject: string, body: string): Promise<ClassifyResult> {
   const { data, error } = await supabase.functions.invoke("inbox-classify", {
     body: { subject, body },
   });
   if (error) throw error;
-  return data as { department: string | null; confidence: number; reason: string };
+  return {
+    department: data?.department ?? null,
+    confidence: data?.confidence ?? 0,
+    reason: data?.reason ?? "",
+    title: data?.title ?? "",
+    suggestions: Array.isArray(data?.suggestions) ? data.suggestions : [],
+  };
 }

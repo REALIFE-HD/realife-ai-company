@@ -34,13 +34,14 @@ serve(async (req) => {
     }
 
     const { subject, body } = await req.json();
-    if (typeof subject !== "string" || typeof body !== "string") {
+    if (typeof body !== "string") {
       return new Response(JSON.stringify({ error: "Invalid input" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
-    if (subject.length > 500 || body.length > 5000) {
+    const subj = typeof subject === "string" ? subject : "";
+    if (subj.length > 500 || body.length > 5000) {
       return new Response(JSON.stringify({ error: "Input too large" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -63,11 +64,11 @@ serve(async (req) => {
           {
             role: "system",
             content:
-              "あなたは合同会社REALIFEのインボックス振り分け担当です。受信メッセージの件名と本文から、最も適切な部門を以下の12部門から1つ選びます。必ず classify_message ツールを呼び出して回答してください。",
+              "あなたは合同会社REALIFEのインボックス担当です。受信メッセージ(言われたこと/思ったことのメモ)を読み、(1)最適な部門を1つ選び、(2)25字以内の簡潔な件名を作成し、(3)次にやるべきアクションを1〜3件提案します。必ず classify_message ツールを呼び出して回答してください。",
           },
           {
             role: "user",
-            content: `## 部門一覧\n${deptList}\n\n## 受信メッセージ\n件名: ${subject}\n本文: ${body}\n\n上記を最も適切な部門コード(01〜12)に分類してください。`,
+            content: `## 部門一覧\n${deptList}\n\n## 受信メッセージ\n${subj ? `件名(任意): ${subj}\n` : ""}本文:\n${body}\n\n上記を分類し、件名と次アクションを提案してください。`,
           },
         ],
         tools: [
@@ -75,7 +76,7 @@ serve(async (req) => {
             type: "function",
             function: {
               name: "classify_message",
-              description: "メッセージを最適な部門に分類する",
+              description: "メッセージを分類し件名と次アクションを生成する",
               parameters: {
                 type: "object",
                 properties: {
@@ -94,8 +95,33 @@ serve(async (req) => {
                     type: "string",
                     description: "選定理由を日本語30字以内で",
                   },
+                  title: {
+                    type: "string",
+                    description: "メッセージを表す件名(25字以内)",
+                  },
+                  suggestions: {
+                    type: "array",
+                    minItems: 1,
+                    maxItems: 3,
+                    description: "次アクション提案(1〜3件)",
+                    items: {
+                      type: "object",
+                      properties: {
+                        title: {
+                          type: "string",
+                          description: "アクション名(20字以内、動詞で始める)",
+                        },
+                        detail: {
+                          type: "string",
+                          description: "具体的な手順や担当を80字以内で",
+                        },
+                      },
+                      required: ["title", "detail"],
+                      additionalProperties: false,
+                    },
+                  },
                 },
-                required: ["department", "confidence", "reason"],
+                required: ["department", "confidence", "reason", "title", "suggestions"],
                 additionalProperties: false,
               },
             },
@@ -130,7 +156,13 @@ serve(async (req) => {
     const tc = data.choices?.[0]?.message?.tool_calls?.[0];
     if (!tc) {
       return new Response(
-        JSON.stringify({ department: null, confidence: 0, reason: "AI応答なし" }),
+        JSON.stringify({
+          department: null,
+          confidence: 0,
+          reason: "AI応答なし",
+          title: subj || body.slice(0, 25),
+          suggestions: [],
+        }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } },
       );
     }
@@ -140,6 +172,8 @@ serve(async (req) => {
         department: args.department,
         confidence: args.confidence ?? 0,
         reason: args.reason ?? "AI判定",
+        title: args.title ?? (subj || body.slice(0, 25)),
+        suggestions: Array.isArray(args.suggestions) ? args.suggestions : [],
       }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } },
     );

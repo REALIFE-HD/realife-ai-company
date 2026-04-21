@@ -1,11 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-import { ArrowLeft, Inbox as InboxIcon, Sparkles, Send, Trash2, Archive, RotateCcw } from "lucide-react";
+import { ArrowLeft, Inbox as InboxIcon, Sparkles, Send, Trash2, Archive, RotateCcw, ListPlus, Lightbulb } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
 import { useRouteMountMark } from "@/lib/web-vitals";
 import { supabase } from "@/integrations/supabase/client";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import {
@@ -16,8 +15,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { DEPARTMENTS } from "@/data/departments";
+import { addInstruction } from "@/lib/instructions";
 import {
-  applyRules,
   classifyWithAI,
   createInboxMessage,
   deleteInboxMessage,
@@ -25,6 +24,7 @@ import {
   METHOD_LABEL,
   STATUS_LABEL,
   updateInboxMessage,
+  type ActionSuggestion,
   type InboxMessage,
   type InboxStatus,
 } from "@/lib/inbox";
@@ -33,12 +33,11 @@ export const Route = createFileRoute("/inbox")({
   head: () => ({
     meta: [
       { title: "インボックス — REALIFE Operations" },
-      { name: "description", content: "受信メッセージを自動で12部門に振り分けるインボックス。" },
+      { name: "description", content: "言われたこと・思ったことをメモして、AIが部門振り分けと次アクションを提案。" },
       { property: "og:title", content: "インボックス — REALIFE Operations" },
-      { property: "og:description", content: "ハイブリッド振り分け(ルール+AI)による自動仕分け。" },
+      { property: "og:description", content: "AI自動振り分け+次アクション提案でワンクリック指示書化。" },
     ],
   }),
-  // loader でメッセージ一覧を事前取得 → 遷移時のスピナー表示を排除
   loader: async () => {
     try {
       return { items: await listInbox() };
@@ -58,6 +57,27 @@ const STATUS_FILTERS: { v: "all" | InboxStatus; label: string }[] = [
   { v: "archived", label: "アーカイブ" },
 ];
 
+// メッセージごとの提案アクションをセッションで保持(再振り分け時も復元)
+const SUGGESTION_CACHE_KEY = "realife_inbox_suggestions";
+type SuggestionMap = Record<string, ActionSuggestion[]>;
+
+function readSuggestionCache(): SuggestionMap {
+  if (typeof window === "undefined") return {};
+  try {
+    return JSON.parse(window.sessionStorage.getItem(SUGGESTION_CACHE_KEY) || "{}");
+  } catch {
+    return {};
+  }
+}
+function writeSuggestionCache(map: SuggestionMap) {
+  if (typeof window === "undefined") return;
+  try {
+    window.sessionStorage.setItem(SUGGESTION_CACHE_KEY, JSON.stringify(map));
+  } catch {
+    /* ignore */
+  }
+}
+
 function InboxPage() {
   useRouteMountMark("/inbox");
   const initial = Route.useLoaderData();
@@ -65,12 +85,9 @@ function InboxPage() {
   const [filter, setFilter] = useState<"all" | InboxStatus>("all");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
-  // loader 通過後に render されるため初回は読込済み扱い
-  const loading = false;
+  const [suggestions, setSuggestions] = useState<SuggestionMap>(() => readSuggestionCache());
 
-  const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
-  const [sender, setSender] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   const refresh = async () => {
@@ -84,7 +101,6 @@ function InboxPage() {
   };
 
   useEffect(() => {
-    // 初回フェッチは loader 済み。Realtime 増分のみ購読
     const ch = supabase
       .channel("inbox-stream")
       .on("postgres_changes", { event: "*", schema: "public", table: "inbox_messages" }, refresh)
@@ -94,6 +110,13 @@ function InboxPage() {
     };
   }, []);
 
+  const updateSuggestions = (id: string, list: ActionSuggestion[]) => {
+    setSuggestions((prev) => {
+      const next = { ...prev, [id]: list };
+      writeSuggestionCache(next);
+      return next;
+    });
+  };
 
   const filtered = useMemo(() => {
     const byStatus = filter === "all" ? items : items.filter((i) => i.status === filter);
@@ -122,53 +145,44 @@ function InboxPage() {
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!subject.trim() || !body.trim() || submitting) return;
+    if (!body.trim() || submitting) return;
     setSubmitting(true);
     try {
-      // 1. 投函
+      // 1. プレースホルダ件名で投函(AI生成の件名に後で更新)
+      const provisionalSubject = body.trim().slice(0, 40);
       const created = await createInboxMessage({
-        subject: subject.trim(),
+        subject: provisionalSubject,
         body: body.trim(),
-        sender: sender.trim(),
+        sender: "",
       });
 
-      // 2. ハイブリッド振り分け: まずルール
-      const ruleHit = applyRules(subject, body);
-      if (ruleHit) {
+      // 2. AIで振り分け+件名+アクション提案
+      toast.message("AIが振り分け中…");
+      try {
+        const ai = await classifyWithAI("", body.trim());
         await updateInboxMessage(created.id, {
-          status: "assigned",
-          assigned_department: ruleHit.dept,
-          route_method: "rule",
-          route_confidence: 100,
-          route_reason: ruleHit.reason,
+          subject: ai.title || provisionalSubject,
+          status: ai.department ? "assigned" : "unassigned",
+          assigned_department: ai.department,
+          route_method: ai.department ? "ai" : "pending",
+          route_confidence: ai.confidence,
+          route_reason: ai.reason,
         });
-        toast.success(`ルール振り分け → ${getDeptName(ruleHit.dept)}`);
-      } else {
-        // 3. ルール外 → AI
-        toast.message("AI振り分け中...");
-        try {
-          const ai = await classifyWithAI(subject, body);
-          if (ai.department) {
-            await updateInboxMessage(created.id, {
-              status: "assigned",
-              assigned_department: ai.department,
-              route_method: "ai",
-              route_confidence: ai.confidence,
-              route_reason: ai.reason,
-            });
-            toast.success(`AI振り分け → ${getDeptName(ai.department)} (${ai.confidence}%)`);
-          } else {
-            toast.warning("AIが判定できず、保留に分類しました");
-          }
-        } catch (err) {
-          console.error(err);
-          toast.error("AI振り分けに失敗。未割当のままです。");
+        if (ai.suggestions.length > 0) {
+          updateSuggestions(created.id, ai.suggestions);
         }
+        if (ai.department) {
+          toast.success(`${getDeptName(ai.department)} に振り分け (${ai.confidence}%)`);
+        } else {
+          toast.warning("AIが判定できず、未割当のままです");
+        }
+        setSelectedId(created.id);
+      } catch (err) {
+        console.error(err);
+        toast.error("AI振り分けに失敗。未割当のままです。");
       }
 
-      setSubject("");
       setBody("");
-      setSender("");
     } catch (err) {
       console.error(err);
       toast.error("投函に失敗しました");
@@ -178,18 +192,20 @@ function InboxPage() {
   };
 
   const reroute = async (m: InboxMessage) => {
-    toast.message("AI再振り分け中...");
+    toast.message("AI再振り分け中…");
     try {
       const ai = await classifyWithAI(m.subject, m.body);
       if (ai.department) {
         await updateInboxMessage(m.id, {
+          subject: ai.title || m.subject,
           status: "assigned",
           assigned_department: ai.department,
           route_method: "ai",
           route_confidence: ai.confidence,
           route_reason: ai.reason,
         });
-        toast.success(`AI再振り分け → ${getDeptName(ai.department)}`);
+        if (ai.suggestions.length > 0) updateSuggestions(m.id, ai.suggestions);
+        toast.success(`${getDeptName(ai.department)} に再振り分け`);
       }
     } catch (e) {
       console.error(e);
@@ -219,13 +235,33 @@ function InboxPage() {
     toast.success("削除しました");
   };
 
+  const promoteToInstruction = async (m: InboxMessage, s: ActionSuggestion) => {
+    if (!m.assigned_department) {
+      toast.error("先に部門を割り当ててください");
+      return;
+    }
+    try {
+      await addInstruction({
+        department_code: m.assigned_department,
+        title: s.title,
+        content: `${s.detail}\n\n— 元メッセージ —\n${m.body}`,
+      });
+      toast.success(`「${s.title}」を指示書化しました`);
+    } catch (e) {
+      console.error(e);
+      toast.error("指示書化に失敗しました");
+    }
+  };
+
+  const selectedSuggestions = selected ? suggestions[selected.id] ?? [] : [];
+
   return (
     <AppShell
       title="インボックス"
-      subtitle="ハイブリッド自動振り分け(ルール+AI)"
+      subtitle="言われたこと・思ったことをメモ → AIが部門振り分け + 次アクション提案"
       search={search}
       onSearchChange={setSearch}
-      searchPlaceholder="件名・本文・差出人で検索…"
+      searchPlaceholder="本文・部門で検索…"
     >
       <div className="space-y-6 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
         <div>
@@ -248,36 +284,37 @@ function InboxPage() {
           ))}
         </section>
 
-        {/* 投函フォーム */}
+        {/* シンプル投函フォーム */}
         <section className="rounded-2xl border border-border bg-card p-6">
           <div className="flex items-center gap-2">
             <Send className="h-4 w-4 text-blue-600" />
-            <h2 className="font-display text-lg font-semibold tracking-tight text-foreground">新規メッセージ投函</h2>
+            <h2 className="font-display text-lg font-semibold tracking-tight text-foreground">言われたこと / 思ったこと</h2>
           </div>
           <p className="mt-1 text-[12px] text-muted-foreground">
-            投函すると、まずキーワードルール、次にAIで自動的に12部門のいずれかに振り分けます。
+            気になったことをそのまま書くだけ。AIが件名を整えて、最適な部門に振り分け、次のアクションまで提案します。
           </p>
-          <form onSubmit={onSubmit} className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
+          <form onSubmit={onSubmit} className="mt-4 space-y-3">
             <div className="space-y-1.5">
-              <Label htmlFor="m-sender">差出人</Label>
-              <Input id="m-sender" value={sender} onChange={(e) => setSender(e.target.value)} placeholder="例:山田 (取引先A)" />
+              <Label htmlFor="m-body" className="sr-only">本文</Label>
+              <Textarea
+                id="m-body"
+                value={body}
+                onChange={(e) => setBody(e.target.value)}
+                rows={4}
+                required
+                placeholder="例:現場Aの工程が遅延気味、来週の打合せまでに見積も再チェックしたい…"
+                className="text-[14px]"
+              />
             </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="m-subj">件名 *</Label>
-              <Input id="m-subj" value={subject} onChange={(e) => setSubject(e.target.value)} required placeholder="例:見積書 #2604 の修正依頼" />
-            </div>
-            <div className="space-y-1.5 md:col-span-2">
-              <Label htmlFor="m-body">本文 *</Label>
-              <Textarea id="m-body" value={body} onChange={(e) => setBody(e.target.value)} rows={4} required placeholder="メッセージ内容を入力" />
-            </div>
-            <div className="md:col-span-2">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] text-muted-foreground">{body.length} / 5000</span>
               <button
                 type="submit"
-                disabled={submitting}
+                disabled={submitting || !body.trim()}
                 className="inline-flex items-center gap-1.5 rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-60"
               >
                 <Sparkles className="h-3.5 w-3.5" />
-                {submitting ? "振り分け中..." : "投函して自動振り分け"}
+                {submitting ? "AI処理中…" : "投函してAIに任せる"}
               </button>
             </div>
           </form>
@@ -308,9 +345,7 @@ function InboxPage() {
               <InboxIcon className="mr-1.5 inline h-3.5 w-3.5" />
               {filtered.length} 件
             </div>
-            {loading ? (
-              <div className="px-4 py-8 text-center text-sm text-muted-foreground">読込中...</div>
-            ) : filtered.length === 0 ? (
+            {filtered.length === 0 ? (
               <div className="px-4 py-8 text-center text-sm text-muted-foreground">メッセージはありません</div>
             ) : (
               <ul className="max-h-[560px] divide-y divide-border overflow-y-auto">
@@ -327,7 +362,7 @@ function InboxPage() {
                         <p className="truncate text-[13px] font-medium text-foreground">{m.subject}</p>
                         <StatusBadge status={m.status} />
                       </div>
-                      <p className="mt-0.5 truncate text-[11px] text-muted-foreground">{m.sender || "(差出人なし)"}</p>
+                      <p className="mt-0.5 line-clamp-1 text-[11px] text-muted-foreground">{m.body}</p>
                       <div className="mt-1 flex items-center gap-1.5">
                         {m.assigned_department && (
                           <span className="rounded border border-blue-100 bg-blue-50 px-1.5 py-0.5 text-[10px] font-medium text-blue-700">
@@ -359,7 +394,7 @@ function InboxPage() {
                       {selected.subject}
                     </h3>
                     <p className="mt-1 text-[12px] text-muted-foreground">
-                      {selected.sender || "(差出人なし)"} ・ {new Date(selected.created_at).toLocaleString("ja-JP")}
+                      {new Date(selected.created_at).toLocaleString("ja-JP")}
                     </p>
                   </div>
                   <StatusBadge status={selected.status} />
@@ -385,9 +420,36 @@ function InboxPage() {
                   )}
                 </div>
 
-                <pre className="mt-4 whitespace-pre-wrap rounded-md border border-border bg-card p-4 font-sans text-[13px] leading-relaxed text-muted-foreground">
+                <pre className="mt-4 whitespace-pre-wrap rounded-md border border-border bg-card p-4 font-sans text-[13px] leading-relaxed text-foreground">
                   {selected.body}
                 </pre>
+
+                {/* AI次アクション */}
+                {selectedSuggestions.length > 0 && (
+                  <div className="mt-5 rounded-md border border-amber-200 bg-amber-50/60 p-4 dark:border-amber-900/40 dark:bg-amber-950/20">
+                    <div className="flex items-center gap-1.5">
+                      <Lightbulb className="h-4 w-4 text-amber-600" />
+                      <p className="text-[12px] font-semibold text-amber-900 dark:text-amber-200">AIが提案する次アクション</p>
+                    </div>
+                    <ul className="mt-3 space-y-2">
+                      {selectedSuggestions.map((s, i) => (
+                        <li key={i} className="flex items-start justify-between gap-3 rounded-md bg-card/80 p-3 ring-1 ring-border">
+                          <div className="min-w-0 flex-1">
+                            <p className="text-[13px] font-medium text-foreground">{s.title}</p>
+                            <p className="mt-0.5 text-[11px] text-muted-foreground">{s.detail}</p>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => promoteToInstruction(selected, s)}
+                            className="inline-flex shrink-0 items-center gap-1 rounded-md border border-blue-200 bg-blue-50 px-2.5 py-1.5 text-[11px] font-medium text-blue-700 hover:bg-blue-100 dark:border-blue-900/40 dark:bg-blue-950/30 dark:text-blue-300"
+                          >
+                            <ListPlus className="h-3.5 w-3.5" /> 指示書化
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
 
                 {/* アクション */}
                 <div className="mt-5 flex flex-wrap items-center gap-2">
