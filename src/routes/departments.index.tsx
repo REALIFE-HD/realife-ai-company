@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useMemo, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
 import { Footer } from "@/components/layout/Footer";
@@ -26,13 +27,33 @@ export const Route = createFileRoute("/departments/")({
 });
 
 function DepartmentsIndex() {
+  const [search, setSearch] = useState("");
   const total = DEPARTMENTS.length;
   const active = DEPARTMENTS.filter((d) => d.status === "active").length;
   const building = DEPARTMENTS.filter((d) => d.status === "setup").length;
   const standard = DEPARTMENTS.filter((d) => d.status === "standard").length;
 
+  const q = search.trim().toLowerCase();
+  const filtered = useMemo(
+    () =>
+      !q
+        ? DEPARTMENTS
+        : DEPARTMENTS.filter((d) =>
+            [d.id, d.name, d.role, d.kpiLabel].some((f) =>
+              f.toLowerCase().includes(q),
+            ),
+          ),
+    [q],
+  );
+
   return (
-    <AppShell title="部門一覧" subtitle={`12部門の役割・ステータス・進捗を一覧で確認`}>
+    <AppShell
+      title="部門一覧"
+      subtitle={`12部門の役割・ステータス・進捗を一覧で確認`}
+      search={search}
+      onSearchChange={setSearch}
+      searchPlaceholder="部門名・役割・KPIラベルで検索…"
+    >
       <div className="space-y-6 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
         <div>
           <Link
@@ -89,11 +110,23 @@ function DepartmentsIndex() {
         </section>
 
         <section aria-label="部門カード一覧">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {DEPARTMENTS.map((d) => (
-              <DepartmentCard key={d.id} d={d} />
-            ))}
-          </div>
+          {q && (
+            <p className="mb-3 text-[12px] text-slate-500">
+              「<span className="font-medium text-slate-700">{search}</span>」の検索結果:{" "}
+              <span className="num font-semibold text-slate-900">{filtered.length}</span> / {total} 部門
+            </p>
+          )}
+          {filtered.length === 0 ? (
+            <p className="rounded-xl border border-dashed border-slate-300 bg-white/60 px-4 py-10 text-center text-[13px] text-slate-500">
+              一致する部門は見つかりませんでした。
+            </p>
+          ) : (
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {filtered.map((d) => (
+                <DepartmentCard key={d.id} d={d} query={q} />
+              ))}
+            </div>
+          )}
         </section>
       </div>
       <Footer />

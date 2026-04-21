@@ -53,6 +53,7 @@ function InboxPage() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"all" | InboxStatus>("all");
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
 
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
@@ -82,10 +83,16 @@ function InboxPage() {
     };
   }, []);
 
-  const filtered = useMemo(
-    () => (filter === "all" ? items : items.filter((i) => i.status === filter)),
-    [items, filter],
-  );
+  const filtered = useMemo(() => {
+    const byStatus = filter === "all" ? items : items.filter((i) => i.status === filter);
+    const q = search.trim().toLowerCase();
+    if (!q) return byStatus;
+    return byStatus.filter((i) =>
+      [i.subject, i.body, i.sender, i.assigned_department ?? ""].some((f) =>
+        f.toLowerCase().includes(q),
+      ),
+    );
+  }, [items, filter, search]);
 
   const selected = useMemo(
     () => items.find((i) => i.id === selectedId) ?? filtered[0] ?? null,
@@ -201,7 +208,13 @@ function InboxPage() {
   };
 
   return (
-    <AppShell title="インボックス" subtitle="ハイブリッド自動振り分け(ルール+AI)">
+    <AppShell
+      title="インボックス"
+      subtitle="ハイブリッド自動振り分け(ルール+AI)"
+      search={search}
+      onSearchChange={setSearch}
+      searchPlaceholder="件名・本文・差出人で検索…"
+    >
       <div className="space-y-6 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
         <div>
           <Link to="/" className="inline-flex items-center gap-1.5 text-[12px] font-medium text-slate-500 hover:text-slate-900">
