@@ -270,7 +270,11 @@ function DealDetailPage() {
             const parsed = JSON.parse(jsonStr);
             const content = parsed.choices?.[0]?.delta?.content as string | undefined;
             if (content) upsert(content);
-          } catch { textBuffer = line + "\n" + textBuffer; break; }
+          } catch {
+            // JSON パースに失敗した場合は行をバッファに戻して次回まとめて処理
+            textBuffer = line + "\n" + textBuffer;
+            break;
+          }
         }
       }
     } catch (err) {
@@ -282,6 +286,7 @@ function DealDetailPage() {
   };
 
   const onAddActivity = async (e: React.FormEvent) => {
+    e.preventDefault();
     if (!deal || !actContent.trim()) return;
     try {
       await addActivity({

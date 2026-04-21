@@ -120,7 +120,12 @@ export type MonthlyRevenueStat = {
 
 /**
  * 直近 `months` ヶ月の受注案件を月別に集計して返す。
- * データが存在しない月は revenue=0, deals=0 で補完する。
+ *
+ * - ステージ「受注」の案件のみを対象とし、`created_at` の年月でグループ化する。
+ * - データが存在しない月は `revenue=0, deals=0` で補完する（グラフの空白防止）。
+ * - 月の判定はクライアントのローカル時刻を使用する。UTC との差が大きい環境では
+ *   月境界付近のデータがずれる可能性があるため注意。
+ * - `revenue` の単位は百万円 (¥M)、小数第1位で丸める。
  */
 export async function aggregateMonthlyRevenue(months = 6): Promise<MonthlyRevenueStat[]> {
   const since = new Date();
