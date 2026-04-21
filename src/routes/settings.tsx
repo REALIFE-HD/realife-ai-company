@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { useUserSettings } from "@/hooks/use-user-settings";
+import { useTheme, type Theme } from "@/hooks/use-theme";
 import type { UserSettings } from "@/lib/settings";
 import {
   HISTORY_LIMIT_MAX,
@@ -37,6 +38,11 @@ function SettingsPage() {
 
   const [searchPrefs, updateSearchPrefs] = useSearchPrefs();
   const [draftLimit, setDraftLimit] = useState<string>(String(searchPrefs.historyLimit));
+  const { theme, setTheme } = useTheme();
+  const themeOptions: { value: Theme; label: string }[] = [
+    { value: "light", label: "Light" },
+    { value: "dark", label: "Dark" },
+  ];
 
   const save = async (next: UserSettings) => {
     try {
@@ -106,9 +112,26 @@ function SettingsPage() {
             <div className="space-y-1.5">
               <Label>テーマ</Label>
               <div className="inline-flex rounded-md border border-slate-200 bg-slate-50 p-1">
-                <span className="rounded-sm bg-white px-3 py-1 text-[12px] font-medium text-slate-900 shadow-sm">Light</span>
-                <span className="px-3 py-1 text-[12px] font-medium text-slate-400">Dark(準備中)</span>
+                {themeOptions.map((opt) => {
+                  const active = theme === opt.value;
+                  return (
+                    <button
+                      key={opt.value}
+                      type="button"
+                      onClick={() => setTheme(opt.value)}
+                      aria-pressed={active}
+                      className={`rounded-sm px-3 py-1 text-[12px] font-medium transition-colors ${
+                        active
+                          ? "bg-white text-slate-900 shadow-sm"
+                          : "text-slate-500 hover:text-slate-900"
+                      }`}
+                    >
+                      {opt.label}
+                    </button>
+                  );
+                })}
               </div>
+              <p className="text-[11px] text-slate-500">ヘッダーの月/太陽アイコンからもいつでも切替できます。</p>
             </div>
           </div>
         </section>

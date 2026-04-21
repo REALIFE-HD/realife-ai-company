@@ -111,38 +111,39 @@
 }
 
 .dark {
-  --background: oklch(0.129 0.042 264.695);
-  --foreground: oklch(0.984 0.003 247.858);
-  --card: oklch(0.208 0.042 265.755);
-  --card-foreground: oklch(0.984 0.003 247.858);
-  --popover: oklch(0.208 0.042 265.755);
-  --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.929 0.013 255.508);
-  --primary-foreground: oklch(0.208 0.042 265.755);
-  --secondary: oklch(0.279 0.041 260.031);
-  --secondary-foreground: oklch(0.984 0.003 247.858);
-  --muted: oklch(0.279 0.041 260.031);
-  --muted-foreground: oklch(0.704 0.04 256.788);
-  --accent: oklch(0.279 0.041 260.031);
-  --accent-foreground: oklch(0.984 0.003 247.858);
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
+  /* Apple HIG 寄りのダーク。背景は #1C1C1E 系の真っ黒寄り、primary は #0A84FF 相当の鮮やかな青 */
+  --background: oklch(0.18 0.004 264);   /* ~ #1C1C1E */
+  --foreground: oklch(0.96 0.003 264);   /* near-white */
+  --card: oklch(0.22 0.005 264);         /* ~ #2C2C2E */
+  --card-foreground: oklch(0.96 0.003 264);
+  --popover: oklch(0.22 0.005 264);
+  --popover-foreground: oklch(0.96 0.003 264);
+  --primary: oklch(0.68 0.19 250);       /* ~ #0A84FF */
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.26 0.005 264);    /* ~ #3A3A3C */
+  --secondary-foreground: oklch(0.96 0.003 264);
+  --muted: oklch(0.26 0.005 264);
+  --muted-foreground: oklch(0.72 0.01 264);
+  --accent: oklch(0.32 0.06 250);        /* deep translucent blue tint */
+  --accent-foreground: oklch(0.85 0.13 250);
+  --destructive: oklch(0.65 0.22 27);
+  --destructive-foreground: oklch(0.99 0 0);
   --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.551 0.027 264.364);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.208 0.042 265.755);
-  --sidebar-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.279 0.041 260.031);
-  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
+  --input: oklch(1 0 0 / 12%);
+  --ring: oklch(0.68 0.19 250);
+  --chart-1: oklch(0.68 0.19 250);
+  --chart-2: oklch(0.72 0.15 200);
+  --chart-3: oklch(0.7 0.18 290);
+  --chart-4: oklch(0.78 0.16 80);
+  --chart-5: oklch(0.7 0.2 20);
+  --sidebar: oklch(0.2 0.004 264);
+  --sidebar-foreground: oklch(0.96 0.003 264);
+  --sidebar-primary: oklch(0.68 0.19 250);
+  --sidebar-primary-foreground: oklch(0.99 0 0);
+  --sidebar-accent: oklch(0.32 0.06 250);
+  --sidebar-accent-foreground: oklch(0.85 0.13 250);
   --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.551 0.027 264.364);
+  --sidebar-ring: oklch(0.68 0.19 250);
 }
 
 @layer base {
@@ -231,3 +232,86 @@
   background-size: 64px 64px;
   mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, black 30%, transparent 100%);
 }
+
+/*
+ * Dark mode 互換レイヤー
+ * 既存コンポーネントは bg-white / text-slate-* / border-slate-* / bg-slate-* /
+ * text-blue-* / bg-blue-* といった固定色クラスを直接使用している。
+ * 全ファイルを semantic token に書き換える代わりに、ダーク時のみ
+ * 同等のトークン色で上書きすることで一括対応する。
+ *
+ * 対応はメンテ容易性を優先し、よく使われる階調のみを定義する。
+ * 個別調整が必要な箇所は dark:bg-* クラスを後付けで追加すれば優先される。
+ */
+.dark {
+  /* ベース背景: index.tsx などで bg-[#F5F5F7] を直書きしている箇所 */
+  & .bg-\[\#F5F5F7\] { background-color: var(--background); }
+
+  /* white 系背景 → card */
+  & .bg-white,
+  & .bg-white\/90,
+  & .bg-white\/80,
+  & .bg-white\/75,
+  & .bg-white\/70,
+  & .bg-white\/60,
+  & .bg-white\/50 { background-color: var(--card); }
+
+  /* slate 背景階調 */
+  & .bg-slate-50,
+  & .bg-slate-50\/70,
+  & .bg-slate-50\/50,
+  & .bg-slate-100,
+  & .bg-slate-100\/70 { background-color: var(--muted); }
+  & .bg-slate-200 { background-color: color-mix(in oklab, var(--muted) 80%, var(--foreground) 20%); }
+  & .bg-slate-900,
+  & .bg-slate-950 { background-color: color-mix(in oklab, var(--background) 60%, black 40%); }
+
+  /* slate ボーダー階調 → border */
+  & .border-slate-100,
+  & .border-slate-100\/70,
+  & .border-slate-200,
+  & .border-slate-200\/80,
+  & .border-slate-200\/60,
+  & .border-slate-300 { border-color: var(--border); }
+
+  /* slate テキスト階調 → foreground / muted-foreground */
+  & .text-slate-950,
+  & .text-slate-900 { color: var(--foreground); }
+  & .text-slate-800,
+  & .text-slate-700 { color: color-mix(in oklab, var(--foreground) 92%, var(--muted-foreground) 8%); }
+  & .text-slate-600,
+  & .text-slate-500,
+  & .text-slate-500\/90 { color: var(--muted-foreground); }
+  & .text-slate-400 { color: color-mix(in oklab, var(--muted-foreground) 80%, var(--background) 20%); }
+
+  /* placeholder */
+  & .placeholder\:text-slate-400::placeholder { color: color-mix(in oklab, var(--muted-foreground) 70%, var(--background) 30%); }
+
+  /* blue アクセント (primary 帯) */
+  & .text-blue-600,
+  & .text-blue-700 { color: var(--primary); }
+  & .bg-blue-50,
+  & .bg-blue-50\/70,
+  & .bg-blue-100 { background-color: color-mix(in oklab, var(--primary) 18%, transparent); }
+  & .bg-blue-600,
+  & .bg-blue-700 { background-color: var(--primary); }
+  & .hover\:bg-blue-700:hover { background-color: color-mix(in oklab, var(--primary) 85%, white 15%); }
+  & .border-blue-300,
+  & .border-blue-400 { border-color: color-mix(in oklab, var(--primary) 70%, transparent); }
+  & .focus\:border-blue-400:focus { border-color: var(--primary); }
+  & .focus\:ring-blue-100:focus { --tw-ring-color: color-mix(in oklab, var(--primary) 30%, transparent); }
+  & .bg-blue-500,
+  & .bg-blue-500\/90 { background-color: var(--primary); }
+
+  /* hover 系の slate */
+  & .hover\:bg-slate-50:hover,
+  & .hover\:bg-slate-100\/70:hover { background-color: color-mix(in oklab, var(--muted) 70%, var(--foreground) 8%); }
+  & .hover\:text-slate-900:hover { color: var(--foreground); }
+  & .hover\:text-slate-700:hover { color: color-mix(in oklab, var(--foreground) 90%, var(--muted-foreground) 10%); }
+  & .hover\:border-slate-300:hover { border-color: color-mix(in oklab, var(--border) 60%, var(--foreground) 40%); }
+
+  /* 区切り線などの divide */
+  & .divide-slate-100 > :not([hidden]) ~ :not([hidden]),
+  & .divide-slate-200 > :not([hidden]) ~ :not([hidden]) { border-color: var(--border); }
+}
+
