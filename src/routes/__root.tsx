@@ -1,10 +1,16 @@
-import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+import { Outlet, Link, createRootRoute, HeadContent, Scripts, useRouter, useRouterState } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { migrateLocalInstructionsIfAny } from "@/lib/instructions";
 import { UserSettingsProvider } from "@/hooks/use-user-settings";
 import { AuthProvider } from "@/hooks/use-auth";
 import { AuthGate } from "@/components/auth/AuthGate";
+import {
+  initWebVitals,
+  exposeMetricsHelpers,
+  markNavigationStart,
+  markNavigationEnd,
+} from "@/lib/web-vitals";
 
 import appCss from "../styles.css?url";
 
@@ -85,7 +91,21 @@ function RootComponent() {
     migrateLocalInstructionsIfAny().then((n) => {
       if (n > 0) console.info(`[instructions] migrated ${n} local entries to Cloud`);
     });
+    initWebVitals();
+    exposeMetricsHelpers();
   }, []);
+
+  // ルート遷移の所要時間を計測（pending 開始〜idle 復帰）
+  const router = useRouter();
+  const status = useRouterState({ select: (s) => s.status });
+  useEffect(() => {
+    if (status === "pending") {
+      markNavigationStart();
+    } else if (status === "idle") {
+      markNavigationEnd(router.state.location.pathname);
+    }
+  }, [status, router]);
+
   return (
     <AuthProvider>
       <AuthGate>
