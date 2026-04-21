@@ -212,6 +212,73 @@ export function AppShell({
     }
   }, [storageKey, searchValue]);
 
+  // 検索履歴（セッション内・ルート別）
+  const historyKey = `realife:search-history:${pathname}`;
+  const HISTORY_LIMIT = 8;
+  const [history, setHistory] = useState<string[]>([]);
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // 履歴ロード
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const raw = window.sessionStorage.getItem(historyKey);
+      setHistory(raw ? (JSON.parse(raw) as string[]) : []);
+    } catch {
+      setHistory([]);
+    }
+  }, [historyKey]);
+
+  const commitHistory = (q: string) => {
+    const v = q.trim();
+    if (!v || v.length < 2) return;
+    setHistory((prev) => {
+      const next = [v, ...prev.filter((x) => x !== v)].slice(0, HISTORY_LIMIT);
+      try {
+        window.sessionStorage.setItem(historyKey, JSON.stringify(next));
+      } catch {
+        /* ignore */
+      }
+      return next;
+    });
+  };
+
+  // 入力が止まったら(800ms)履歴に追加
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    if (!searchValue) return;
+    debounceRef.current = setTimeout(() => commitHistory(searchValue), 800);
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchValue]);
+
+  const removeHistory = (q: string) => {
+    setHistory((prev) => {
+      const next = prev.filter((x) => x !== q);
+      try {
+        window.sessionStorage.setItem(historyKey, JSON.stringify(next));
+      } catch {
+        /* ignore */
+      }
+      return next;
+    });
+  };
+  const clearHistory = () => {
+    setHistory([]);
+    try {
+      window.sessionStorage.removeItem(historyKey);
+    } catch {
+      /* ignore */
+    }
+  };
+  const selectHistory = (q: string) => {
+    setSearch(q);
+    setHistoryOpen(false);
+  };
+
   return (
     <div className="min-h-screen bg-[#F5F5F7]">
       {/* Mobile top bar */}
