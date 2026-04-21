@@ -345,12 +345,15 @@ export function AppShell({
         setActiveIndex((i) => (i <= 0 ? history.length - 1 : i - 1));
       }
     } else if (e.key === "Enter") {
-      if (historyOpen && activeIndex >= 0 && activeIndex < history.length) {
+      // ドロップダウンが開いているとき: 履歴選択を最優先(ハイライト中はそれを、なければ先頭を選ぶ)
+      // 閉じているとき: 通常の検索コミット
+      if (historyOpen) {
+        if (history.length === 0) return;
         e.preventDefault();
-        selectHistory(history[activeIndex]);
+        const idx = activeIndex >= 0 && activeIndex < history.length ? activeIndex : 0;
+        selectHistory(history[idx]);
       } else {
         commitHistory(searchValue);
-        setHistoryOpen(false);
       }
     } else if (e.key === "Escape") {
       setHistoryOpen(false);
