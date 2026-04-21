@@ -161,7 +161,7 @@ function AuthPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="mt-2 w-full rounded-md bg-blue-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-700 disabled:bg-slate-300"
+              className="mt-2 w-full rounded-md bg-blue-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-700 disabled:bg-muted"
             >
               {submitting ? "処理中..." : mode === "signin" ? "ログイン" : "アカウント作成"}
             </button>

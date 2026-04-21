@@ -190,7 +190,7 @@ function DepartmentDetail() {
                             <Link
                               to="/departments/$id"
                               params={{ id: x.id }}
-                              className="group flex items-center justify-between rounded-lg border border-border px-3 py-2 transition-colors hover:border-slate-900"
+                              className="group flex items-center justify-between rounded-lg border border-border px-3 py-2 transition-colors hover:border-foreground"
                             >
                               <span className="flex items-center gap-2.5">
                                 <span className="font-mono text-[11px] text-muted-foreground">{x.id}</span>
@@ -243,7 +243,7 @@ function DepartmentDetail() {
                   {DUMMY_DEALS.map((deal) => (
                     <div
                       key={deal.id}
-                      className="rounded-xl border border-border bg-card p-5 transition-colors hover:border-slate-900"
+                      className="rounded-xl border border-border bg-card p-5 transition-colors hover:border-foreground"
                     >
                       <div className="flex items-center justify-between">
                         <span className="font-mono text-[11px] text-muted-foreground">{deal.id}</span>

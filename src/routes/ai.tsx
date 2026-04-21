@@ -248,7 +248,7 @@ function AiPage() {
             <button
               type="button"
               onClick={clearHistory}
-              className="inline-flex items-center gap-1.5 rounded-md border border-border bg-card px-2.5 py-1.5 text-[11px] font-medium text-muted-foreground hover:border-slate-400 hover:text-foreground"
+              className="inline-flex items-center gap-1.5 rounded-md border border-border bg-card px-2.5 py-1.5 text-[11px] font-medium text-muted-foreground hover:border-border hover:text-foreground"
             >
               <Trash2 className="h-3 w-3" /> 履歴を削除
             </button>
@@ -314,7 +314,7 @@ function AiPage() {
               <button
                 type="submit"
                 disabled={!input.trim() || isLoading}
-                className="inline-flex h-10 items-center gap-1.5 rounded-md bg-blue-600 px-4 text-[13px] font-medium text-white hover:bg-blue-700 disabled:bg-slate-300"
+                className="inline-flex h-10 items-center gap-1.5 rounded-md bg-blue-600 px-4 text-[13px] font-medium text-white hover:bg-blue-700 disabled:bg-muted"
               >
                 <Send className="h-3.5 w-3.5" /> {isLoading ? "送信中" : "送信"}
               </button>

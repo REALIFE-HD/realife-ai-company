@@ -183,7 +183,7 @@ export function NewInstructionDialog({
             <button
               type="button"
               onClick={() => setOpen(false)}
-              className="rounded-md border border-border bg-card px-4 py-2 text-sm font-medium text-muted-foreground hover:border-slate-900"
+              className="rounded-md border border-border bg-card px-4 py-2 text-sm font-medium text-muted-foreground hover:border-foreground"
             >
               キャンセル
             </button>

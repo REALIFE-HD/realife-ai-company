@@ -217,7 +217,7 @@ function DealDetailPage() {
             type="button"
             onClick={onSave}
             disabled={saving}
-            className="inline-flex items-center gap-1.5 rounded-md bg-blue-600 px-3 py-1.5 text-[12px] font-medium text-white hover:bg-blue-700 disabled:bg-slate-300"
+            className="inline-flex items-center gap-1.5 rounded-md bg-blue-600 px-3 py-1.5 text-[12px] font-medium text-white hover:bg-blue-700 disabled:bg-muted"
           >
             <Save className="h-3.5 w-3.5" /> {saving ? "保存中..." : "変更を保存"}
           </button>
@@ -394,7 +394,7 @@ function DealDetailPage() {
               <button
                 type="submit"
                 disabled={!actContent.trim()}
-                className="rounded-md bg-foreground px-3 py-2 text-[12px] font-medium text-white hover:bg-slate-800 disabled:bg-slate-300"
+                className="rounded-md bg-foreground px-3 py-2 text-[12px] font-medium text-white hover:bg-foreground/90 disabled:bg-muted"
               >
                 記録
               </button>

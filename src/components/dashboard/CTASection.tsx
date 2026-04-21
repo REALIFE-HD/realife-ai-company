@@ -46,7 +46,7 @@ export function CTASection() {
           </Link>
           <Link
             to="/docs"
-            className="inline-flex h-11 items-center justify-center gap-2 rounded-md border border-border/80 bg-card/60 px-4 text-[13px] font-medium text-muted-foreground backdrop-blur transition-colors hover:border-slate-400 hover:bg-card focus-visible:ring-2 focus-visible:ring-slate-300 focus-visible:ring-offset-2 focus-visible:outline-none"
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-md border border-border/80 bg-card/60 px-4 text-[13px] font-medium text-muted-foreground backdrop-blur transition-colors hover:border-border hover:bg-card focus-visible:ring-2 focus-visible:ring-border focus-visible:ring-offset-2 focus-visible:outline-none"
           >
             <BookOpen className="h-3.5 w-3.5" aria-hidden="true" />
             ドキュメント

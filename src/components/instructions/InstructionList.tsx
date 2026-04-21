@@ -104,7 +104,7 @@ export function InstructionList({ instructions, onChange }: Props) {
                 <DropdownMenuTrigger asChild>
                   <button
                     type="button"
-                    className="inline-flex items-center gap-1 rounded-md border border-border bg-card px-2.5 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:border-slate-400"
+                    className="inline-flex items-center gap-1 rounded-md border border-border bg-card px-2.5 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:border-border"
                   >
                     ステータス変更
                     <ChevronDown className="h-3 w-3" aria-hidden="true" />
