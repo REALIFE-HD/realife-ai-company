@@ -7,6 +7,7 @@ import { useUserSettings } from "@/hooks/use-user-settings";
 import { useAuth } from "@/hooks/use-auth";
 import { SearchHistoryDropdown } from "./SearchHistoryDropdown";
 import { normalizeQuery } from "@/lib/normalize-query";
+import { useSearchPrefs } from "@/lib/search-prefs";
 
 function useNow(intervalMs = 30_000) {
   const [now, setNow] = useState(() => new Date());
@@ -216,7 +217,8 @@ export function AppShell({
 
   // 検索履歴（セッション内・ルート別）
   const historyKey = `realife:search-history:${pathname}`;
-  const HISTORY_LIMIT = 8; // 最大保存件数
+  const [searchPrefs] = useSearchPrefs();
+  const HISTORY_LIMIT = searchPrefs.historyLimit; // 最大保存件数（設定で変更可能）
   const HISTORY_ITEM_MAX = 80; // 1件あたりの最大文字数
   const HISTORY_BYTES_MAX = 4 * 1024; // sessionStorage 上限(約4KB)
   const [history, setHistory] = useState<string[]>([]);
@@ -225,6 +227,7 @@ export function AppShell({
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // 履歴ロード(壊れた値や上限超過の値は読み込み時に切り詰め)
+  // 上限値(HISTORY_LIMIT)が設定変更で減った場合にも追従する
   useEffect(() => {
     if (typeof window === "undefined") return;
     try {
@@ -237,10 +240,18 @@ export function AppShell({
             .slice(0, HISTORY_LIMIT)
         : [];
       setHistory(arr);
+      // 上限縮小に追従して保存し直す
+      if (Array.isArray(parsed) && parsed.length > HISTORY_LIMIT) {
+        try {
+          window.sessionStorage.setItem(historyKey, JSON.stringify(arr));
+        } catch {
+          /* ignore */
+        }
+      }
     } catch {
       setHistory([]);
     }
-  }, [historyKey]);
+  }, [historyKey, HISTORY_LIMIT]);
 
   // 検索文字列の正規化は src/lib/normalize-query.ts を使用
 

@@ -9,6 +9,11 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { useUserSettings } from "@/hooks/use-user-settings";
 import type { UserSettings } from "@/lib/settings";
+import {
+  HISTORY_LIMIT_MAX,
+  HISTORY_LIMIT_MIN,
+  useSearchPrefs,
+} from "@/lib/search-prefs";
 
 export const Route = createFileRoute("/settings")({
   head: () => ({
@@ -30,6 +35,9 @@ function SettingsPage() {
     display_name: draftName ?? ctxSettings.display_name,
   };
 
+  const [searchPrefs, updateSearchPrefs] = useSearchPrefs();
+  const [draftLimit, setDraftLimit] = useState<string>(String(searchPrefs.historyLimit));
+
   const save = async (next: UserSettings) => {
     try {
       await update(next);
@@ -37,6 +45,20 @@ function SettingsPage() {
     } catch {
       toast.error("保存に失敗しました");
     }
+  };
+
+  const commitHistoryLimit = (raw: string) => {
+    const n = Number.parseInt(raw, 10);
+    if (!Number.isFinite(n)) {
+      setDraftLimit(String(searchPrefs.historyLimit));
+      return;
+    }
+    const clamped = Math.min(HISTORY_LIMIT_MAX, Math.max(HISTORY_LIMIT_MIN, n));
+    if (clamped !== searchPrefs.historyLimit) {
+      updateSearchPrefs({ historyLimit: clamped });
+      toast.success(`検索履歴の最大件数を ${clamped} 件に変更しました`);
+    }
+    setDraftLimit(String(clamped));
   };
 
   return (
@@ -87,6 +109,41 @@ function SettingsPage() {
                 <span className="rounded-sm bg-white px-3 py-1 text-[12px] font-medium text-slate-900 shadow-sm">Light</span>
                 <span className="px-3 py-1 text-[12px] font-medium text-slate-400">Dark(準備中)</span>
               </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
+          <h2 className="font-display text-xl font-semibold tracking-tight text-slate-900">検索</h2>
+          <div className="mt-6 space-y-6 max-w-md">
+            <div className="space-y-1.5">
+              <Label htmlFor="history_limit">検索履歴の最大件数</Label>
+              <div className="flex items-center gap-3">
+                <Input
+                  id="history_limit"
+                  type="number"
+                  inputMode="numeric"
+                  min={HISTORY_LIMIT_MIN}
+                  max={HISTORY_LIMIT_MAX}
+                  step={1}
+                  value={draftLimit}
+                  onChange={(e) => setDraftLimit(e.target.value)}
+                  onBlur={(e) => commitHistoryLimit(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      commitHistoryLimit((e.target as HTMLInputElement).value);
+                    }
+                  }}
+                  className="w-24"
+                />
+                <span className="text-[12px] text-slate-500">
+                  件（{HISTORY_LIMIT_MIN}〜{HISTORY_LIMIT_MAX}）
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-500">
+                ヘッダー検索バーで保持する履歴の最大件数。古い履歴は自動的に削除されます。
+              </p>
             </div>
           </div>
         </section>
