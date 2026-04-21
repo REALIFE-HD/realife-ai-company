@@ -5,6 +5,7 @@ import { HISTORY_DEDUPE_HINT } from "@/lib/normalize-query";
 export function SearchHistoryDropdown({
   history,
   activeIndex = -1,
+  limit,
   onSelect,
   onRemove,
   onClear,
@@ -12,6 +13,8 @@ export function SearchHistoryDropdown({
 }: {
   history: string[];
   activeIndex?: number;
+  /** 保存件数の上限。表示と「次に消える項目」の予告に使用 */
+  limit?: number;
   onSelect: (q: string) => void;
   onRemove: (q: string) => void;
   onClear: () => void;
@@ -50,9 +53,18 @@ export function SearchHistoryDropdown({
       aria-label="検索履歴"
       className="absolute left-0 right-0 top-full z-30 mt-1 overflow-hidden rounded-md border border-slate-200 bg-white shadow-lg"
     >
-      <div className="flex items-center justify-between border-b border-slate-100 px-3 py-1.5">
-        <span className="flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500">
-          最近の検索
+      <div className="flex items-center justify-between gap-2 border-b border-slate-100 px-3 py-1.5">
+        <span className="flex min-w-0 items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+          <span>最近の検索</span>
+          {typeof limit === "number" && (
+            <span
+              className="rounded-sm bg-slate-100 px-1.5 py-px font-mono text-[10px] font-medium tracking-normal text-slate-600"
+              title={`最大 ${limit} 件まで保存。上限を超えると古い履歴から自動削除されます。`}
+              aria-label={`現在 ${history.length} 件 / 最大 ${limit} 件`}
+            >
+              {history.length}/{limit}
+            </span>
+          )}
           <span
             tabIndex={0}
             aria-label={HISTORY_DEDUPE_HINT}
@@ -68,11 +80,16 @@ export function SearchHistoryDropdown({
             e.preventDefault();
             onClear();
           }}
-          className="text-[11px] font-medium text-slate-500 hover:text-slate-900"
+          className="shrink-0 text-[11px] font-medium text-slate-500 hover:text-slate-900"
         >
           履歴を消去
         </button>
       </div>
+      {typeof limit === "number" && history.length >= limit && (
+        <div className="border-b border-slate-100 bg-amber-50/60 px-3 py-1 text-[10.5px] text-amber-800">
+          上限 {limit} 件に到達。次に検索すると一番古い履歴が削除されます。
+        </div>
+      )}
       <ul ref={listRef} className="max-h-64 overflow-y-auto py-1" onMouseLeave={() => onHover?.(-1)}>
         {history.map((q, i) => {
           const isActive = i === activeIndex;
