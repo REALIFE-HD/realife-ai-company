@@ -250,6 +250,7 @@ function MetricsDashboard() {
         </ResponsiveContainer>
       </ChartCard>
 
+      <ErrorsPanel metrics={metrics} />
       <RecentTable metrics={metrics} key={tick} />
     </div>
   );
@@ -352,6 +353,53 @@ function ChartCard({
         </div>
       ) : (
         children
+      )}
+    </div>
+  );
+}
+
+function ErrorsPanel({ metrics }: { metrics: CapturedMetric[] }) {
+  const errors = useMemo(
+    () =>
+      metrics
+        .filter((m) => m.name === "JSError" || m.name === "UnhandledRejection" || m.name === "ResourceError")
+        .slice(-10)
+        .reverse(),
+    [metrics],
+  );
+
+  return (
+    <div className="rounded-lg border border-border bg-card">
+      <div className="flex items-center justify-between border-b border-border px-4 py-2">
+        <span className="text-sm font-medium">エラー / Promise 拒否</span>
+        <span className="text-xs text-muted-foreground">
+          {errors.length === 0 ? "0 件" : `直近 ${errors.length} 件`}
+        </span>
+      </div>
+      {errors.length === 0 ? (
+        <div className="px-4 py-6 text-sm text-muted-foreground">
+          まだエラーは記録されていません。
+        </div>
+      ) : (
+        <ul className="divide-y divide-border">
+          {errors.map((m, i) => (
+            <li key={`${m.timestamp}-${i}`} className="px-4 py-3">
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <span className="tabular-nums">{formatTime(m.timestamp)}</span>
+                <span className="rounded bg-muted px-1.5 py-0.5 text-[11px] font-medium text-foreground">
+                  {m.name}
+                </span>
+                {m.source ? <span className="truncate">{m.source}</span> : null}
+              </div>
+              <div className="mt-1 text-sm font-medium text-foreground">{m.id}</div>
+              {m.stack ? (
+                <pre className="mt-2 max-h-40 overflow-auto rounded bg-muted/40 p-2 text-[11px] leading-relaxed text-muted-foreground">
+                  {m.stack}
+                </pre>
+              ) : null}
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );

@@ -22,6 +22,10 @@ export type CapturedMetric = {
   id: string;
   navigationType?: string;
   timestamp: number;
+  /** エラー系メトリクスのみ。スタックトレース文字列 */
+  stack?: string;
+  /** エラー系メトリクスのみ。発生元 URL */
+  source?: string;
 };
 
 declare global {
@@ -109,6 +113,95 @@ export function initWebVitals() {
       // longtask 未対応ブラウザは無視
     }
   }
+
+  initErrorTracking();
+}
+
+/**
+ * 未捕捉エラー / Promise 拒否を捕捉し、メトリクスバッファに記録する。
+ * スタックトレースを残すことで、ボトルネック診断時に発生箇所を辿れるようにする。
+ */
+function initErrorTracking() {
+  if (typeof window === "undefined") return;
+
+  const logError = (m: CapturedMetric) => {
+    pushMetric(m);
+    if (import.meta.env.DEV) {
+      // eslint-disable-next-line no-console
+      console.log(
+        `%c[error] %c${m.name}%c ${m.id}`,
+        "color:#dc2626;font-weight:600",
+        "color:#0f172a;font-weight:600",
+        "color:#64748b",
+      );
+      if (m.stack) {
+        // eslint-disable-next-line no-console
+        console.log(m.stack);
+      }
+    }
+  };
+
+  window.addEventListener("error", (event: ErrorEvent) => {
+    const err = event.error as Error | undefined;
+    logError({
+      name: "JSError",
+      value: 1,
+      rating: "poor",
+      id: (err?.message || event.message || "unknown error").slice(0, 200),
+      timestamp: Date.now(),
+      stack: err?.stack ?? `${event.filename}:${event.lineno}:${event.colno}`,
+      source: event.filename || window.location.pathname,
+    });
+  });
+
+  window.addEventListener("unhandledrejection", (event: PromiseRejectionEvent) => {
+    const reason = event.reason as unknown;
+    let message = "unhandled rejection";
+    let stack: string | undefined;
+    if (reason instanceof Error) {
+      message = reason.message;
+      stack = reason.stack;
+    } else if (typeof reason === "string") {
+      message = reason;
+    } else if (reason && typeof reason === "object") {
+      try {
+        message = JSON.stringify(reason).slice(0, 200);
+      } catch {
+        message = String(reason);
+      }
+    }
+    logError({
+      name: "UnhandledRejection",
+      value: 1,
+      rating: "poor",
+      id: message.slice(0, 200),
+      timestamp: Date.now(),
+      stack,
+      source: window.location.pathname,
+    });
+  });
+
+  // Resource エラー (画像/script/css 読み込み失敗) — capture フェーズで拾う
+  window.addEventListener(
+    "error",
+    (event: Event) => {
+      const target = event.target as (HTMLElement & { src?: string; href?: string }) | null;
+      if (!target || target === (window as unknown as EventTarget)) return;
+      const tag = target.tagName?.toLowerCase();
+      if (!tag || !["img", "script", "link", "video", "audio", "source"].includes(tag)) return;
+      const url = target.src || target.href || "";
+      if (!url) return;
+      logError({
+        name: "ResourceError",
+        value: 1,
+        rating: "needs-improvement",
+        id: `${tag}: ${url}`.slice(0, 200),
+        timestamp: Date.now(),
+        source: url,
+      });
+    },
+    true,
+  );
 }
 
 /**
