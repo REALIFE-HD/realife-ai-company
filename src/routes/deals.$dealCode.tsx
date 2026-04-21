@@ -71,7 +71,9 @@ const KIND_ICONS: Record<DealActivityKind, typeof MessageSquare> = {
 
 function DealDetailPage() {
   const { dealCode } = Route.useParams();
-  const initial = Route.useLoaderData();
+  const loaderData = Route.useLoaderData();
+  const initial: { deal: Deal | null; activities: DealActivity[]; instructions: Instruction[] } =
+    loaderData ?? { deal: null, activities: [], instructions: [] };
   const router = useRouter();
   const { settings } = useUserSettings();
   const [deal, setDeal] = useState<Deal | null>(initial.deal);
