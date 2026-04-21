@@ -34,7 +34,7 @@ export function Highlight({
         p.toLowerCase() === q ? (
           <mark
             key={i}
-            className="rounded-sm bg-yellow-200/70 px-0.5 text-inherit"
+            className="rounded-[3px] bg-blue-100 px-0.5 font-medium text-blue-900 ring-1 ring-inset ring-blue-200/70"
           >
             {p}
           </mark>
