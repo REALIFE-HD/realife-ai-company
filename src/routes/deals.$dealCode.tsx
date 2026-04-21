@@ -119,6 +119,24 @@ function DealDetailPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dealCode]);
 
+  // deferred 関連データの解決を待って反映 (画面表示後に追従)
+  useEffect(() => {
+    const ld = loaderData as typeof loaderData & {
+      activitiesPromise?: Promise<DealActivity[]>;
+      instructionsPromise?: Promise<Instruction[]>;
+    };
+    let mounted = true;
+    if (ld?.activitiesPromise) {
+      ld.activitiesPromise.then((a) => mounted && setActivities(a)).catch(() => {});
+    }
+    if (ld?.instructionsPromise) {
+      ld.instructionsPromise.then((i) => mounted && setInstructions(i)).catch(() => {});
+    }
+    return () => {
+      mounted = false;
+    };
+  }, [loaderData]);
+
   // realtime activities
   useEffect(() => {
     if (!deal) return;
