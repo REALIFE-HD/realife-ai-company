@@ -3,27 +3,34 @@ import { useTheme } from "@/hooks/use-theme";
 
 /**
  * ヘッダー用テーマ切替ボタン。
- * 現在のテーマをアイコンで表示し、クリックで反転する。
+ * 現在のテーマをアイコン + テキストラベルで明示し、クリックで反転する。
  */
 export function ThemeToggle({ className = "" }: { className?: string }) {
   const { theme, toggle } = useTheme();
   const isDark = theme === "dark";
-  const label = isDark ? "ライトモードに切替" : "ダークモードに切替";
+  const currentLabel = isDark ? "ダーク" : "ライト";
+  const actionLabel = isDark ? "ライトモードに切替" : "ダークモードに切替";
   return (
     <button
       type="button"
       onClick={toggle}
-      aria-label={label}
-      title={`${label}(現在: ${isDark ? "ダーク" : "ライト"})`}
+      aria-label={actionLabel}
+      title={`${actionLabel}(現在: ${currentLabel})`}
       aria-pressed={isDark}
-      className={`relative inline-flex h-9 w-9 items-center justify-center rounded-md border border-border bg-card text-muted-foreground transition-colors hover:border-border hover:text-foreground dark:border-white/10 dark:bg-white/5 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white ${className}`}
+      className={`relative inline-flex h-9 items-center gap-1.5 rounded-md border border-border bg-card px-2.5 text-muted-foreground transition-colors hover:border-border hover:text-foreground ${className}`}
     >
       {isDark ? (
-        <Sun className="h-4 w-4" aria-hidden="true" />
-      ) : (
         <Moon className="h-4 w-4" aria-hidden="true" />
+      ) : (
+        <Sun className="h-4 w-4" aria-hidden="true" />
       )}
-      <span className="sr-only">{label}</span>
+      <span
+        aria-live="polite"
+        className="text-[12px] font-medium tracking-tight text-foreground"
+      >
+        {currentLabel}
+      </span>
+      <span className="sr-only">{actionLabel}</span>
     </button>
   );
 }
