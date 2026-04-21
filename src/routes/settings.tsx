@@ -9,6 +9,11 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { useUserSettings } from "@/hooks/use-user-settings";
 import type { UserSettings } from "@/lib/settings";
+import {
+  HISTORY_LIMIT_MAX,
+  HISTORY_LIMIT_MIN,
+  useSearchPrefs,
+} from "@/lib/search-prefs";
 
 export const Route = createFileRoute("/settings")({
   head: () => ({
