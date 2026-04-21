@@ -7,12 +7,11 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  /* 本文: 欧文 Inter + 和文 Noto Sans JP(SmartHR / Notion JP / freee などで定番のスタック) */
+  /* 本文: Inter + 和文 Noto Sans JP。-0.011em の Apple 風トラッキング。 */
   --font-sans: "Inter", "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", "Yu Gothic Medium", "Yu Gothic", "Meiryo", ui-sans-serif, system-ui, sans-serif;
-  /* 見出し: Plus Jakarta Sans(モダンSaaS定番) + Noto Sans JP Bold */
-  --font-display: "Plus Jakarta Sans", "Inter", "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Yu Gothic", ui-sans-serif, sans-serif;
-  /* 数値: Inter の tabular + slashed-zero を最優先 */
-  --font-numeric: "Inter", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  /* 見出し: Inter Tight (SF Pro Display 風)。tight tracking 推奨 */
+  --font-display: "Inter Tight", "Inter", "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Yu Gothic", ui-sans-serif, sans-serif;
+  --font-numeric: "Inter Tight", "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", "DM Mono", ui-monospace, SFMono-Regular, monospace;
 }
 
