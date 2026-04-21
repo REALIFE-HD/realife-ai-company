@@ -73,7 +73,7 @@ export function SearchHistoryDropdown({
           履歴を消去
         </button>
       </div>
-      <ul ref={listRef} className="max-h-64 overflow-y-auto py-1">
+      <ul ref={listRef} className="max-h-64 overflow-y-auto py-1" onMouseLeave={() => onHover?.(-1)}>
         {history.map((q, i) => {
           const isActive = i === activeIndex;
           return (
@@ -83,6 +83,7 @@ export function SearchHistoryDropdown({
               aria-selected={isActive}
               ref={isActive ? activeItemRef : undefined}
               onMouseEnter={() => onHover?.(i)}
+              onMouseMove={() => { if (i !== activeIndex) onHover?.(i); }}
               className={`group flex items-center ${
                 isActive ? "bg-blue-50" : ""
               }`}
