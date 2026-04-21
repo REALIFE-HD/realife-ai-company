@@ -33,42 +33,90 @@ const GREETING: Msg = {
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`;
 
+const HISTORY_CACHE_KEY = "realife:ai-chat:history-cache";
+
+function readCachedHistory(): Msg[] | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = sessionStorage.getItem(HISTORY_CACHE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as Msg[];
+    return Array.isArray(parsed) && parsed.length > 0 ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeCachedHistory(msgs: Msg[]) {
+  if (typeof window === "undefined") return;
+  try {
+    // Skip greeting; keep last 50 to bound size
+    const trimmed = msgs.filter((m) => m.id !== "greeting").slice(-50);
+    sessionStorage.setItem(HISTORY_CACHE_KEY, JSON.stringify(trimmed));
+  } catch {
+    /* ignore quota errors */
+  }
+}
+
 function AiPage() {
   useRouteMountMark("/ai");
   const { user } = useAuth();
   const [input, setInput] = useState("");
-  const [messages, setMessages] = useState<Msg[]>([GREETING]);
+  // Hydrate immediately from sessionStorage so first paint shows previous turns.
+  const [messages, setMessages] = useState<Msg[]>(() => {
+    const cached = readCachedHistory();
+    return cached ? [GREETING, ...cached] : [GREETING];
+  });
   const [isLoading, setIsLoading] = useState(false);
-  const [historyLoaded, setHistoryLoaded] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const didInitialScroll = useRef(false);
 
-  // Load history from DB
+  // Load history from DB in background; do NOT block first paint.
   useEffect(() => {
+    let cancelled = false;
     (async () => {
       const { data, error } = await supabase
         .from("ai_chat_messages")
         .select("*")
         .order("created_at", { ascending: true });
+      if (cancelled) return;
       if (error) {
         console.error(error);
-        toast.error("履歴の読み込みに失敗しました");
-      } else if (data && data.length > 0) {
-        setMessages([
-          GREETING,
-          ...data.map((r) => ({
-            id: r.id,
-            role: r.role as "user" | "assistant",
-            content: r.content,
-            created_at: r.created_at,
-          })),
-        ]);
+        // Silent: cached history (or greeting) is already on screen.
+        return;
       }
-      setHistoryLoaded(true);
+      if (data && data.length > 0) {
+        const fresh: Msg[] = data.map((r) => ({
+          id: r.id,
+          role: r.role as "user" | "assistant",
+          content: r.content,
+          created_at: r.created_at,
+        }));
+        setMessages([GREETING, ...fresh]);
+        writeCachedHistory(fresh);
+      }
     })();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
+  // First mount: jump to bottom instantly (no smooth animation).
+  // Subsequent updates: smooth scroll.
   useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+    const el = scrollRef.current;
+    if (!el) return;
+    if (!didInitialScroll.current) {
+      el.scrollTop = el.scrollHeight;
+      didInitialScroll.current = true;
+    } else {
+      el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
+    }
+  }, [messages]);
+
+  // Keep sessionStorage in sync so the next /ai visit hydrates instantly.
+  useEffect(() => {
+    writeCachedHistory(messages);
   }, [messages]);
 
   const clearHistory = async () => {
@@ -259,9 +307,6 @@ function AiPage() {
 
         <div className="flex flex-1 flex-col overflow-hidden rounded-2xl border border-border bg-card">
           <div ref={scrollRef} className="flex-1 space-y-4 overflow-y-auto p-6">
-            {!historyLoaded && (
-              <p className="text-center text-xs text-muted-foreground">履歴を読み込み中...</p>
-            )}
             {messages.map((m) => (
               <div key={m.id} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
                 <div
@@ -288,10 +333,10 @@ function AiPage() {
                 </div>
               </div>
             ))}
-            {isLoading && messages[messages.length - 1]?.role === "user" && (
-              <div className="flex justify-start">
+            {isLoading && messages[messages.length - 1]?.role !== "assistant" && (
+              <div className="flex justify-start" aria-live="polite">
                 <div className="rounded-2xl border border-border bg-muted px-4 py-3">
-                  <div className="flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-wider text-blue-700">
+                  <div className="flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-wider text-blue-700 dark:text-blue-300">
                     <Sparkles className="h-3 w-3 animate-pulse" /> 思考中...
                   </div>
                 </div>
