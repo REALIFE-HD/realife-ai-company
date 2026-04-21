@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import ReactMarkdown from "react-markdown";
 import { AppShell } from "@/components/layout/AppShell";
 import { CodeBlock } from "@/components/ai/CodeBlock";
+import { MarkdownLink } from "@/components/ai/MarkdownLink";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { useRouteMountMark } from "@/lib/web-vitals";
@@ -323,7 +324,9 @@ function AiPage() {
                   )}
                   {m.role === "assistant" ? (
                     <div className="prose prose-sm max-w-none text-foreground prose-headings:text-foreground prose-strong:text-foreground prose-em:text-foreground prose-li:text-foreground prose-p:text-foreground prose-blockquote:text-foreground prose-a:text-blue-700 prose-a:underline prose-code:text-foreground prose-code:bg-background/60 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none prose-pre:bg-background prose-pre:text-foreground prose-pre:border prose-pre:border-border prose-p:my-1.5 prose-ul:my-1.5 prose-ol:my-1.5 prose-headings:mt-3 prose-headings:mb-1.5 prose-pre:my-2 prose-code:text-[12px] dark:prose-invert dark:prose-a:text-blue-300">
-                      <ReactMarkdown components={{ code: CodeBlock as never }}>
+                      <ReactMarkdown
+                        components={{ code: CodeBlock as never, a: MarkdownLink as never }}
+                      >
                         {m.content || "..."}
                       </ReactMarkdown>
                     </div>
