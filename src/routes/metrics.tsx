@@ -15,7 +15,8 @@ import {
   YAxis,
 } from "recharts";
 import type { CapturedMetric } from "@/lib/web-vitals";
-import { useRouteMountMark } from "@/lib/web-vitals";
+import { useRouteMountMark, isMetricsOptedIn, setMetricsOptIn } from "@/lib/web-vitals";
+import { Switch } from "@/components/ui/switch";
 
 export const Route = createFileRoute("/metrics")({
   head: () => ({
@@ -162,6 +163,8 @@ function MetricsDashboard() {
           {metrics.length} 件 / 最大 200 件 ・ 自動更新 1s
         </span>
       </div>
+
+      <TransportToggle />
 
       <SummaryCards metrics={metrics} />
 
