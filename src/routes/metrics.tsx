@@ -477,3 +477,42 @@ function NetworkPanel({ metrics }: { metrics: CapturedMetric[] }) {
     </div>
   );
 }
+
+function TransportToggle() {
+  const [enabled, setEnabled] = useState(() => isMetricsOptedIn());
+  const endpoint = (import.meta.env.VITE_METRICS_ENDPOINT as string | undefined) ?? "";
+  const isProd = import.meta.env.PROD;
+
+  const handleFlush = async () => {
+    const fn = (window as unknown as { __realifeFlushMetrics?: () => Promise<void> })
+      .__realifeFlushMetrics;
+    if (fn) await fn();
+  };
+
+  return (
+    <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-card px-4 py-3">
+      <div className="space-y-1">
+        <div className="text-sm font-medium">テレメトリ送信 (オプトイン)</div>
+        <div className="text-xs text-muted-foreground">
+          {endpoint
+            ? `送信先: ${endpoint} ・ ${isProd ? "本番ビルドで有効" : "開発ビルドでは送信されません"}`
+            : "VITE_METRICS_ENDPOINT が未設定のため、有効にしても送信されません。"}
+        </div>
+      </div>
+      <div className="flex items-center gap-3">
+        <Switch
+          checked={enabled}
+          onCheckedChange={(v) => {
+            setMetricsOptIn(v);
+            setEnabled(v);
+          }}
+          aria-label="metrics opt-in"
+        />
+        <span className="text-xs text-muted-foreground">{enabled ? "ON" : "OFF"}</span>
+        <Button variant="outline" size="sm" onClick={handleFlush} disabled={!enabled || !endpoint}>
+          いますぐ送信
+        </Button>
+      </div>
+    </div>
+  );
+}
