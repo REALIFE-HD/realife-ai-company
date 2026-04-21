@@ -471,6 +471,10 @@ export function AppShell({
 
   return (
     <div className="min-h-screen bg-background">
+      {/* スキップリンク: Tab で最初に到達、本文へジャンプ */}
+      <a href="#main-content" className="skip-link">
+        メインコンテンツへスキップ
+      </a>
       {/* Mobile top bar */}
       <div className="sticky top-0 z-40 flex h-14 items-center justify-between border-b border-border bg-card/90 px-4 backdrop-blur md:hidden">
         <Brand />
@@ -735,7 +739,7 @@ export function AppShell({
           </div>
         </div>
 
-        <main>{children}</main>
+        <main id="main-content" tabIndex={-1} aria-label="メインコンテンツ">{children}</main>
       </div>
     </div>
   );
