@@ -40,7 +40,7 @@ function Index() {
     <>
       <AppShell
         title="ダッシュボード"
-        subtitle="Q2 2026 ・ 12部門の業務指揮を一望"
+        subtitle="AI COMPANY 統合プラットフォーム"
         search={search}
         onSearchChange={setSearch}
         searchPlaceholder="部門名・役割・KPIラベルで検索…"
