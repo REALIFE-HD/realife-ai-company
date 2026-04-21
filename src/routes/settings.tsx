@@ -35,6 +35,9 @@ function SettingsPage() {
     display_name: draftName ?? ctxSettings.display_name,
   };
 
+  const [searchPrefs, updateSearchPrefs] = useSearchPrefs();
+  const [draftLimit, setDraftLimit] = useState<string>(String(searchPrefs.historyLimit));
+
   const save = async (next: UserSettings) => {
     try {
       await update(next);
@@ -42,6 +45,20 @@ function SettingsPage() {
     } catch {
       toast.error("保存に失敗しました");
     }
+  };
+
+  const commitHistoryLimit = (raw: string) => {
+    const n = Number.parseInt(raw, 10);
+    if (!Number.isFinite(n)) {
+      setDraftLimit(String(searchPrefs.historyLimit));
+      return;
+    }
+    const clamped = Math.min(HISTORY_LIMIT_MAX, Math.max(HISTORY_LIMIT_MIN, n));
+    if (clamped !== searchPrefs.historyLimit) {
+      updateSearchPrefs({ historyLimit: clamped });
+      toast.success(`検索履歴の最大件数を ${clamped} 件に変更しました`);
+    }
+    setDraftLimit(String(clamped));
   };
 
   return (
