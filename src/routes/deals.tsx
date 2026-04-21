@@ -16,21 +16,29 @@ export const Route = createFileRoute("/deals")({
       { property: "og:description", content: "進行中案件をステージ別・確度別に一覧管理。" },
     ],
   }),
+  // 遷移時に loader が事前にデータを取得 → コンポーネント初回 render で即表示
+  loader: async () => {
+    try {
+      return { deals: await listDeals() };
+    } catch (e) {
+      console.error("[deals.loader]", e);
+      return { deals: [] as Deal[] };
+    }
+  },
+  // 10 秒間は再フェッチせず即座にキャッシュ表示
+  staleTime: 10_000,
   component: DealsPage,
 });
 
 function DealsPage() {
-  const [deals, setDeals] = useState<Deal[]>([]);
-  const [loading, setLoading] = useState(true);
+  const initial = Route.useLoaderData();
+  const [deals, setDeals] = useState<Deal[]>(initial.deals);
   const [search, setSearch] = useState("");
+  const loading = false; // loader 完了後にレンダリングされるため常に false
 
   useEffect(() => {
     let mounted = true;
-    listDeals()
-      .then((d) => mounted && setDeals(d))
-      .catch((e) => console.error(e))
-      .finally(() => mounted && setLoading(false));
-
+    // Realtime のみ。初回フェッチは loader 済み
     const channel = supabase
       .channel("deals-list")
       .on("postgres_changes", { event: "*", schema: "public", table: "deals" }, () => {
@@ -43,6 +51,7 @@ function DealsPage() {
       supabase.removeChannel(channel);
     };
   }, []);
+
 
   const q = search.trim().toLowerCase();
   const filteredDeals = q

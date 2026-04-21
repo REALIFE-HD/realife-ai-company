@@ -38,6 +38,16 @@ export const Route = createFileRoute("/inbox")({
       { property: "og:description", content: "ハイブリッド振り分け(ルール+AI)による自動仕分け。" },
     ],
   }),
+  // loader でメッセージ一覧を事前取得 → 遷移時のスピナー表示を排除
+  loader: async () => {
+    try {
+      return { items: await listInbox() };
+    } catch (e) {
+      console.error("[inbox.loader]", e);
+      return { items: [] as InboxMessage[] };
+    }
+  },
+  staleTime: 10_000,
   component: InboxPage,
 });
 
@@ -49,11 +59,13 @@ const STATUS_FILTERS: { v: "all" | InboxStatus; label: string }[] = [
 ];
 
 function InboxPage() {
-  const [items, setItems] = useState<InboxMessage[]>([]);
-  const [loading, setLoading] = useState(true);
+  const initial = Route.useLoaderData();
+  const [items, setItems] = useState<InboxMessage[]>(initial.items);
   const [filter, setFilter] = useState<"all" | InboxStatus>("all");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
+  // loader 通過後に render されるため初回は読込済み扱い
+  const loading = false;
 
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
@@ -67,13 +79,11 @@ function InboxPage() {
     } catch (e) {
       console.error(e);
       toast.error("読み込みに失敗しました");
-    } finally {
-      setLoading(false);
     }
   };
 
   useEffect(() => {
-    refresh();
+    // 初回フェッチは loader 済み。Realtime 増分のみ購読
     const ch = supabase
       .channel("inbox-stream")
       .on("postgres_changes", { event: "*", schema: "public", table: "inbox_messages" }, refresh)
@@ -82,6 +92,7 @@ function InboxPage() {
       supabase.removeChannel(ch);
     };
   }, []);
+
 
   const filtered = useMemo(() => {
     const byStatus = filter === "all" ? items : items.filter((i) => i.status === filter);
