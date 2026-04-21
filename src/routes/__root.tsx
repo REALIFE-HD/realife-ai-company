@@ -10,6 +10,7 @@ import {
   exposeMetricsHelpers,
   markNavigationStart,
   markNavigationEnd,
+  initMetricsTransport,
 } from "@/lib/web-vitals";
 
 import appCss from "../styles.css?url";
