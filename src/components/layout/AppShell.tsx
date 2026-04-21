@@ -215,18 +215,27 @@ export function AppShell({
 
   // 検索履歴（セッション内・ルート別）
   const historyKey = `realife:search-history:${pathname}`;
-  const HISTORY_LIMIT = 8;
+  const HISTORY_LIMIT = 8; // 最大保存件数
+  const HISTORY_ITEM_MAX = 80; // 1件あたりの最大文字数
+  const HISTORY_BYTES_MAX = 4 * 1024; // sessionStorage 上限(約4KB)
   const [history, setHistory] = useState<string[]>([]);
   const [historyOpen, setHistoryOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // 履歴ロード
+  // 履歴ロード(壊れた値や上限超過の値は読み込み時に切り詰め)
   useEffect(() => {
     if (typeof window === "undefined") return;
     try {
       const raw = window.sessionStorage.getItem(historyKey);
-      setHistory(raw ? (JSON.parse(raw) as string[]) : []);
+      const parsed = raw ? (JSON.parse(raw) as unknown) : [];
+      const arr = Array.isArray(parsed)
+        ? parsed
+            .filter((x): x is string => typeof x === "string")
+            .map((x) => x.slice(0, HISTORY_ITEM_MAX))
+            .slice(0, HISTORY_LIMIT)
+        : [];
+      setHistory(arr);
     } catch {
       setHistory([]);
     }
@@ -236,11 +245,13 @@ export function AppShell({
   //  - Unicode 互換正規化(NFKC): 全角英数 → 半角、全角記号 → 半角
   //  - 全角空白(U+3000)・タブ等 → 半角スペース
   //  - 連続空白を 1 つにまとめ、前後スペースを除去
+  //  - 1件あたりの最大文字数で切り詰め
   const normalizeQuery = (q: string) =>
     q
       .normalize("NFKC")
       .replace(/[\s\u3000]+/g, " ")
-      .trim();
+      .trim()
+      .slice(0, HISTORY_ITEM_MAX);
 
   const commitHistory = (q: string) => {
     const v = normalizeQuery(q);
@@ -249,11 +260,22 @@ export function AppShell({
       // 大文字小文字の違いも重複扱いし、初出の表記を保持
       const lower = v.toLowerCase();
       const filtered = prev.filter((x) => x.toLowerCase() !== lower);
-      const next = [v, ...filtered].slice(0, HISTORY_LIMIT);
+      let next = [v, ...filtered].slice(0, HISTORY_LIMIT);
+
+      // 合計バイト数が上限を超える場合は古い順に削る
+      let serialized = JSON.stringify(next);
+      while (
+        next.length > 1 &&
+        new Blob([serialized]).size > HISTORY_BYTES_MAX
+      ) {
+        next = next.slice(0, -1);
+        serialized = JSON.stringify(next);
+      }
+
       try {
-        window.sessionStorage.setItem(historyKey, JSON.stringify(next));
+        window.sessionStorage.setItem(historyKey, serialized);
       } catch {
-        /* ignore */
+        /* quota 超過などは無視 */
       }
       return next;
     });
