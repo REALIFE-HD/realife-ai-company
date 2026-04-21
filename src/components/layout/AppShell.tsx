@@ -280,6 +280,15 @@ export function AppShell({
     setHistoryOpen(false);
   };
 
+  // クリア後にフォーカスを戻すための ref
+  const desktopInputRef = useRef<HTMLInputElement>(null);
+  const tabletInputRef = useRef<HTMLInputElement>(null);
+  const mobileInputRef = useRef<HTMLInputElement>(null);
+  const clearAndFocus = (ref: React.RefObject<HTMLInputElement | null>) => {
+    setSearch("");
+    requestAnimationFrame(() => ref.current?.focus());
+  };
+
   return (
     <div className="min-h-screen bg-[#F5F5F7]">
       {/* Mobile top bar */}
