@@ -218,6 +218,7 @@ export function AppShell({
   const HISTORY_LIMIT = 8;
   const [history, setHistory] = useState<string[]>([]);
   const [historyOpen, setHistoryOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(-1);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // 履歴ロード
@@ -291,6 +292,43 @@ export function AppShell({
   const selectHistory = (q: string) => {
     setSearch(q);
     setHistoryOpen(false);
+    setActiveIndex(-1);
+  };
+
+  // 履歴ドロップダウンを開いたとき / 閉じたとき / 履歴が変わったときに選択をリセット
+  useEffect(() => {
+    if (!historyOpen) setActiveIndex(-1);
+  }, [historyOpen]);
+  useEffect(() => {
+    setActiveIndex(-1);
+  }, [history.length]);
+
+  // 全 input 共通のキーボード操作
+  const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      if (!historyOpen) setHistoryOpen(true);
+      if (history.length > 0) {
+        setActiveIndex((i) => (i + 1) % history.length);
+      }
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      if (!historyOpen) setHistoryOpen(true);
+      if (history.length > 0) {
+        setActiveIndex((i) => (i <= 0 ? history.length - 1 : i - 1));
+      }
+    } else if (e.key === "Enter") {
+      if (historyOpen && activeIndex >= 0 && activeIndex < history.length) {
+        e.preventDefault();
+        selectHistory(history[activeIndex]);
+      } else {
+        commitHistory(searchValue);
+        setHistoryOpen(false);
+      }
+    } else if (e.key === "Escape") {
+      setHistoryOpen(false);
+      setActiveIndex(-1);
+    }
   };
 
   // クリア後にフォーカスを戻すための ref
@@ -368,14 +406,7 @@ export function AppShell({
                   if (searchValue) commitHistory(searchValue);
                   setTimeout(() => setHistoryOpen(false), 120);
                 }}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    commitHistory(searchValue);
-                    setHistoryOpen(false);
-                  } else if (e.key === "Escape") {
-                    setHistoryOpen(false);
-                  }
-                }}
+                onKeyDown={handleSearchKeyDown}
                 placeholder={searchPlaceholder}
                 aria-label="検索"
                 aria-expanded={historyOpen}
@@ -398,6 +429,8 @@ export function AppShell({
                   onSelect={selectHistory}
                   onRemove={removeHistory}
                   onClear={clearHistory}
+                  activeIndex={activeIndex}
+                  onHover={setActiveIndex}
                 />
               )}
             </div>
@@ -474,14 +507,7 @@ export function AppShell({
                   if (searchValue) commitHistory(searchValue);
                   setTimeout(() => setHistoryOpen(false), 120);
                 }}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    commitHistory(searchValue);
-                    setHistoryOpen(false);
-                  } else if (e.key === "Escape") {
-                    setHistoryOpen(false);
-                  }
-                }}
+                onKeyDown={handleSearchKeyDown}
                 placeholder={searchPlaceholder}
                 aria-label="検索"
                 aria-expanded={historyOpen}
@@ -504,6 +530,8 @@ export function AppShell({
                   onSelect={selectHistory}
                   onRemove={removeHistory}
                   onClear={clearHistory}
+                  activeIndex={activeIndex}
+                  onHover={setActiveIndex}
                 />
               )}
             </div>
@@ -541,14 +569,7 @@ export function AppShell({
                 if (searchValue) commitHistory(searchValue);
                 setTimeout(() => setHistoryOpen(false), 120);
               }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  commitHistory(searchValue);
-                  setHistoryOpen(false);
-                } else if (e.key === "Escape") {
-                  setHistoryOpen(false);
-                }
-              }}
+              onKeyDown={handleSearchKeyDown}
               placeholder={searchPlaceholder}
               aria-label="検索"
               aria-expanded={historyOpen}
@@ -571,6 +592,8 @@ export function AppShell({
                 onSelect={selectHistory}
                 onRemove={removeHistory}
                 onClear={clearHistory}
+                activeIndex={activeIndex}
+                onHover={setActiveIndex}
               />
             )}
           </div>
