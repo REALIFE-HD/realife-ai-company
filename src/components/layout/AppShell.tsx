@@ -1,6 +1,6 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { LayoutGrid, Building2, Briefcase, BarChart3, MessageSquare, Settings, Bell, Plus, Menu, X, BookOpen, Inbox, LogOut, Search, SlidersHorizontal } from "lucide-react";
-import { useEffect, useState, type ReactNode } from "react";
+import { LayoutGrid, Building2, Briefcase, BarChart3, MessageSquare, Settings, Bell, Plus, Menu, X, BookOpen, Inbox, LogOut, Search, SlidersHorizontal, XCircle } from "lucide-react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { toast } from "sonner";
 import { NewInstructionDialog } from "@/components/instructions/NewInstructionDialog";
 import { useUserSettings } from "@/hooks/use-user-settings";
@@ -150,11 +150,39 @@ export function AppShell({
   onFilterClick?: () => void;
   filterActive?: boolean;
 }) {
+  const { pathname } = useLocation();
+  const storageKey = `realife:search:${pathname}`;
   const [open, setOpen] = useState(false);
   const [localSearch, setLocalSearch] = useState("");
   const searchValue = search ?? localSearch;
   const setSearch = onSearchChange ?? setLocalSearch;
   const now = useNow();
+
+  // Rehydrate persisted search on mount / route change
+  const hydratedRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (hydratedRef.current === pathname) return;
+    hydratedRef.current = pathname;
+    try {
+      const saved = window.sessionStorage.getItem(storageKey);
+      if (saved && saved !== searchValue) setSearch(saved);
+    } catch {
+      /* ignore */
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
+
+  // Persist on change
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      if (searchValue) window.sessionStorage.setItem(storageKey, searchValue);
+      else window.sessionStorage.removeItem(storageKey);
+    } catch {
+      /* ignore */
+    }
+  }, [storageKey, searchValue]);
 
   return (
     <div className="min-h-screen bg-[#F5F5F7]">
@@ -218,8 +246,18 @@ export function AppShell({
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder={searchPlaceholder}
                 aria-label="検索"
-                className="h-9 w-72 rounded-md border border-slate-200 bg-white pl-8 pr-3 text-[13px] text-slate-800 placeholder:text-slate-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100"
+                className="h-9 w-72 rounded-md border border-slate-200 bg-white pl-8 pr-8 text-[13px] text-slate-800 placeholder:text-slate-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100"
               />
+              {searchValue && (
+                <button
+                  type="button"
+                  onClick={() => setSearch("")}
+                  aria-label="検索をクリア"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex h-5 w-5 items-center justify-center rounded-full text-slate-400 hover:text-slate-700"
+                >
+                  <XCircle className="h-3.5 w-3.5" />
+                </button>
+              )}
             </div>
 
             {/* Date / time */}
@@ -290,8 +328,18 @@ export function AppShell({
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder={searchPlaceholder}
                 aria-label="検索"
-                className="h-9 w-full rounded-md border border-slate-200 bg-white pl-8 pr-3 text-[13px] text-slate-800 placeholder:text-slate-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100"
+                className="h-9 w-full rounded-md border border-slate-200 bg-white pl-8 pr-8 text-[13px] text-slate-800 placeholder:text-slate-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100"
               />
+              {searchValue && (
+                <button
+                  type="button"
+                  onClick={() => setSearch("")}
+                  aria-label="検索をクリア"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex h-5 w-5 items-center justify-center rounded-full text-slate-400 hover:text-slate-700"
+                >
+                  <XCircle className="h-3.5 w-3.5" />
+                </button>
+              )}
             </div>
           </div>
         </header>
@@ -323,8 +371,18 @@ export function AppShell({
               onChange={(e) => setSearch(e.target.value)}
               placeholder={searchPlaceholder}
               aria-label="検索"
-              className="h-9 w-full rounded-md border border-slate-200 bg-white pl-8 pr-3 text-[13px] text-slate-800 placeholder:text-slate-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100"
+              className="h-9 w-full rounded-md border border-slate-200 bg-white pl-8 pr-8 text-[13px] text-slate-800 placeholder:text-slate-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100"
             />
+            {searchValue && (
+              <button
+                type="button"
+                onClick={() => setSearch("")}
+                aria-label="検索をクリア"
+                className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex h-5 w-5 items-center justify-center rounded-full text-slate-400 hover:text-slate-700"
+              >
+                <XCircle className="h-3.5 w-3.5" />
+              </button>
+            )}
           </div>
         </div>
 
