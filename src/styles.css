@@ -181,7 +181,8 @@
   .num {
     font-family: var(--font-numeric);
     font-variant-numeric: tabular-nums;
-    font-feature-settings: "tnum" 1, "ss01" 1;
+    /* "zero" 0 で斜線ゼロを明示的にOFF (IBM Plex Mono の ss01 は斜線ゼロ) */
+    font-feature-settings: "tnum" 1, "zero" 0;
     letter-spacing: -0.005em;
     font-weight: 500;
   }
@@ -189,6 +190,7 @@
   .font-mono {
     font-family: var(--font-mono);
     font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1, "zero" 0;
   }
 
   /* 数値セル: テーブル内の金額・件数・日付などに使用。
@@ -198,7 +200,7 @@
   .num-cell {
     font-family: var(--font-numeric);
     font-variant-numeric: tabular-nums;
-    font-feature-settings: "tnum" 1, "ss01" 1;
+    font-feature-settings: "tnum" 1, "zero" 0;
     text-align: right;
     white-space: nowrap;
     letter-spacing: -0.005em;
@@ -208,7 +210,7 @@
   .kpi-value {
     font-family: var(--font-numeric);
     font-variant-numeric: tabular-nums;
-    font-feature-settings: "tnum" 1, "ss01" 1;
+    font-feature-settings: "tnum" 1, "zero" 0;
     letter-spacing: -0.01em;
     font-weight: 600;
   }
