@@ -70,7 +70,7 @@ function DepartmentsIndex() {
         <div>
           <Link
             to="/"
-            className="inline-flex items-center gap-1.5 text-[12px] font-medium text-slate-500 transition-colors hover:text-slate-900"
+            className="inline-flex items-center gap-1.5 text-[12px] font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
             <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
             ダッシュボードへ戻る
@@ -81,7 +81,7 @@ function DepartmentsIndex() {
 
         <section
           aria-labelledby="dept-summary"
-          className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8"
+          className="rounded-2xl border border-border bg-card p-6 sm:p-8"
         >
           <div className="flex items-center gap-2.5">
             <span aria-hidden="true" className="h-px w-6 bg-blue-500" />
@@ -91,11 +91,11 @@ function DepartmentsIndex() {
           </div>
           <h2
             id="dept-summary"
-            className="mt-2 font-display text-2xl font-semibold tracking-tight text-slate-900 sm:text-[1.75rem]"
+            className="mt-2 font-display text-2xl font-semibold tracking-tight text-foreground sm:text-[1.75rem]"
           >
             すべての部門を、一望する。
           </h2>
-          <p className="mt-1.5 max-w-2xl text-[13px] leading-relaxed text-slate-500">
+          <p className="mt-1.5 max-w-2xl text-[13px] leading-relaxed text-muted-foreground">
             各部門カードから詳細ページへ移動し、KPI・タスク・案件・指示履歴にアクセスできます。
           </p>
 
@@ -108,12 +108,12 @@ function DepartmentsIndex() {
             ].map((s) => (
               <div
                 key={s.label}
-                className="rounded-xl border border-slate-200 bg-slate-50/60 px-4 py-3"
+                className="rounded-xl border border-border bg-muted/60 px-4 py-3"
               >
-                <dt className="text-[11px] font-medium uppercase tracking-wider text-slate-500">
+                <dt className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
                   {s.label}
                 </dt>
-                <dd className="kpi-value mt-1 text-right text-2xl text-slate-900">
+                <dd className="kpi-value mt-1 text-right text-2xl text-foreground">
                   {s.value}
                 </dd>
               </div>
@@ -123,10 +123,10 @@ function DepartmentsIndex() {
 
         <section aria-label="部門カード一覧">
           {summaryActive && (
-            <p className="mb-3 text-[12px] text-slate-500">
+            <p className="mb-3 text-[12px] text-muted-foreground">
               {q && (
                 <>
-                  「<span className="font-medium text-slate-700">{search}</span>」
+                  「<span className="font-medium text-muted-foreground">{search}</span>」
                 </>
               )}
               {hasFilters && (
@@ -137,11 +137,11 @@ function DepartmentsIndex() {
                 </span>
               )}
               の結果:{" "}
-              <span className="num font-semibold text-slate-900">{filtered.length}</span> / {total} 部門
+              <span className="num font-semibold text-foreground">{filtered.length}</span> / {total} 部門
             </p>
           )}
           {filtered.length === 0 ? (
-            <p className="rounded-xl border border-dashed border-slate-300 bg-white/60 px-4 py-10 text-center text-[13px] text-slate-500">
+            <p className="rounded-xl border border-dashed border-border bg-card/60 px-4 py-10 text-center text-[13px] text-muted-foreground">
               条件に一致する部門は見つかりませんでした。
             </p>
           ) : (

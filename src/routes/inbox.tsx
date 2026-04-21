@@ -217,7 +217,7 @@ function InboxPage() {
     >
       <div className="space-y-6 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
         <div>
-          <Link to="/" className="inline-flex items-center gap-1.5 text-[12px] font-medium text-slate-500 hover:text-slate-900">
+          <Link to="/" className="inline-flex items-center gap-1.5 text-[12px] font-medium text-muted-foreground hover:text-foreground">
             <ArrowLeft className="h-3.5 w-3.5" /> ダッシュボードへ戻る
           </Link>
         </div>
@@ -225,24 +225,24 @@ function InboxPage() {
         {/* KPI */}
         <section className="grid grid-cols-3 gap-3">
           {[
-            { l: "総数", v: stats.total, accent: "text-slate-950" },
+            { l: "総数", v: stats.total, accent: "text-foreground" },
             { l: "未割当", v: stats.unassigned, accent: "text-amber-700" },
             { l: "割当済", v: stats.assigned, accent: "text-blue-700" },
           ].map((s) => (
-            <div key={s.l} className="rounded-xl border border-slate-200/80 bg-white px-4 py-3.5 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-              <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-slate-500">{s.l}</p>
+            <div key={s.l} className="rounded-xl border border-border/80 bg-card px-4 py-3.5 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+              <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-muted-foreground">{s.l}</p>
               <p className={`kpi-value mt-1.5 text-right text-[1.625rem] leading-none ${s.accent}`}>{s.v}</p>
             </div>
           ))}
         </section>
 
         {/* 投函フォーム */}
-        <section className="rounded-2xl border border-slate-200 bg-white p-6">
+        <section className="rounded-2xl border border-border bg-card p-6">
           <div className="flex items-center gap-2">
             <Send className="h-4 w-4 text-blue-600" />
-            <h2 className="font-display text-lg font-semibold tracking-tight text-slate-900">新規メッセージ投函</h2>
+            <h2 className="font-display text-lg font-semibold tracking-tight text-foreground">新規メッセージ投函</h2>
           </div>
-          <p className="mt-1 text-[12px] text-slate-500">
+          <p className="mt-1 text-[12px] text-muted-foreground">
             投函すると、まずキーワードルール、次にAIで自動的に12部門のいずれかに振り分けます。
           </p>
           <form onSubmit={onSubmit} className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
@@ -281,7 +281,7 @@ function InboxPage() {
               className={`rounded-full border px-3 py-1 text-[12px] font-medium transition-colors ${
                 filter === f.v
                   ? "border-blue-600 bg-blue-600 text-white"
-                  : "border-slate-200 bg-white text-slate-600 hover:border-slate-300"
+                  : "border-border bg-card text-muted-foreground hover:border-border"
               }`}
             >
               {f.label}
@@ -291,38 +291,38 @@ function InboxPage() {
 
         {/* 一覧 + 詳細 */}
         <section className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-          <div className="rounded-2xl border border-slate-200 bg-white lg:col-span-1">
-            <div className="border-b border-slate-100 px-4 py-3 text-[11px] uppercase tracking-wider text-slate-500">
+          <div className="rounded-2xl border border-border bg-card lg:col-span-1">
+            <div className="border-b border-border px-4 py-3 text-[11px] uppercase tracking-wider text-muted-foreground">
               <InboxIcon className="mr-1.5 inline h-3.5 w-3.5" />
               {filtered.length} 件
             </div>
             {loading ? (
-              <div className="px-4 py-8 text-center text-sm text-slate-500">読込中...</div>
+              <div className="px-4 py-8 text-center text-sm text-muted-foreground">読込中...</div>
             ) : filtered.length === 0 ? (
-              <div className="px-4 py-8 text-center text-sm text-slate-500">メッセージはありません</div>
+              <div className="px-4 py-8 text-center text-sm text-muted-foreground">メッセージはありません</div>
             ) : (
-              <ul className="max-h-[560px] divide-y divide-slate-100 overflow-y-auto">
+              <ul className="max-h-[560px] divide-y divide-border overflow-y-auto">
                 {filtered.map((m) => (
                   <li key={m.id}>
                     <button
                       type="button"
                       onClick={() => setSelectedId(m.id)}
-                      className={`block w-full px-4 py-3 text-left transition-colors hover:bg-slate-50 ${
+                      className={`block w-full px-4 py-3 text-left transition-colors hover:bg-muted ${
                         selected?.id === m.id ? "bg-blue-50/60" : ""
                       }`}
                     >
                       <div className="flex items-center justify-between gap-2">
-                        <p className="truncate text-[13px] font-medium text-slate-900">{m.subject}</p>
+                        <p className="truncate text-[13px] font-medium text-foreground">{m.subject}</p>
                         <StatusBadge status={m.status} />
                       </div>
-                      <p className="mt-0.5 truncate text-[11px] text-slate-500">{m.sender || "(差出人なし)"}</p>
+                      <p className="mt-0.5 truncate text-[11px] text-muted-foreground">{m.sender || "(差出人なし)"}</p>
                       <div className="mt-1 flex items-center gap-1.5">
                         {m.assigned_department && (
                           <span className="rounded border border-blue-100 bg-blue-50 px-1.5 py-0.5 text-[10px] font-medium text-blue-700">
                             {m.assigned_department} {getDeptName(m.assigned_department)}
                           </span>
                         )}
-                        <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] text-slate-600">
+                        <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground">
                           {METHOD_LABEL[m.route_method]}
                         </span>
                       </div>
@@ -334,53 +334,53 @@ function InboxPage() {
           </div>
 
           {/* 詳細 */}
-          <div className="rounded-2xl border border-slate-200 bg-white lg:col-span-2">
+          <div className="rounded-2xl border border-border bg-card lg:col-span-2">
             {!selected ? (
-              <div className="flex h-full min-h-[320px] items-center justify-center text-sm text-slate-500">
+              <div className="flex h-full min-h-[320px] items-center justify-center text-sm text-muted-foreground">
                 左から選択してください
               </div>
             ) : (
               <div className="p-6">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0 flex-1">
-                    <h3 className="font-display text-lg font-semibold tracking-tight text-slate-900">
+                    <h3 className="font-display text-lg font-semibold tracking-tight text-foreground">
                       {selected.subject}
                     </h3>
-                    <p className="mt-1 text-[12px] text-slate-500">
+                    <p className="mt-1 text-[12px] text-muted-foreground">
                       {selected.sender || "(差出人なし)"} ・ {new Date(selected.created_at).toLocaleString("ja-JP")}
                     </p>
                   </div>
                   <StatusBadge status={selected.status} />
                 </div>
 
-                <div className="mt-4 rounded-md border border-slate-200 bg-slate-50/60 p-3">
-                  <p className="text-[10px] font-medium uppercase tracking-wider text-slate-500">振り分け結果</p>
+                <div className="mt-4 rounded-md border border-border bg-muted/60 p-3">
+                  <p className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">振り分け結果</p>
                   <div className="mt-1 flex flex-wrap items-center gap-2 text-[12px]">
-                    <span className="font-medium text-slate-900">
+                    <span className="font-medium text-foreground">
                       {selected.assigned_department
                         ? `${selected.assigned_department} ${getDeptName(selected.assigned_department)}`
                         : "未割当"}
                     </span>
-                    <span className="rounded bg-white px-1.5 py-0.5 text-[11px] text-slate-600 ring-1 ring-slate-200">
+                    <span className="rounded bg-card px-1.5 py-0.5 text-[11px] text-muted-foreground ring-1 ring-border">
                       {METHOD_LABEL[selected.route_method]}
                     </span>
                     {selected.route_method !== "pending" && (
-                      <span className="text-slate-500">信頼度 {selected.route_confidence}%</span>
+                      <span className="text-muted-foreground">信頼度 {selected.route_confidence}%</span>
                     )}
                   </div>
                   {selected.route_reason && (
-                    <p className="mt-1 text-[11px] text-slate-500">理由: {selected.route_reason}</p>
+                    <p className="mt-1 text-[11px] text-muted-foreground">理由: {selected.route_reason}</p>
                   )}
                 </div>
 
-                <pre className="mt-4 whitespace-pre-wrap rounded-md border border-slate-200 bg-white p-4 font-sans text-[13px] leading-relaxed text-slate-800">
+                <pre className="mt-4 whitespace-pre-wrap rounded-md border border-border bg-card p-4 font-sans text-[13px] leading-relaxed text-muted-foreground">
                   {selected.body}
                 </pre>
 
                 {/* アクション */}
                 <div className="mt-5 flex flex-wrap items-center gap-2">
                   <div className="flex items-center gap-2">
-                    <Label className="text-[11px] text-slate-500">手動割当:</Label>
+                    <Label className="text-[11px] text-muted-foreground">手動割当:</Label>
                     <Select
                       value={selected.assigned_department ?? undefined}
                       onValueChange={(v) => setDept(selected, v)}
@@ -400,7 +400,7 @@ function InboxPage() {
                   <button
                     type="button"
                     onClick={() => reroute(selected)}
-                    className="inline-flex items-center gap-1 rounded-md border border-slate-200 bg-white px-3 py-1.5 text-[12px] font-medium text-slate-700 hover:border-slate-300"
+                    className="inline-flex items-center gap-1 rounded-md border border-border bg-card px-3 py-1.5 text-[12px] font-medium text-muted-foreground hover:border-border"
                   >
                     <RotateCcw className="h-3.5 w-3.5" /> AI再振り分け
                   </button>
@@ -408,7 +408,7 @@ function InboxPage() {
                     <button
                       type="button"
                       onClick={() => archive(selected)}
-                      className="inline-flex items-center gap-1 rounded-md border border-slate-200 bg-white px-3 py-1.5 text-[12px] font-medium text-slate-700 hover:border-slate-300"
+                      className="inline-flex items-center gap-1 rounded-md border border-border bg-card px-3 py-1.5 text-[12px] font-medium text-muted-foreground hover:border-border"
                     >
                       <Archive className="h-3.5 w-3.5" /> アーカイブ
                     </button>
@@ -416,7 +416,7 @@ function InboxPage() {
                   <button
                     type="button"
                     onClick={() => remove(selected)}
-                    className="inline-flex items-center gap-1 rounded-md border border-red-200 bg-white px-3 py-1.5 text-[12px] font-medium text-red-700 hover:bg-red-50"
+                    className="inline-flex items-center gap-1 rounded-md border border-red-200 bg-card px-3 py-1.5 text-[12px] font-medium text-red-700 hover:bg-red-50"
                   >
                     <Trash2 className="h-3.5 w-3.5" /> 削除
                   </button>
@@ -439,7 +439,7 @@ function StatusBadge({ status }: { status: InboxStatus }) {
   const style: Record<InboxStatus, string> = {
     unassigned: "border-amber-200 bg-amber-50 text-amber-700",
     assigned: "border-emerald-200 bg-emerald-50 text-emerald-700",
-    archived: "border-slate-200 bg-slate-50 text-slate-500",
+    archived: "border-border bg-muted text-muted-foreground",
   };
   return (
     <span className={`shrink-0 rounded-full border px-2 py-0.5 text-[10px] font-medium ${style[status]}`}>

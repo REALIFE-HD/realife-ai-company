@@ -42,13 +42,13 @@ export const Route = createFileRoute("/departments/$id")({
   },
   component: DepartmentDetail,
   notFoundComponent: () => (
-    <div className="flex min-h-screen items-center justify-center bg-white px-4">
+    <div className="flex min-h-screen items-center justify-center bg-card px-4">
       <div className="text-center">
-        <p className="font-mono text-xs uppercase tracking-wider text-slate-500">404</p>
-        <h1 className="mt-3 font-display text-2xl font-semibold text-slate-950">部門が見つかりません</h1>
+        <p className="font-mono text-xs uppercase tracking-wider text-muted-foreground">404</p>
+        <h1 className="mt-3 font-display text-2xl font-semibold text-foreground">部門が見つかりません</h1>
         <Link
           to="/"
-          className="mt-6 inline-flex items-center gap-2 rounded-md bg-slate-950 px-4 py-2 text-sm font-medium text-white"
+          className="mt-6 inline-flex items-center gap-2 rounded-md bg-foreground px-4 py-2 text-sm font-medium text-white"
         >
           <ArrowLeft className="h-4 w-4" />
           ダッシュボードへ
@@ -67,7 +67,7 @@ const STATUS_STYLE: Record<Department["status"], string> = {
 const PRIORITY_STYLE: Record<string, string> = {
   高: "bg-red-50 text-red-700 border-red-200",
   中: "bg-amber-50 text-amber-700 border-amber-200",
-  低: "bg-slate-100 text-slate-700 border-slate-200",
+  低: "bg-muted text-muted-foreground border-border",
 };
 
 function DepartmentDetail() {
@@ -92,11 +92,11 @@ function DepartmentDetail() {
   return (
     <AppShell title={d.name} subtitle={d.role}>
       <div className="space-y-6 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-        <section className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
+        <section className="rounded-2xl border border-border bg-card p-6 sm:p-8">
           <div>
             <Link
               to="/"
-              className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 transition-colors hover:text-slate-950"
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
               <ArrowLeft className="h-3.5 w-3.5" />
               ダッシュボード
@@ -104,7 +104,7 @@ function DepartmentDetail() {
 
             <div className="mt-6 flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
               <div className="flex items-start gap-5">
-                <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 font-mono text-xl font-medium text-slate-700">
+                <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl border border-border bg-muted font-mono text-xl font-medium text-muted-foreground">
                   {d.id}
                 </span>
                 <div>
@@ -115,10 +115,10 @@ function DepartmentDetail() {
                       {d.statusLabel}
                     </span>
                   )}
-                  <h1 className="mt-2 font-display text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">
+                  <h1 className="mt-2 font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
                     {d.name}
                   </h1>
-                  <p className="mt-2 max-w-2xl text-sm text-slate-600">{d.role}</p>
+                  <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{d.role}</p>
                 </div>
               </div>
 
@@ -138,7 +138,7 @@ function DepartmentDetail() {
             </div>
 
             {/* KPI strip */}
-            <dl className="mt-10 grid grid-cols-2 gap-4 border-t border-slate-200 pt-6 sm:grid-cols-4">
+            <dl className="mt-10 grid grid-cols-2 gap-4 border-t border-border pt-6 sm:grid-cols-4">
               {[
                 { l: d.kpiLabel, v: d.kpiValue },
                 { l: "タスク", v: String(d.tasks) },
@@ -146,8 +146,8 @@ function DepartmentDetail() {
                 { l: "指示履歴", v: String(instructions.length) },
               ].map((m) => (
                 <div key={m.l} className="text-right">
-                  <dt className="text-[10px] uppercase tracking-[0.18em] text-slate-500">{m.l}</dt>
-                  <dd className="kpi-value mt-2 text-2xl text-slate-950">{m.v}</dd>
+                  <dt className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">{m.l}</dt>
+                  <dd className="kpi-value mt-2 text-2xl text-foreground">{m.v}</dd>
                 </div>
               ))}
             </dl>
@@ -156,7 +156,7 @@ function DepartmentDetail() {
 
         <section>
           <Tabs defaultValue="overview">
-              <TabsList className="bg-white">
+              <TabsList className="bg-card">
                 <TabsTrigger value="overview">概要</TabsTrigger>
                 <TabsTrigger value="tasks">タスク</TabsTrigger>
                 <TabsTrigger value="deals">案件</TabsTrigger>
@@ -166,22 +166,22 @@ function DepartmentDetail() {
 
               <TabsContent value="overview" className="mt-6">
                 <div className="grid gap-4 lg:grid-cols-3">
-                  <div className="rounded-xl border border-slate-200 bg-white p-6 lg:col-span-2">
-                    <h3 className="font-display text-lg font-semibold text-slate-950">最近のアクティビティ</h3>
-                    <ul className="mt-4 divide-y divide-slate-100">
+                  <div className="rounded-xl border border-border bg-card p-6 lg:col-span-2">
+                    <h3 className="font-display text-lg font-semibold text-foreground">最近のアクティビティ</h3>
+                    <ul className="mt-4 divide-y divide-border">
                       {DUMMY_TASKS.slice(0, 5).map((t) => (
                         <li key={t.id} className="flex items-center justify-between py-3 text-sm">
                           <div className="flex items-center gap-3">
-                            <span className="font-mono text-xs text-slate-500">{t.id}</span>
-                            <span className="text-slate-800">{t.title}</span>
+                            <span className="font-mono text-xs text-muted-foreground">{t.id}</span>
+                            <span className="text-muted-foreground">{t.title}</span>
                           </div>
-                          <span className="font-mono text-xs text-slate-500">{t.due}</span>
+                          <span className="font-mono text-xs text-muted-foreground">{t.due}</span>
                         </li>
                       ))}
                     </ul>
                   </div>
-                  <div className="rounded-xl border border-slate-200 bg-white p-6">
-                    <h3 className="font-display text-lg font-semibold text-slate-950">関連部門</h3>
+                  <div className="rounded-xl border border-border bg-card p-6">
+                    <h3 className="font-display text-lg font-semibold text-foreground">関連部門</h3>
                     <ul className="mt-4 space-y-2">
                       {DEPARTMENTS.filter((x) => x.id !== d.id)
                         .slice(0, 4)
@@ -190,13 +190,13 @@ function DepartmentDetail() {
                             <Link
                               to="/departments/$id"
                               params={{ id: x.id }}
-                              className="group flex items-center justify-between rounded-lg border border-slate-200 px-3 py-2 transition-colors hover:border-slate-900"
+                              className="group flex items-center justify-between rounded-lg border border-border px-3 py-2 transition-colors hover:border-foreground"
                             >
                               <span className="flex items-center gap-2.5">
-                                <span className="font-mono text-[11px] text-slate-500">{x.id}</span>
-                                <span className="text-sm text-slate-800">{x.name}</span>
+                                <span className="font-mono text-[11px] text-muted-foreground">{x.id}</span>
+                                <span className="text-sm text-muted-foreground">{x.name}</span>
                               </span>
-                              <ArrowRight className="h-3.5 w-3.5 text-slate-400 transition-transform group-hover:translate-x-0.5 group-hover:text-slate-950" />
+                              <ArrowRight className="h-3.5 w-3.5 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-foreground" />
                             </Link>
                           </li>
                         ))}
@@ -206,9 +206,9 @@ function DepartmentDetail() {
               </TabsContent>
 
               <TabsContent value="tasks" className="mt-6">
-                <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+                <div className="overflow-hidden rounded-xl border border-border bg-card">
                   <table className="w-full text-sm">
-                    <thead className="border-b border-slate-200 bg-slate-50 text-[10px] uppercase tracking-wider text-slate-500">
+                    <thead className="border-b border-border bg-muted text-[10px] uppercase tracking-wider text-muted-foreground">
                       <tr>
                         <th className="num-cell px-4 py-3 font-medium">ID</th>
                         <th className="px-4 py-3 text-left font-medium">タイトル</th>
@@ -217,11 +217,11 @@ function DepartmentDetail() {
                         <th className="num-cell px-4 py-3 font-medium">期日</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100">
+                    <tbody className="divide-y divide-border">
                       {DUMMY_TASKS.map((t) => (
-                        <tr key={t.id} className="hover:bg-slate-50">
-                          <td className="num-cell px-4 py-3 text-xs text-slate-500">{t.id}</td>
-                          <td className="px-4 py-3 text-slate-800">{t.title}</td>
+                        <tr key={t.id} className="hover:bg-muted">
+                          <td className="num-cell px-4 py-3 text-xs text-muted-foreground">{t.id}</td>
+                          <td className="px-4 py-3 text-muted-foreground">{t.title}</td>
                           <td className="px-4 py-3">
                             <span
                               className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-medium ${PRIORITY_STYLE[t.priority]}`}
@@ -229,8 +229,8 @@ function DepartmentDetail() {
                               {t.priority}
                             </span>
                           </td>
-                          <td className="px-4 py-3 text-xs text-slate-700">{t.status}</td>
-                          <td className="num-cell px-4 py-3 text-xs text-slate-700">{t.due}</td>
+                          <td className="px-4 py-3 text-xs text-muted-foreground">{t.status}</td>
+                          <td className="num-cell px-4 py-3 text-xs text-muted-foreground">{t.due}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -243,24 +243,24 @@ function DepartmentDetail() {
                   {DUMMY_DEALS.map((deal) => (
                     <div
                       key={deal.id}
-                      className="rounded-xl border border-slate-200 bg-white p-5 transition-colors hover:border-slate-900"
+                      className="rounded-xl border border-border bg-card p-5 transition-colors hover:border-foreground"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="font-mono text-[11px] text-slate-500">{deal.id}</span>
-                        <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[10px] font-medium text-slate-700">
+                        <span className="font-mono text-[11px] text-muted-foreground">{deal.id}</span>
+                        <span className="rounded-full border border-border bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
                           {deal.stage}
                         </span>
                       </div>
-                      <h4 className="mt-3 text-base font-semibold text-slate-950">{deal.title}</h4>
-                      <p className="mt-1 text-xs text-slate-500">{deal.client}</p>
-                      <div className="mt-4 flex items-end justify-between border-t border-slate-100 pt-4">
+                      <h4 className="mt-3 text-base font-semibold text-foreground">{deal.title}</h4>
+                      <p className="mt-1 text-xs text-muted-foreground">{deal.client}</p>
+                      <div className="mt-4 flex items-end justify-between border-t border-border pt-4">
                         <div>
-                          <p className="text-[10px] uppercase tracking-wider text-slate-500">金額</p>
-                          <p className="kpi-value mt-0.5 text-lg text-slate-950">{deal.amount}</p>
+                          <p className="text-[10px] uppercase tracking-wider text-muted-foreground">金額</p>
+                          <p className="kpi-value mt-0.5 text-lg text-foreground">{deal.amount}</p>
                         </div>
                         <div className="text-right">
-                          <p className="text-[10px] uppercase tracking-wider text-slate-500">確度</p>
-                          <p className="kpi-value mt-0.5 text-lg text-slate-950">{deal.probability}%</p>
+                          <p className="text-[10px] uppercase tracking-wider text-muted-foreground">確度</p>
+                          <p className="kpi-value mt-0.5 text-lg text-foreground">{deal.probability}%</p>
                         </div>
                       </div>
                     </div>
@@ -269,7 +269,7 @@ function DepartmentDetail() {
               </TabsContent>
 
               <TabsContent value="documents" className="mt-6">
-                <div className="rounded-xl border border-slate-200 bg-white p-6">
+                <div className="rounded-xl border border-border bg-card p-6">
                   <DocumentList departmentCode={d.id} />
                 </div>
               </TabsContent>

@@ -24,15 +24,15 @@ export function KpiCards() {
         return (
           <div
             key={k.label}
-            className="group relative rounded-xl border border-slate-200/80 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-[0_12px_28px_-16px_rgba(15,23,42,0.18)]"
+            className="group relative rounded-xl border border-border/80 bg-card p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-all duration-200 hover:-translate-y-0.5 hover:border-border hover:shadow-[0_12px_28px_-16px_rgba(15,23,42,0.18)]"
           >
             <div className="flex items-start justify-between">
-              <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-slate-500">{k.label}</p>
-              <span className="flex h-7 w-7 items-center justify-center rounded-md bg-slate-50 text-slate-600 ring-1 ring-inset ring-slate-200/70 transition-colors group-hover:bg-blue-50 group-hover:text-blue-600 group-hover:ring-blue-100">
+              <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-muted-foreground">{k.label}</p>
+              <span className="flex h-7 w-7 items-center justify-center rounded-md bg-muted text-muted-foreground ring-1 ring-inset ring-border/70 transition-colors group-hover:bg-blue-50 group-hover:text-blue-600 group-hover:ring-blue-100">
                 <Icon className="h-3.5 w-3.5" aria-hidden="true" />
               </span>
             </div>
-            <p className="kpi-value mt-3.5 text-right text-[1.875rem] leading-none text-slate-950">
+            <p className="kpi-value mt-3.5 text-right text-[1.875rem] leading-none text-foreground">
               {k.value}
             </p>
             <div className="mt-2.5 flex items-center gap-2">
@@ -48,7 +48,7 @@ export function KpiCards() {
                   {k.delta.value}
                 </span>
               )}
-              {k.sub && <p className="text-[11px] text-slate-500">{k.sub}</p>}
+              {k.sub && <p className="text-[11px] text-muted-foreground">{k.sub}</p>}
             </div>
           </div>
         );

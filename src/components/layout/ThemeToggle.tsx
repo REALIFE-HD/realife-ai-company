@@ -16,7 +16,7 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
       aria-label={label}
       title={`${label}(現在: ${isDark ? "ダーク" : "ライト"})`}
       aria-pressed={isDark}
-      className={`relative inline-flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-600 transition-colors hover:border-slate-300 hover:text-slate-900 dark:border-white/10 dark:bg-white/5 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white ${className}`}
+      className={`relative inline-flex h-9 w-9 items-center justify-center rounded-md border border-border bg-card text-muted-foreground transition-colors hover:border-border hover:text-foreground dark:border-white/10 dark:bg-white/5 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white ${className}`}
     >
       {isDark ? (
         <Sun className="h-4 w-4" aria-hidden="true" />

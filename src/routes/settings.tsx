@@ -126,28 +126,28 @@ function SettingsPage() {
     <AppShell title="設定" subtitle="アカウント・外観・検索・危険な操作">
       <div className="space-y-6 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
         <div>
-          <Link to="/" className="inline-flex items-center gap-1.5 text-[12px] font-medium text-slate-500 hover:text-slate-900">
+          <Link to="/" className="inline-flex items-center gap-1.5 text-[12px] font-medium text-muted-foreground hover:text-foreground">
             <ArrowLeft className="h-3.5 w-3.5" /> ダッシュボードへ戻る
           </Link>
         </div>
 
         {/* アカウント */}
-        <section className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
-          <h2 className="font-display text-xl font-semibold tracking-tight text-slate-900">アカウント</h2>
-          <p className="mt-1 text-[12px] text-slate-500">プロフィール情報は社内表示や指示の発信者として使用されます。</p>
+        <section className="rounded-2xl border border-border bg-card p-6 sm:p-8">
+          <h2 className="font-display text-xl font-semibold tracking-tight text-foreground">アカウント</h2>
+          <p className="mt-1 text-[12px] text-muted-foreground">プロフィール情報は社内表示や指示の発信者として使用されます。</p>
 
           <div className="mt-6 flex items-start gap-4">
             <div
               aria-hidden="true"
-              className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-blue-50 font-mono text-base font-semibold text-blue-700"
+              className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-border bg-blue-50 font-mono text-base font-semibold text-blue-700"
             >
               {initials}
             </div>
             <div className="min-w-0 flex-1">
-              <p className="truncate text-[13px] font-medium text-slate-900">{settings.display_name || "未設定"}</p>
-              <p className="truncate text-[12px] text-slate-500">{user?.email ?? "未ログイン"}</p>
+              <p className="truncate text-[13px] font-medium text-foreground">{settings.display_name || "未設定"}</p>
+              <p className="truncate text-[12px] text-muted-foreground">{user?.email ?? "未ログイン"}</p>
               {settings.department && (
-                <p className="mt-0.5 text-[11.5px] text-slate-500">所属: {settings.department}</p>
+                <p className="mt-0.5 text-[11.5px] text-muted-foreground">所属: {settings.department}</p>
               )}
             </div>
           </div>
@@ -167,7 +167,7 @@ function SettingsPage() {
                   setDraftName(null);
                 }}
               />
-              <p className="text-[11px] text-slate-500">指示の発信者として記録されます。</p>
+              <p className="text-[11px] text-muted-foreground">指示の発信者として記録されます。</p>
             </div>
 
             <div className="space-y-1.5">
@@ -177,7 +177,7 @@ function SettingsPage() {
                 value={settings.department}
                 disabled={loading}
                 onChange={(e) => save({ department: e.target.value })}
-                className="block h-9 w-full rounded-md border border-slate-200 bg-white px-2 text-[13px] text-slate-800 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100"
+                className="block h-9 w-full rounded-md border border-border bg-card px-2 text-[13px] text-muted-foreground focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100"
               >
                 <option value="">(未所属)</option>
                 {DEPARTMENTS.map((d) => (
@@ -186,13 +186,13 @@ function SettingsPage() {
                   </option>
                 ))}
               </select>
-              <p className="text-[11px] text-slate-500">部門ヘッドとして表示されます。</p>
+              <p className="text-[11px] text-muted-foreground">部門ヘッドとして表示されます。</p>
             </div>
 
-            <div className="sm:col-span-2 flex items-center justify-between gap-4 rounded-md border border-slate-200 px-4 py-3">
+            <div className="sm:col-span-2 flex items-center justify-between gap-4 rounded-md border border-border px-4 py-3">
               <div>
                 <Label htmlFor="notifications" className="text-sm">通知</Label>
-                <p className="mt-0.5 text-[11px] text-slate-500">指示・ステータス変更の通知を受け取る</p>
+                <p className="mt-0.5 text-[11px] text-muted-foreground">指示・ステータス変更の通知を受け取る</p>
               </div>
               <Switch
                 id="notifications"
@@ -205,14 +205,14 @@ function SettingsPage() {
         </section>
 
         {/* 外観 */}
-        <section className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
-          <h2 className="font-display text-xl font-semibold tracking-tight text-slate-900">外観</h2>
-          <p className="mt-1 text-[12px] text-slate-500">テーマ・密度・日付フォーマットを変更できます。</p>
+        <section className="rounded-2xl border border-border bg-card p-6 sm:p-8">
+          <h2 className="font-display text-xl font-semibold tracking-tight text-foreground">外観</h2>
+          <p className="mt-1 text-[12px] text-muted-foreground">テーマ・密度・日付フォーマットを変更できます。</p>
 
           <div className="mt-6 space-y-6">
             <div className="space-y-2">
               <Label>テーマ</Label>
-              <div className="inline-flex rounded-md border border-slate-200 bg-slate-50 p-1">
+              <div className="inline-flex rounded-md border border-border bg-muted p-1">
                 {themeOptions.map(({ value, label, Icon }) => {
                   const active = themePref === value;
                   return (
@@ -222,7 +222,7 @@ function SettingsPage() {
                       onClick={() => setThemePref(value)}
                       aria-pressed={active}
                       className={`inline-flex items-center gap-1.5 rounded-sm px-3 py-1 text-[12px] font-medium transition-colors ${
-                        active ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-900"
+                        active ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
                       }`}
                     >
                       <Icon className="h-3.5 w-3.5" aria-hidden="true" />
@@ -231,7 +231,7 @@ function SettingsPage() {
                   );
                 })}
               </div>
-              <p className="text-[11px] text-slate-500">
+              <p className="text-[11px] text-muted-foreground">
                 System を選ぶと OS の外観設定(ライト/ダーク)に自動で追従します。ヘッダーのアイコンからもいつでも切替できます。
               </p>
             </div>
@@ -248,11 +248,11 @@ function SettingsPage() {
                       onClick={() => updateDisplayPrefs({ density: opt.value as Density })}
                       aria-pressed={active}
                       className={`rounded-md border px-3 py-2 text-left transition-colors ${
-                        active ? "border-blue-300 bg-blue-50/60" : "border-slate-200 bg-white hover:border-slate-300"
+                        active ? "border-blue-300 bg-blue-50/60" : "border-border bg-card hover:border-border"
                       }`}
                     >
-                      <div className="text-[13px] font-medium text-slate-900">{opt.label}</div>
-                      <div className="text-[11px] text-slate-500">{opt.description}</div>
+                      <div className="text-[13px] font-medium text-foreground">{opt.label}</div>
+                      <div className="text-[11px] text-muted-foreground">{opt.description}</div>
                     </button>
                   );
                 })}
@@ -265,7 +265,7 @@ function SettingsPage() {
                 id="date_format"
                 value={displayPrefs.dateFormat}
                 onChange={(e) => updateDisplayPrefs({ dateFormat: e.target.value as DateFormat })}
-                className="block h-9 w-full max-w-md rounded-md border border-slate-200 bg-white px-2 text-[13px] text-slate-800 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100"
+                className="block h-9 w-full max-w-md rounded-md border border-border bg-card px-2 text-[13px] text-muted-foreground focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100"
               >
                 {DATE_FORMAT_OPTIONS.map((opt) => (
                   <option key={opt.value} value={opt.value}>
@@ -273,7 +273,7 @@ function SettingsPage() {
                   </option>
                 ))}
               </select>
-              <p className="text-[11px] text-slate-500">
+              <p className="text-[11px] text-muted-foreground">
                 プレビュー: <span className="font-mono">{formatDate(new Date(), displayPrefs.dateFormat)}</span>
               </p>
             </div>
@@ -281,8 +281,8 @@ function SettingsPage() {
         </section>
 
         {/* 検索 */}
-        <section className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
-          <h2 className="font-display text-xl font-semibold tracking-tight text-slate-900">検索</h2>
+        <section className="rounded-2xl border border-border bg-card p-6 sm:p-8">
+          <h2 className="font-display text-xl font-semibold tracking-tight text-foreground">検索</h2>
           <div className="mt-6 space-y-6 max-w-md">
             <div className="space-y-1.5">
               <Label htmlFor="history_limit">検索履歴の最大件数</Label>
@@ -305,12 +305,12 @@ function SettingsPage() {
                   }}
                   className="w-24"
                 />
-                <span className="text-[12px] text-slate-500">
+                <span className="text-[12px] text-muted-foreground">
                   件({HISTORY_LIMIT_MIN}〜{HISTORY_LIMIT_MAX})
                 </span>
               </div>
-              <p className="text-[11px] text-slate-500">
-                ヘッダー検索バーで保持する履歴の最大件数。<strong className="font-semibold text-slate-700">上限を超えると古い履歴から自動的に削除</strong>されます。
+              <p className="text-[11px] text-muted-foreground">
+                ヘッダー検索バーで保持する履歴の最大件数。<strong className="font-semibold text-muted-foreground">上限を超えると古い履歴から自動的に削除</strong>されます。
               </p>
             </div>
           </div>
@@ -365,15 +365,15 @@ function DangerRow({
   onClick: () => void;
 }) {
   return (
-    <div className="flex flex-col gap-3 rounded-md border border-red-200/70 bg-white p-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="flex flex-col gap-3 rounded-md border border-red-200/70 bg-card p-4 sm:flex-row sm:items-center sm:justify-between">
       <div className="min-w-0">
-        <p className="text-[13px] font-semibold text-slate-900">{title}</p>
-        <p className="mt-0.5 text-[11.5px] text-slate-600">{description}</p>
+        <p className="text-[13px] font-semibold text-foreground">{title}</p>
+        <p className="mt-0.5 text-[11.5px] text-muted-foreground">{description}</p>
       </div>
       <button
         type="button"
         onClick={onClick}
-        className="inline-flex shrink-0 items-center gap-1.5 self-start rounded-md border border-red-300 bg-white px-3 py-1.5 text-[12px] font-medium text-red-700 hover:bg-red-50 sm:self-auto"
+        className="inline-flex shrink-0 items-center gap-1.5 self-start rounded-md border border-red-300 bg-card px-3 py-1.5 text-[12px] font-medium text-red-700 hover:bg-red-50 sm:self-auto"
       >
         <Icon className="h-3.5 w-3.5" aria-hidden="true" />
         {actionLabel}

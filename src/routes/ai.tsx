@@ -241,24 +241,24 @@ function AiPage() {
     <AppShell title="AIチャット" subtitle="Lovable AI 経由 ・ 業務支援">
       <div className="flex h-[calc(100vh-4rem)] flex-col px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
         <div className="mb-4 flex items-center justify-between">
-          <Link to="/" className="inline-flex items-center gap-1.5 text-[12px] font-medium text-slate-500 hover:text-slate-900">
+          <Link to="/" className="inline-flex items-center gap-1.5 text-[12px] font-medium text-muted-foreground hover:text-foreground">
             <ArrowLeft className="h-3.5 w-3.5" /> ダッシュボードへ戻る
           </Link>
           {messages.length > 1 && (
             <button
               type="button"
               onClick={clearHistory}
-              className="inline-flex items-center gap-1.5 rounded-md border border-slate-200 bg-white px-2.5 py-1.5 text-[11px] font-medium text-slate-600 hover:border-slate-400 hover:text-slate-900"
+              className="inline-flex items-center gap-1.5 rounded-md border border-border bg-card px-2.5 py-1.5 text-[11px] font-medium text-muted-foreground hover:border-border hover:text-foreground"
             >
               <Trash2 className="h-3 w-3" /> 履歴を削除
             </button>
           )}
         </div>
 
-        <div className="flex flex-1 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white">
+        <div className="flex flex-1 flex-col overflow-hidden rounded-2xl border border-border bg-card">
           <div ref={scrollRef} className="flex-1 space-y-4 overflow-y-auto p-6">
             {!historyLoaded && (
-              <p className="text-center text-xs text-slate-400">履歴を読み込み中...</p>
+              <p className="text-center text-xs text-muted-foreground">履歴を読み込み中...</p>
             )}
             {messages.map((m) => (
               <div key={m.id} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
@@ -266,7 +266,7 @@ function AiPage() {
                   className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
                     m.role === "user"
                       ? "bg-blue-600 text-white"
-                      : "border border-slate-200 bg-slate-50 text-slate-800"
+                      : "border border-border bg-muted text-muted-foreground"
                   }`}
                 >
                   {m.role === "assistant" && (
@@ -286,7 +286,7 @@ function AiPage() {
             ))}
             {isLoading && messages[messages.length - 1]?.role === "user" && (
               <div className="flex justify-start">
-                <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
+                <div className="rounded-2xl border border-border bg-muted px-4 py-3">
                   <div className="flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-wider text-blue-700">
                     <Sparkles className="h-3 w-3 animate-pulse" /> 思考中...
                   </div>
@@ -295,7 +295,7 @@ function AiPage() {
             )}
           </div>
 
-          <form onSubmit={send} className="border-t border-slate-200 bg-white p-3">
+          <form onSubmit={send} className="border-t border-border bg-card p-3">
             <div className="flex items-end gap-2">
               <textarea
                 value={input}
@@ -309,12 +309,12 @@ function AiPage() {
                 placeholder="指示・質問を入力(Enter送信、Shift+Enter改行)"
                 rows={2}
                 disabled={isLoading}
-                className="flex-1 resize-none rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-60"
+                className="flex-1 resize-none rounded-md border border-border bg-muted px-3 py-2 text-sm focus:border-blue-500 focus:bg-card focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-60"
               />
               <button
                 type="submit"
                 disabled={!input.trim() || isLoading}
-                className="inline-flex h-10 items-center gap-1.5 rounded-md bg-blue-600 px-4 text-[13px] font-medium text-white hover:bg-blue-700 disabled:bg-slate-300"
+                className="inline-flex h-10 items-center gap-1.5 rounded-md bg-blue-600 px-4 text-[13px] font-medium text-white hover:bg-blue-700 disabled:bg-muted"
               >
                 <Send className="h-3.5 w-3.5" /> {isLoading ? "送信中" : "送信"}
               </button>
