@@ -22,6 +22,7 @@ export const Route = createFileRoute("/deals")({
 function DealsPage() {
   const [deals, setDeals] = useState<Deal[]>([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     let mounted = true;
@@ -43,12 +44,27 @@ function DealsPage() {
     };
   }, []);
 
-  const total = deals.reduce((acc, d) => acc + d.amount, 0);
-  const won = deals.filter((d) => d.stage === "受注").length;
-  const open = deals.filter((d) => d.stage !== "受注" && d.stage !== "失注").length;
+  const q = search.trim().toLowerCase();
+  const filteredDeals = q
+    ? deals.filter((d) =>
+        [d.code, d.client, d.title, d.stage, d.owner, d.next_action].some((f) =>
+          (f ?? "").toLowerCase().includes(q),
+        ),
+      )
+    : deals;
+
+  const total = filteredDeals.reduce((acc, d) => acc + d.amount, 0);
+  const won = filteredDeals.filter((d) => d.stage === "受注").length;
+  const open = filteredDeals.filter((d) => d.stage !== "受注" && d.stage !== "失注").length;
 
   return (
-    <AppShell title="案件管理" subtitle="Lovable Cloud に永続化 ・ リアルタイム同期">
+    <AppShell
+      title="案件管理"
+      subtitle="Lovable Cloud に永続化 ・ リアルタイム同期"
+      search={search}
+      onSearchChange={setSearch}
+      searchPlaceholder="案件コード・クライアント・案件名で検索…"
+    >
       <div className="space-y-6 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
         <div>
           <Link to="/" className="inline-flex items-center gap-1.5 text-[12px] font-medium text-slate-500 hover:text-slate-900">
