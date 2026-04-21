@@ -71,64 +71,39 @@ const KIND_ICONS: Record<DealActivityKind, typeof MessageSquare> = {
 
 function DealDetailPage() {
   const { dealCode } = Route.useParams();
+  const initial = Route.useLoaderData();
   const router = useRouter();
   const { settings } = useUserSettings();
-  const [deal, setDeal] = useState<Deal | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [deal, setDeal] = useState<Deal | null>(initial.deal);
+  const loading = false; // loader 通過後に render されるため初回ロード状態は不要
   const [saving, setSaving] = useState(false);
-  const [activities, setActivities] = useState<DealActivity[]>([]);
-  const [instructions, setInstructions] = useState<Instruction[]>([]);
+  const [activities, setActivities] = useState<DealActivity[]>(initial.activities);
+  const [instructions, setInstructions] = useState<Instruction[]>(initial.instructions);
 
-  // form state
-  const [stage, setStage] = useState<DealStage>("見積中");
-  const [probability, setProbability] = useState(0);
-  const [nextAction, setNextAction] = useState("");
-  const [due, setDue] = useState("");
-  const [notes, setNotes] = useState("");
+  // form state — loader データから初期化
+  const [stage, setStage] = useState<DealStage>(initial.deal?.stage ?? "見積中");
+  const [probability, setProbability] = useState(initial.deal?.probability ?? 0);
+  const [nextAction, setNextAction] = useState(initial.deal?.next_action ?? "");
+  const [due, setDue] = useState(initial.deal?.due ?? "");
+  const [notes, setNotes] = useState(initial.deal?.notes ?? "");
 
   // activity form
   const [actKind, setActKind] = useState<DealActivityKind>("メモ");
   const [actContent, setActContent] = useState("");
 
+  // dealCode が変わった (別案件への遷移) ときは loader データで再同期
   useEffect(() => {
-    let mounted = true;
-    setLoading(true);
-    (async () => {
-      try {
-        const d = await getDealByCode(dealCode);
-        if (!mounted) return;
-        if (!d) {
-          setDeal(null);
-          setLoading(false);
-          return;
-        }
-        setDeal(d);
-        setStage(d.stage);
-        setProbability(d.probability);
-        setNextAction(d.next_action);
-        setDue(d.due ?? "");
-        setNotes(d.notes);
-
-        const [acts, instrs] = await Promise.all([
-          listActivities(d.id),
-          getInstructionsForDepartment("02"),
-        ]);
-        if (!mounted) return;
-        setActivities(acts);
-        setInstructions(
-          instrs.filter((i: Instruction) => i.title.includes(d.code) || i.content.includes(d.code)),
-        );
-      } catch (e) {
-        console.error(e);
-        toast.error("読み込みに失敗しました");
-      } finally {
-        if (mounted) setLoading(false);
-      }
-    })();
-
-    return () => {
-      mounted = false;
-    };
+    setDeal(initial.deal);
+    setActivities(initial.activities);
+    setInstructions(initial.instructions);
+    if (initial.deal) {
+      setStage(initial.deal.stage);
+      setProbability(initial.deal.probability);
+      setNextAction(initial.deal.next_action);
+      setDue(initial.deal.due ?? "");
+      setNotes(initial.deal.notes);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dealCode]);
 
   // realtime activities
