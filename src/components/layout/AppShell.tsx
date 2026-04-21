@@ -227,32 +227,123 @@ export function AppShell({
   const [activeIndex, setActiveIndex] = useState(-1);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // 履歴ロード(壊れた値や上限超過の値は読み込み時に切り詰め)
-  // 上限値(HISTORY_LIMIT)が設定変更で減った場合にも追従する
+  // 履歴ロード（自動クリーンアップ）
+  // - normalizeQuery で再正規化（古いバージョンが保存した未正規化値を浄化）
+  // - 1件あたりの最大文字数で切り詰め
+  // - 大文字小文字を無視した重複排除（初出を保持）
+  // - 件数上限 (HISTORY_LIMIT) に切り詰め
+  // - 合計バイト上限 (HISTORY_BYTES_MAX) に収まるよう古い順に削る
+  // - サニタイズ後に内容が変わった場合は sessionStorage に書き戻し
   useEffect(() => {
     if (typeof window === "undefined") return;
     try {
       const raw = window.sessionStorage.getItem(historyKey);
       const parsed = raw ? (JSON.parse(raw) as unknown) : [];
-      const arr = Array.isArray(parsed)
-        ? parsed
-            .filter((x): x is string => typeof x === "string")
-            .map((x) => x.slice(0, HISTORY_ITEM_MAX))
-            .slice(0, HISTORY_LIMIT)
-        : [];
-      setHistory(arr);
-      // 上限縮小に追従して保存し直す
-      if (Array.isArray(parsed) && parsed.length > HISTORY_LIMIT) {
+      if (!Array.isArray(parsed)) {
+        setHistory([]);
+        window.sessionStorage.removeItem(historyKey);
+        return;
+      }
+
+      const seen = new Set<string>();
+      const cleaned: string[] = [];
+      for (const item of parsed) {
+        if (typeof item !== "string") continue;
+        const v = normalizeQuery(item, HISTORY_ITEM_MAX);
+        if (!v || v.length < 2) continue;
+        const key = v.toLowerCase();
+        if (seen.has(key)) continue;
+        seen.add(key);
+        cleaned.push(v);
+        if (cleaned.length >= HISTORY_LIMIT) break;
+      }
+
+      // バイト数上限に収める
+      let serialized = JSON.stringify(cleaned);
+      while (cleaned.length > 1 && new Blob([serialized]).size > HISTORY_BYTES_MAX) {
+        cleaned.pop();
+        serialized = JSON.stringify(cleaned);
+      }
+
+      setHistory(cleaned);
+
+      // 元データと差分があれば書き戻し（無駄な write を避ける）
+      if (raw !== serialized) {
         try {
-          window.sessionStorage.setItem(historyKey, JSON.stringify(arr));
+          if (cleaned.length === 0) window.sessionStorage.removeItem(historyKey);
+          else window.sessionStorage.setItem(historyKey, serialized);
         } catch {
-          /* ignore */
+          /* ignore quota errors */
         }
       }
     } catch {
       setHistory([]);
+      try {
+        window.sessionStorage.removeItem(historyKey);
+      } catch {
+        /* ignore */
+      }
     }
-  }, [historyKey, HISTORY_LIMIT]);
+  }, [historyKey, HISTORY_LIMIT, HISTORY_ITEM_MAX, HISTORY_BYTES_MAX]);
+
+  // アプリ起動時に一度、全ルートの履歴を一括クリーンアップ
+  // (古いバージョンで保存された壊れた値・未正規化値・大きすぎる値などを浄化)
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const FLAG = "realife:search-history:cleanup-v1";
+    try {
+      if (window.sessionStorage.getItem(FLAG)) return;
+      const prefix = "realife:search-history:";
+      const keys: string[] = [];
+      for (let i = 0; i < window.sessionStorage.length; i++) {
+        const k = window.sessionStorage.key(i);
+        if (k && k.startsWith(prefix)) keys.push(k);
+      }
+      for (const k of keys) {
+        try {
+          const raw = window.sessionStorage.getItem(k);
+          if (!raw) continue;
+          const parsed = JSON.parse(raw) as unknown;
+          if (!Array.isArray(parsed)) {
+            window.sessionStorage.removeItem(k);
+            continue;
+          }
+          const seen = new Set<string>();
+          const cleaned: string[] = [];
+          for (const item of parsed) {
+            if (typeof item !== "string") continue;
+            const v = normalizeQuery(item, HISTORY_ITEM_MAX);
+            if (!v || v.length < 2) continue;
+            const key = v.toLowerCase();
+            if (seen.has(key)) continue;
+            seen.add(key);
+            cleaned.push(v);
+            if (cleaned.length >= HISTORY_LIMIT) break;
+          }
+          let serialized = JSON.stringify(cleaned);
+          while (cleaned.length > 1 && new Blob([serialized]).size > HISTORY_BYTES_MAX) {
+            cleaned.pop();
+            serialized = JSON.stringify(cleaned);
+          }
+          if (cleaned.length === 0) window.sessionStorage.removeItem(k);
+          else if (raw !== serialized) window.sessionStorage.setItem(k, serialized);
+        } catch {
+          // 個別キーの破損はスキップ（必要なら削除）
+          try {
+            window.sessionStorage.removeItem(k);
+          } catch {
+            /* ignore */
+          }
+        }
+      }
+      window.sessionStorage.setItem(FLAG, String(Date.now()));
+    } catch {
+      /* ignore */
+    }
+    // 起動時に1回だけ実行
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
 
   // 検索文字列の正規化は src/lib/normalize-query.ts を使用
 
