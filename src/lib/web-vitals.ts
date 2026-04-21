@@ -361,3 +361,148 @@ export function exposeMetricsHelpers() {
     console.table(window.__realifeMetrics ?? []);
   };
 }
+
+/* -------------------------------------------------------------------------
+ * Opt-in transport
+ * -------------------------------------------------------------------------
+ * 本番環境で計測データを集約サーバーに送信したい場合に使う、軽量バッチ送信。
+ *
+ * 設計方針:
+ * - 既定では無効。`localStorage["realife:metrics:optin"]==="1"` でオプトイン。
+ * - 送信先 URL は `VITE_METRICS_ENDPOINT` (ビルド時) を使用。未設定なら何もしない。
+ * - 30 秒ごと、もしくは 50 件溜まった時点でフラッシュ。
+ * - ページ離脱時 (`pagehide`) は `navigator.sendBeacon` を使い確実に送る。
+ * - 送信済みのカーソルを保持し、同じ計測値を二重送信しない。
+ * - 送信失敗は静かに無視（次回マージしてリトライ）。計測自体を阻害しない。
+ */
+
+type TransportConfig = {
+  endpoint: string;
+  /** バッチサイズしきい値 (これを超えたら即時フラッシュ) */
+  batchSize?: number;
+  /** インターバル (ms) */
+  intervalMs?: number;
+  /** 追加のメタ情報 (例: app version, env) */
+  meta?: Record<string, unknown>;
+};
+
+let transportInited = false;
+let lastFlushedIndex = 0; // window.__realifeMetrics の何件目まで送ったか
+let flushTimer: ReturnType<typeof setInterval> | null = null;
+
+const OPTIN_KEY = "realife:metrics:optin";
+
+export function isMetricsOptedIn(): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    return window.localStorage.getItem(OPTIN_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+export function setMetricsOptIn(value: boolean) {
+  if (typeof window === "undefined") return;
+  try {
+    if (value) window.localStorage.setItem(OPTIN_KEY, "1");
+    else window.localStorage.removeItem(OPTIN_KEY);
+  } catch {
+    /* noop */
+  }
+}
+
+/**
+ * バッチ送信トランスポートを起動する。
+ * 通常は `initWebVitals()` の後に `initMetricsTransport({ endpoint })` を呼ぶ。
+ * `endpoint` が空 / オプトイン無効 / SSR の場合は何もしない（多重起動も防止）。
+ */
+export function initMetricsTransport(config: TransportConfig) {
+  if (typeof window === "undefined" || transportInited) return;
+  if (!config.endpoint) return;
+  if (!isMetricsOptedIn()) return;
+
+  transportInited = true;
+  const batchSize = config.batchSize ?? 50;
+  const intervalMs = config.intervalMs ?? 30_000;
+
+  const buildPayload = () => {
+    const buf = window.__realifeMetrics ?? [];
+    if (lastFlushedIndex > buf.length) lastFlushedIndex = 0; // バッファが切り詰められた
+    const slice = buf.slice(lastFlushedIndex);
+    if (slice.length === 0) return null;
+    return {
+      sentAt: Date.now(),
+      url: window.location.href,
+      ua: navigator.userAgent,
+      meta: config.meta ?? {},
+      metrics: slice,
+    };
+  };
+
+  const flush = async (useBeacon = false) => {
+    const payload = buildPayload();
+    if (!payload) return;
+    const body = JSON.stringify(payload);
+    const startIndex = lastFlushedIndex;
+    const endIndex = (window.__realifeMetrics ?? []).length;
+
+    try {
+      if (useBeacon && "sendBeacon" in navigator) {
+        const blob = new Blob([body], { type: "application/json" });
+        const ok = navigator.sendBeacon(config.endpoint, blob);
+        if (ok) lastFlushedIndex = endIndex;
+        return;
+      }
+      const res = await fetch(config.endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body,
+        keepalive: true,
+        credentials: "omit",
+      });
+      if (res.ok) lastFlushedIndex = endIndex;
+    } catch {
+      // 失敗時は lastFlushedIndex を進めない → 次回再送
+      lastFlushedIndex = startIndex;
+    }
+  };
+
+  // 一定間隔
+  flushTimer = setInterval(() => {
+    void flush(false);
+  }, intervalMs);
+
+  // バッチサイズ閾値: メトリクス追加を監視するため軽くポーリング
+  const sizeWatcher = setInterval(() => {
+    const buf = window.__realifeMetrics ?? [];
+    if (buf.length - lastFlushedIndex >= batchSize) {
+      void flush(false);
+    }
+  }, 2_000);
+
+  // 離脱時に sendBeacon でフラッシュ
+  const onPageHide = () => {
+    void flush(true);
+  };
+  window.addEventListener("pagehide", onPageHide);
+  // タブ非表示時にも一度送っておく
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") void flush(true);
+  });
+
+  // テスト/DevTools から手動フラッシュできるよう露出
+  (
+    window as unknown as { __realifeFlushMetrics?: () => Promise<void> }
+  ).__realifeFlushMetrics = () => flush(false);
+
+  // クリーンアップ用 (HMR 対策)
+  (
+    window as unknown as { __realifeStopMetrics?: () => void }
+  ).__realifeStopMetrics = () => {
+    if (flushTimer) clearInterval(flushTimer);
+    clearInterval(sizeWatcher);
+    window.removeEventListener("pagehide", onPageHide);
+    transportInited = false;
+  };
+}
+
