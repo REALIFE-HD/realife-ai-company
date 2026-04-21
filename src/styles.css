@@ -379,5 +379,28 @@
 
   /* ダーク時はホバー枠を slate-300 ではなく primary 寄りで強調 */
   & .hover\:border-blue-300:hover { border-color: color-mix(in oklab, var(--primary) 55%, transparent); }
+
+  /* ダーク時の hover/selected 強化:
+     - hover:bg-muted は muted(0.28) と card(0.235) が近く判別困難 →
+       card 上でも背景上でも +0.06 程度明るく見える透明白を被せる */
+  & .hover\:bg-muted:hover,
+  & .hover\:bg-muted\/50:hover,
+  & .hover\:bg-muted\/60:hover,
+  & .hover\:bg-muted\/70:hover,
+  & .hover\:bg-muted\/80:hover { background-color: oklch(1 0 0 / 8%); }
+
+  /* selected 状態(data-state=selected, aria-selected, .is-selected) を accent で確実に塗る */
+  & [data-state="selected"],
+  & [aria-selected="true"]:not(button),
+  & .is-selected {
+    background-color: var(--accent) !important;
+    color: var(--accent-foreground);
+  }
+
+  /* カード境界の補強: border-border/80 のように透過指定があってもダークでは
+     ほぼ消えるので、最低限の可視性を担保 */
+  & .border-border\/80,
+  & .border-border\/70,
+  & .border-border\/60 { border-color: oklch(1 0 0 / 12%); }
 }
 
