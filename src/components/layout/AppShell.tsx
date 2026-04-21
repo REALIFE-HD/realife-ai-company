@@ -218,6 +218,7 @@ export function AppShell({
   const HISTORY_LIMIT = 8;
   const [history, setHistory] = useState<string[]>([]);
   const [historyOpen, setHistoryOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(-1);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // 履歴ロード
