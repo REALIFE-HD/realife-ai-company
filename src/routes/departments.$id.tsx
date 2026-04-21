@@ -14,6 +14,7 @@ import { CTASection } from "@/components/dashboard/CTASection";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { NewInstructionDialog } from "@/components/instructions/NewInstructionDialog";
 import { InstructionList } from "@/components/instructions/InstructionList";
+import { DocumentList } from "@/components/documents/DocumentList";
 import {
   getInstructionsForDepartment,
   subscribeToInstructions,
@@ -159,6 +160,7 @@ function DepartmentDetail() {
                 <TabsTrigger value="overview">概要</TabsTrigger>
                 <TabsTrigger value="tasks">タスク</TabsTrigger>
                 <TabsTrigger value="deals">案件</TabsTrigger>
+                <TabsTrigger value="documents">ドキュメント</TabsTrigger>
                 <TabsTrigger value="instructions">指示履歴</TabsTrigger>
               </TabsList>
 
@@ -263,6 +265,12 @@ function DepartmentDetail() {
                       </div>
                     </div>
                   ))}
+                </div>
+              </TabsContent>
+
+              <TabsContent value="documents" className="mt-6">
+                <div className="rounded-xl border border-slate-200 bg-white p-6">
+                  <DocumentList departmentCode={d.id} />
                 </div>
               </TabsContent>
 
