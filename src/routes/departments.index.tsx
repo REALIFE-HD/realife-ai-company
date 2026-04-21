@@ -6,6 +6,12 @@ import { Footer } from "@/components/layout/Footer";
 import { DepartmentCard } from "@/components/dashboard/DepartmentCard";
 import { CTASection } from "@/components/dashboard/CTASection";
 import { DEPARTMENTS } from "@/data/departments";
+import {
+  applyDeptFilters,
+  DEFAULT_DEPT_FILTERS,
+  DepartmentFilterDialog,
+  type DeptFilters,
+} from "@/components/dashboard/DepartmentFilterDialog";
 
 export const Route = createFileRoute("/departments/")({
   head: () => ({
@@ -28,32 +34,37 @@ export const Route = createFileRoute("/departments/")({
 
 function DepartmentsIndex() {
   const [search, setSearch] = useState("");
+  const [filters, setFilters] = useState<DeptFilters>(DEFAULT_DEPT_FILTERS);
+  const [filterOpen, setFilterOpen] = useState(false);
+
   const total = DEPARTMENTS.length;
   const active = DEPARTMENTS.filter((d) => d.status === "active").length;
   const building = DEPARTMENTS.filter((d) => d.status === "setup").length;
   const standard = DEPARTMENTS.filter((d) => d.status === "standard").length;
 
   const q = search.trim().toLowerCase();
-  const filtered = useMemo(
-    () =>
-      !q
-        ? DEPARTMENTS
-        : DEPARTMENTS.filter((d) =>
-            [d.id, d.name, d.role, d.kpiLabel].some((f) =>
-              f.toLowerCase().includes(q),
-            ),
-          ),
-    [q],
-  );
+  const filtered = useMemo(() => {
+    const byText = !q
+      ? DEPARTMENTS
+      : DEPARTMENTS.filter((d) =>
+          [d.id, d.name, d.role, d.kpiLabel].some((f) => f.toLowerCase().includes(q)),
+        );
+    return applyDeptFilters(byText, filters);
+  }, [q, filters]);
+
+  const hasFilters = filters.statuses.length > 0 || filters.unreadOnly;
+  const summaryActive = q || hasFilters;
 
   return (
-    <AppShell
-      title="部門一覧"
-      subtitle={`12部門の役割・ステータス・進捗を一覧で確認`}
-      search={search}
-      onSearchChange={setSearch}
-      searchPlaceholder="部門名・役割・KPIラベルで検索…"
-    >
+    <>
+      <AppShell
+        title="部門一覧"
+        subtitle={`12部門の役割・ステータス・進捗を一覧で確認`}
+        search={search}
+        onSearchChange={setSearch}
+        searchPlaceholder="部門名・役割・KPIラベルで検索…"
+        onFilterClick={() => setFilterOpen(true)}
+      >
       <div className="space-y-6 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
         <div>
           <Link
@@ -110,15 +121,27 @@ function DepartmentsIndex() {
         </section>
 
         <section aria-label="部門カード一覧">
-          {q && (
+          {summaryActive && (
             <p className="mb-3 text-[12px] text-slate-500">
-              「<span className="font-medium text-slate-700">{search}</span>」の検索結果:{" "}
+              {q && (
+                <>
+                  「<span className="font-medium text-slate-700">{search}</span>」
+                </>
+              )}
+              {hasFilters && (
+                <span className="ml-1">
+                  {filters.statuses.length > 0 && `状態: ${filters.statuses.join(" / ")}`}
+                  {filters.statuses.length > 0 && filters.unreadOnly && " ・ "}
+                  {filters.unreadOnly && "未読あり のみ"}
+                </span>
+              )}
+              の結果:{" "}
               <span className="num font-semibold text-slate-900">{filtered.length}</span> / {total} 部門
             </p>
           )}
           {filtered.length === 0 ? (
             <p className="rounded-xl border border-dashed border-slate-300 bg-white/60 px-4 py-10 text-center text-[13px] text-slate-500">
-              一致する部門は見つかりませんでした。
+              条件に一致する部門は見つかりませんでした。
             </p>
           ) : (
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -130,6 +153,13 @@ function DepartmentsIndex() {
         </section>
       </div>
       <Footer />
-    </AppShell>
+      </AppShell>
+      <DepartmentFilterDialog
+        open={filterOpen}
+        onOpenChange={setFilterOpen}
+        value={filters}
+        onChange={setFilters}
+      />
+    </>
   );
 }
