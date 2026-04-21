@@ -267,16 +267,16 @@ function AiPage() {
                   className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
                     m.role === "user"
                       ? "bg-blue-600 text-white"
-                      : "border border-border bg-muted text-muted-foreground"
+                      : "border border-border bg-muted text-foreground"
                   }`}
                 >
                   {m.role === "assistant" && (
-                    <div className="mb-1 flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-wider text-blue-700">
+                    <div className="mb-1 flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-wider text-blue-700 dark:text-blue-300">
                       <Sparkles className="h-3 w-3" /> REALIFE AI
                     </div>
                   )}
                   {m.role === "assistant" ? (
-                    <div className="prose prose-sm max-w-none prose-p:my-1.5 prose-ul:my-1.5 prose-ol:my-1.5 prose-headings:mt-3 prose-headings:mb-1.5 prose-pre:my-2 prose-code:text-[12px]">
+                    <div className="prose prose-sm max-w-none text-foreground prose-headings:text-foreground prose-strong:text-foreground prose-a:text-blue-600 prose-code:text-foreground prose-li:text-foreground prose-p:my-1.5 prose-ul:my-1.5 prose-ol:my-1.5 prose-headings:mt-3 prose-headings:mb-1.5 prose-pre:my-2 prose-code:text-[12px] dark:prose-invert dark:prose-a:text-blue-300">
                       <ReactMarkdown>{m.content || "..."}</ReactMarkdown>
                     </div>
                   ) : (
