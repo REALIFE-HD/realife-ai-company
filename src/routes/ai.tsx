@@ -114,6 +114,11 @@ function AiPage() {
     }
   }, [messages]);
 
+  // Keep sessionStorage in sync so the next /ai visit hydrates instantly.
+  useEffect(() => {
+    writeCachedHistory(messages);
+  }, [messages]);
+
   const clearHistory = async () => {
     if (!confirm("チャット履歴をすべて削除しますか?")) return;
     const { error } = await supabase
