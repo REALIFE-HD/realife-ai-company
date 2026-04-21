@@ -302,9 +302,6 @@ function AiPage() {
 
         <div className="flex flex-1 flex-col overflow-hidden rounded-2xl border border-border bg-card">
           <div ref={scrollRef} className="flex-1 space-y-4 overflow-y-auto p-6">
-            {!historyLoaded && (
-              <p className="text-center text-xs text-muted-foreground">履歴を読み込み中...</p>
-            )}
             {messages.map((m) => (
               <div key={m.id} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
                 <div
