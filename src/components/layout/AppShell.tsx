@@ -217,7 +217,8 @@ export function AppShell({
 
   // 検索履歴（セッション内・ルート別）
   const historyKey = `realife:search-history:${pathname}`;
-  const HISTORY_LIMIT = 8; // 最大保存件数
+  const [searchPrefs] = useSearchPrefs();
+  const HISTORY_LIMIT = searchPrefs.historyLimit; // 最大保存件数（設定で変更可能）
   const HISTORY_ITEM_MAX = 80; // 1件あたりの最大文字数
   const HISTORY_BYTES_MAX = 4 * 1024; // sessionStorage 上限(約4KB)
   const [history, setHistory] = useState<string[]>([]);
