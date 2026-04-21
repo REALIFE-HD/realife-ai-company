@@ -184,6 +184,45 @@ export type Database = {
         }
         Relationships: []
       }
+      documents: {
+        Row: {
+          category: string
+          created_at: string
+          created_by: string
+          department_code: string
+          description: string
+          id: string
+          sort_order: number
+          title: string
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          created_by?: string
+          department_code: string
+          description?: string
+          id?: string
+          sort_order?: number
+          title: string
+          updated_at?: string
+          url: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          created_by?: string
+          department_code?: string
+          description?: string
+          id?: string
+          sort_order?: number
+          title?: string
+          updated_at?: string
+          url?: string
+        }
+        Relationships: []
+      }
       inbox_messages: {
         Row: {
           assigned_department: string | null
