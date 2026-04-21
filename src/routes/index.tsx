@@ -33,6 +33,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  useRouteMountMark("/");
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState<DeptFilters>(DEFAULT_DEPT_FILTERS);
   const [filterOpen, setFilterOpen] = useState(false);
