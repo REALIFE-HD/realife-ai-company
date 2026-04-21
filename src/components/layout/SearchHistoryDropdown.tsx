@@ -1,6 +1,15 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { Clock, Info, X } from "lucide-react";
 import { HISTORY_DEDUPE_HINT } from "@/lib/normalize-query";
+
+// ブラウザの localStorage には実装上の上限（多くは ~5MB/オリジン）があるため、
+// 履歴単体ではまず到達しないが、目安として 4KB を「警戒ライン」として扱う。
+const BYTE_SOFT_LIMIT = 4 * 1024;
+
+function formatBytes(n: number): string {
+  if (n < 1024) return `${n} B`;
+  return `${(n / 1024).toFixed(n < 1024 * 10 ? 2 : 1)} KB`;
+}
 
 export function SearchHistoryDropdown({
   history,
