@@ -429,6 +429,8 @@ export function AppShell({
                   onSelect={selectHistory}
                   onRemove={removeHistory}
                   onClear={clearHistory}
+                  activeIndex={activeIndex}
+                  onHover={setActiveIndex}
                 />
               )}
             </div>
@@ -528,6 +530,8 @@ export function AppShell({
                   onSelect={selectHistory}
                   onRemove={removeHistory}
                   onClear={clearHistory}
+                  activeIndex={activeIndex}
+                  onHover={setActiveIndex}
                 />
               )}
             </div>
@@ -588,6 +592,8 @@ export function AppShell({
                 onSelect={selectHistory}
                 onRemove={removeHistory}
                 onClear={clearHistory}
+                activeIndex={activeIndex}
+                onHover={setActiveIndex}
               />
             )}
           </div>
