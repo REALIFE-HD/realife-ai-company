@@ -39,6 +39,7 @@ export const Route = createFileRoute("/settings")({
 });
 
 function SettingsPage() {
+  useRouteMountMark("/settings");
   const { settings: ctxSettings, loading, update } = useUserSettings();
   const { user, signOut } = useAuth();
   const { preference: themePref, setPreference: setThemePref } = useTheme();

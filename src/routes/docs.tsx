@@ -66,6 +66,7 @@ function getIcon(name: string): LucideIcon {
 }
 
 function DocsPage() {
+  useRouteMountMark("/docs");
   const [sections, setSections] = useState<DocSection[]>([]);
   const [faqs, setFaqs] = useState<DocFaq[]>([]);
   const [loading, setLoading] = useState(true);

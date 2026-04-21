@@ -33,6 +33,7 @@ const GREETING: Msg = {
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`;
 
 function AiPage() {
+  useRouteMountMark("/ai");
   const { user } = useAuth();
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<Msg[]>([GREETING]);

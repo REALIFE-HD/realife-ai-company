@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
 import { Footer } from "@/components/layout/Footer";
+import { useRouteMountMark } from "@/lib/web-vitals";
 import { DepartmentCard } from "@/components/dashboard/DepartmentCard";
 import { CTASection } from "@/components/dashboard/CTASection";
 import { DEPARTMENTS } from "@/data/departments";
@@ -33,6 +34,7 @@ export const Route = createFileRoute("/departments/")({
 });
 
 function DepartmentsIndex() {
+  useRouteMountMark("/departments");
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState<DeptFilters>(DEFAULT_DEPT_FILTERS);
   const [filterOpen, setFilterOpen] = useState(false);
