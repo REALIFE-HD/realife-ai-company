@@ -406,14 +406,7 @@ export function AppShell({
                   if (searchValue) commitHistory(searchValue);
                   setTimeout(() => setHistoryOpen(false), 120);
                 }}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    commitHistory(searchValue);
-                    setHistoryOpen(false);
-                  } else if (e.key === "Escape") {
-                    setHistoryOpen(false);
-                  }
-                }}
+                onKeyDown={handleSearchKeyDown}
                 placeholder={searchPlaceholder}
                 aria-label="検索"
                 aria-expanded={historyOpen}
@@ -512,14 +505,7 @@ export function AppShell({
                   if (searchValue) commitHistory(searchValue);
                   setTimeout(() => setHistoryOpen(false), 120);
                 }}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    commitHistory(searchValue);
-                    setHistoryOpen(false);
-                  } else if (e.key === "Escape") {
-                    setHistoryOpen(false);
-                  }
-                }}
+                onKeyDown={handleSearchKeyDown}
                 placeholder={searchPlaceholder}
                 aria-label="検索"
                 aria-expanded={historyOpen}
@@ -579,14 +565,7 @@ export function AppShell({
                 if (searchValue) commitHistory(searchValue);
                 setTimeout(() => setHistoryOpen(false), 120);
               }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  commitHistory(searchValue);
-                  setHistoryOpen(false);
-                } else if (e.key === "Escape") {
-                  setHistoryOpen(false);
-                }
-              }}
+              onKeyDown={handleSearchKeyDown}
               placeholder={searchPlaceholder}
               aria-label="検索"
               aria-expanded={historyOpen}
