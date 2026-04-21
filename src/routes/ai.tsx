@@ -33,42 +33,85 @@ const GREETING: Msg = {
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`;
 
+const HISTORY_CACHE_KEY = "realife:ai-chat:history-cache";
+
+function readCachedHistory(): Msg[] | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = sessionStorage.getItem(HISTORY_CACHE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as Msg[];
+    return Array.isArray(parsed) && parsed.length > 0 ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeCachedHistory(msgs: Msg[]) {
+  if (typeof window === "undefined") return;
+  try {
+    // Skip greeting; keep last 50 to bound size
+    const trimmed = msgs.filter((m) => m.id !== "greeting").slice(-50);
+    sessionStorage.setItem(HISTORY_CACHE_KEY, JSON.stringify(trimmed));
+  } catch {
+    /* ignore quota errors */
+  }
+}
+
 function AiPage() {
   useRouteMountMark("/ai");
   const { user } = useAuth();
   const [input, setInput] = useState("");
-  const [messages, setMessages] = useState<Msg[]>([GREETING]);
+  // Hydrate immediately from sessionStorage so first paint shows previous turns.
+  const [messages, setMessages] = useState<Msg[]>(() => {
+    const cached = readCachedHistory();
+    return cached ? [GREETING, ...cached] : [GREETING];
+  });
   const [isLoading, setIsLoading] = useState(false);
-  const [historyLoaded, setHistoryLoaded] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const didInitialScroll = useRef(false);
 
-  // Load history from DB
+  // Load history from DB in background; do NOT block first paint.
   useEffect(() => {
+    let cancelled = false;
     (async () => {
       const { data, error } = await supabase
         .from("ai_chat_messages")
         .select("*")
         .order("created_at", { ascending: true });
+      if (cancelled) return;
       if (error) {
         console.error(error);
-        toast.error("履歴の読み込みに失敗しました");
-      } else if (data && data.length > 0) {
-        setMessages([
-          GREETING,
-          ...data.map((r) => ({
-            id: r.id,
-            role: r.role as "user" | "assistant",
-            content: r.content,
-            created_at: r.created_at,
-          })),
-        ]);
+        // Silent: cached history (or greeting) is already on screen.
+        return;
       }
-      setHistoryLoaded(true);
+      if (data && data.length > 0) {
+        const fresh: Msg[] = data.map((r) => ({
+          id: r.id,
+          role: r.role as "user" | "assistant",
+          content: r.content,
+          created_at: r.created_at,
+        }));
+        setMessages([GREETING, ...fresh]);
+        writeCachedHistory(fresh);
+      }
     })();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
+  // First mount: jump to bottom instantly (no smooth animation).
+  // Subsequent updates: smooth scroll.
   useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+    const el = scrollRef.current;
+    if (!el) return;
+    if (!didInitialScroll.current) {
+      el.scrollTop = el.scrollHeight;
+      didInitialScroll.current = true;
+    } else {
+      el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
+    }
   }, [messages]);
 
   const clearHistory = async () => {
