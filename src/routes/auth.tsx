@@ -84,7 +84,7 @@ function AuthPage() {
     <div className="min-h-screen bg-muted/70 flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
         <Link to="/" className="flex items-center justify-center gap-2.5 mb-8">
-          <span className="flex h-9 w-9 items-center justify-center rounded-md bg-foreground font-display text-sm font-semibold text-white">
+          <span className="flex h-9 w-9 items-center justify-center rounded-md bg-foreground font-display text-sm font-semibold text-background">
             RL
           </span>
           <span className="flex flex-col leading-none">
