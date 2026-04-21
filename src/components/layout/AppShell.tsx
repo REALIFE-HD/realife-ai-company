@@ -6,6 +6,7 @@ import { NewInstructionDialog } from "@/components/instructions/NewInstructionDi
 import { useUserSettings } from "@/hooks/use-user-settings";
 import { useAuth } from "@/hooks/use-auth";
 import { SearchHistoryDropdown } from "./SearchHistoryDropdown";
+import { ThemeToggle } from "./ThemeToggle";
 import { normalizeQuery } from "@/lib/normalize-query";
 import { useSearchPrefs } from "@/lib/search-prefs";
 
@@ -373,15 +374,18 @@ export function AppShell({
       {/* Mobile top bar */}
       <div className="sticky top-0 z-40 flex h-14 items-center justify-between border-b border-slate-200 bg-white/90 px-4 backdrop-blur md:hidden">
         <Brand />
-        <button
-          type="button"
-          aria-label={open ? "メニューを閉じる" : "メニューを開く"}
-          aria-expanded={open}
-          onClick={() => setOpen((v) => !v)}
-          className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 text-slate-700"
-        >
-          {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-        </button>
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          <button
+            type="button"
+            aria-label={open ? "メニューを閉じる" : "メニューを開く"}
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
+            className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 text-slate-700"
+          >
+            {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile drawer */}
@@ -478,6 +482,7 @@ export function AppShell({
             </div>
 
             <div className="flex shrink-0 items-center gap-2">
+              <ThemeToggle />
               <button
                 type="button"
                 aria-label="絞り込み"
