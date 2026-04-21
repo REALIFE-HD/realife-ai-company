@@ -239,6 +239,53 @@ export function markNavigationEnd(routePath: string) {
   }
 }
 
+/**
+ * ルートコンポーネントの「初回マウント時間」を計測するためのフック。
+ *
+ * ルート遷移開始 (markNavigationStart) からこのフックの useEffect が走るまで
+ * の経過時間を `RouteMount` として記録する。これは「動的 import チャンクの
+ * 取得 + ローダー実行 + React のレンダー確定」までを含む実体感に近い値で、
+ * RouteChange と並べることでチャンク読み込みのコストを切り分けやすくなる。
+ *
+ * 使い方: 各ルートコンポーネントの先頭で `useRouteMountMark("/path")` を呼ぶ。
+ */
+export function useRouteMountMark(routePath: string) {
+  // 動的 import される route component が評価された瞬間のタイムスタンプ
+  // = "chunk loaded & module evaluated" を近似する。
+  const moduleEvalAt = typeof performance !== "undefined" ? performance.now() : 0;
+
+  if (typeof window === "undefined") return;
+
+  // useEffect 相当のタイミングで mount 完了を記録するため、
+  // micro task で呼び出して React の commit 直後に走らせる。
+  queueMicrotask(() => {
+    if (typeof performance === "undefined") return;
+    const now = performance.now();
+    const sinceNavStart = navStart !== null ? now - navStart : null;
+    const sinceModuleEval = now - moduleEvalAt;
+
+    const duration = sinceNavStart ?? sinceModuleEval;
+    const m: CapturedMetric = {
+      name: "RouteMount",
+      value: duration,
+      rating: duration < 100 ? "good" : duration < 300 ? "needs-improvement" : "poor",
+      id: routePath,
+      timestamp: Date.now(),
+    };
+    pushMetric(m);
+    if (import.meta.env.DEV) {
+      // eslint-disable-next-line no-console
+      console.log(
+        `%c[mount] %c${routePath}%c ${Math.round(duration)}ms %c(${m.rating})`,
+        "color:#0891b2;font-weight:600",
+        "color:#0f172a;font-weight:600",
+        "color:#0f172a",
+        COLORS[m.rating],
+      );
+    }
+  });
+}
+
 /** DevTools から `window.__realifeMetricsTable()` で一覧表示できるようにする */
 export function exposeMetricsHelpers() {
   if (typeof window === "undefined") return;
