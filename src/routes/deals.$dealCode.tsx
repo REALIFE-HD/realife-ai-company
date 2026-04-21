@@ -31,6 +31,25 @@ export const Route = createFileRoute("/deals/$dealCode")({
       { property: "og:description", content: "案件の進捗・関連指示・活動ログ。" },
     ],
   }),
+  // 案件本体・活動ログ・関連指示を並列取得して loader 1 往復で完結
+  loader: async ({ params }) => {
+    try {
+      const deal = await getDealByCode(params.dealCode);
+      if (!deal) return { deal: null, activities: [], instructions: [] };
+      const [activities, allInstrs] = await Promise.all([
+        listActivities(deal.id),
+        getInstructionsForDepartment("02"),
+      ]);
+      const instructions = allInstrs.filter(
+        (i: Instruction) => i.title.includes(deal.code) || i.content.includes(deal.code),
+      );
+      return { deal, activities, instructions };
+    } catch (e) {
+      console.error("[deal.$dealCode.loader]", e);
+      return { deal: null, activities: [], instructions: [] };
+    }
+  },
+  staleTime: 5_000,
   component: DealDetailPage,
   notFoundComponent: () => (
     <div className="flex min-h-screen items-center justify-center">
