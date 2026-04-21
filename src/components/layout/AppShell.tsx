@@ -456,8 +456,23 @@ export function AppShell({
                 type="search"
                 value={searchValue}
                 onChange={(e) => setSearch(e.target.value)}
+                onFocus={() => setHistoryOpen(true)}
+                onBlur={() => {
+                  if (searchValue) commitHistory(searchValue);
+                  setTimeout(() => setHistoryOpen(false), 120);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    commitHistory(searchValue);
+                    setHistoryOpen(false);
+                  } else if (e.key === "Escape") {
+                    setHistoryOpen(false);
+                  }
+                }}
                 placeholder={searchPlaceholder}
                 aria-label="検索"
+                aria-expanded={historyOpen}
+                aria-haspopup="listbox"
                 className="h-9 w-full rounded-md border border-slate-200 bg-white pl-8 pr-8 text-[13px] text-slate-800 placeholder:text-slate-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100"
               />
               {searchValue && (
@@ -469,6 +484,14 @@ export function AppShell({
                 >
                   <XCircle className="h-3.5 w-3.5" />
                 </button>
+              )}
+              {historyOpen && (
+                <SearchHistoryDropdown
+                  history={history}
+                  onSelect={selectHistory}
+                  onRemove={removeHistory}
+                  onClear={clearHistory}
+                />
               )}
             </div>
           </div>
@@ -500,8 +523,23 @@ export function AppShell({
                 type="search"
               value={searchValue}
               onChange={(e) => setSearch(e.target.value)}
+              onFocus={() => setHistoryOpen(true)}
+              onBlur={() => {
+                if (searchValue) commitHistory(searchValue);
+                setTimeout(() => setHistoryOpen(false), 120);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  commitHistory(searchValue);
+                  setHistoryOpen(false);
+                } else if (e.key === "Escape") {
+                  setHistoryOpen(false);
+                }
+              }}
               placeholder={searchPlaceholder}
               aria-label="検索"
+              aria-expanded={historyOpen}
+              aria-haspopup="listbox"
               className="h-9 w-full rounded-md border border-slate-200 bg-white pl-8 pr-8 text-[13px] text-slate-800 placeholder:text-slate-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100"
             />
             {searchValue && (
@@ -513,6 +551,14 @@ export function AppShell({
               >
                 <XCircle className="h-3.5 w-3.5" />
               </button>
+            )}
+            {historyOpen && (
+              <SearchHistoryDropdown
+                history={history}
+                onSelect={selectHistory}
+                onRemove={removeHistory}
+                onClear={clearHistory}
+              />
             )}
           </div>
         </div>
