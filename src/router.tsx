@@ -59,7 +59,18 @@ export const getRouter = () => {
     routeTree,
     context: {},
     scrollRestoration: true,
-    defaultPreloadStaleTime: 0,
+    // ホバー / タッチ開始 / フォーカス時に対象ルートのチャンクを先読みし、
+    // クリック時には体感ゼロ遅延で遷移できるようにする。
+    defaultPreload: "intent",
+    // ホバー〜クリックまでの一般的な遅延に合わせ、無駄な先読みを抑制。
+    defaultPreloadDelay: 50,
+    // 先読みデータを 30 秒キャッシュ（TanStack Query 未使用なのでルーター側で保持）。
+    defaultPreloadStaleTime: 30_000,
+    // 通常のルートデータも 10 秒は再フェッチしない（戻る/進む時の即時表示）。
+    defaultStaleTime: 10_000,
+    // ローダーが 200ms 以内に終わればペンディング UI を出さず、ちらつきを防ぐ。
+    defaultPendingMs: 200,
+    defaultPendingMinMs: 300,
     defaultErrorComponent: DefaultErrorComponent,
   });
 
