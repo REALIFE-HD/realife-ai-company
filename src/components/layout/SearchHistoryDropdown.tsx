@@ -32,6 +32,20 @@ export function SearchHistoryDropdown({
   const listRef = useRef<HTMLUListElement>(null);
   const activeItemRef = useRef<HTMLLIElement>(null);
 
+  // 履歴全体のおおよそのバイト数（UTF-8）。JSON 化したサイズで概算する。
+  const byteSize = useMemo(() => {
+    try {
+      const json = JSON.stringify(history);
+      return typeof TextEncoder !== "undefined"
+        ? new TextEncoder().encode(json).length
+        : json.length;
+    } catch {
+      return 0;
+    }
+  }, [history]);
+  const bytePct = Math.min(100, Math.round((byteSize / BYTE_SOFT_LIMIT) * 100));
+  const byteWarn = byteSize >= BYTE_SOFT_LIMIT * 0.75;
+
   // ↑↓ で activeIndex が変わったら、その項目をリスト内で確実に表示する
   useEffect(() => {
     const list = listRef.current;
