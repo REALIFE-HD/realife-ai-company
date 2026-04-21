@@ -4,6 +4,7 @@ import { Sparkles, Moon, Sun, ArrowLeft } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { AppShell } from "@/components/layout/AppShell";
 import { CodeBlock } from "@/components/ai/CodeBlock";
+import { MarkdownLink } from "@/components/ai/MarkdownLink";
 
 export const Route = createFileRoute("/ai/preview")({
   head: () => ({
