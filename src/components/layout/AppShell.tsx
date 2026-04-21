@@ -472,6 +472,7 @@ export function AppShell({
                   onClear={clearHistory}
                   activeIndex={activeIndex}
                   onHover={setActiveIndex}
+                  limit={HISTORY_LIMIT}
                 />
               )}
             </div>
@@ -574,6 +575,7 @@ export function AppShell({
                   onClear={clearHistory}
                   activeIndex={activeIndex}
                   onHover={setActiveIndex}
+                  limit={HISTORY_LIMIT}
                 />
               )}
             </div>
@@ -636,6 +638,7 @@ export function AppShell({
                 onClear={clearHistory}
                 activeIndex={activeIndex}
                 onHover={setActiveIndex}
+                  limit={HISTORY_LIMIT}
               />
             )}
           </div>
