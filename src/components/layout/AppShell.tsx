@@ -280,6 +280,15 @@ export function AppShell({
     setHistoryOpen(false);
   };
 
+  // クリア後にフォーカスを戻すための ref
+  const desktopInputRef = useRef<HTMLInputElement>(null);
+  const tabletInputRef = useRef<HTMLInputElement>(null);
+  const mobileInputRef = useRef<HTMLInputElement>(null);
+  const clearAndFocus = (ref: React.RefObject<HTMLInputElement | null>) => {
+    setSearch("");
+    requestAnimationFrame(() => ref.current?.focus());
+  };
+
   return (
     <div className="min-h-screen bg-[#F5F5F7]">
       {/* Mobile top bar */}
@@ -337,6 +346,7 @@ export function AppShell({
                 aria-hidden="true"
               />
               <input
+                ref={desktopInputRef}
                 type="search"
                 value={searchValue}
                 onChange={(e) => setSearch(e.target.value)}
@@ -362,7 +372,7 @@ export function AppShell({
               {searchValue && (
                 <button
                   type="button"
-                  onClick={() => setSearch("")}
+                  onClick={() => clearAndFocus(desktopInputRef)}
                   aria-label="検索をクリア"
                   className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex h-5 w-5 items-center justify-center rounded-full text-slate-400 hover:text-slate-700"
                 >
@@ -442,6 +452,7 @@ export function AppShell({
                 aria-hidden="true"
               />
               <input
+                ref={tabletInputRef}
                 type="search"
                 value={searchValue}
                 onChange={(e) => setSearch(e.target.value)}
@@ -452,7 +463,7 @@ export function AppShell({
               {searchValue && (
                 <button
                   type="button"
-                  onClick={() => setSearch("")}
+                  onClick={() => clearAndFocus(tabletInputRef)}
                   aria-label="検索をクリア"
                   className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex h-5 w-5 items-center justify-center rounded-full text-slate-400 hover:text-slate-700"
                 >
@@ -484,8 +495,9 @@ export function AppShell({
               className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400"
               aria-hidden="true"
             />
-            <input
-              type="search"
+              <input
+                ref={mobileInputRef}
+                type="search"
               value={searchValue}
               onChange={(e) => setSearch(e.target.value)}
               placeholder={searchPlaceholder}
@@ -495,7 +507,7 @@ export function AppShell({
             {searchValue && (
               <button
                 type="button"
-                onClick={() => setSearch("")}
+                onClick={() => clearAndFocus(mobileInputRef)}
                 aria-label="検索をクリア"
                 className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex h-5 w-5 items-center justify-center rounded-full text-slate-400 hover:text-slate-700"
               >
