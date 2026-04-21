@@ -165,7 +165,7 @@ function SettingsPage() {
                 </span>
               </div>
               <p className="text-[11px] text-slate-500">
-                ヘッダー検索バーで保持する履歴の最大件数。古い履歴は自動的に削除されます。
+                ヘッダー検索バーで保持する履歴の最大件数。<strong className="font-semibold text-slate-700">上限を超えると古い履歴から自動的に削除</strong>されます。
               </p>
             </div>
           </div>
