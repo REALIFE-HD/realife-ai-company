@@ -109,12 +109,14 @@ function DealsPage() {
                     <td colSpan={10} className="px-4 py-8 text-center text-xs text-slate-400">読み込み中...</td>
                   </tr>
                 )}
-                {!loading && deals.length === 0 && (
+                {!loading && filteredDeals.length === 0 && (
                   <tr>
-                    <td colSpan={10} className="px-4 py-8 text-center text-xs text-slate-400">案件がありません</td>
+                    <td colSpan={10} className="px-4 py-8 text-center text-xs text-slate-400">
+                      {q ? `「${search}」に一致する案件はありません` : "案件がありません"}
+                    </td>
                   </tr>
                 )}
-                {deals.map((d) => (
+                {filteredDeals.map((d) => (
                   <tr key={d.id} className="group cursor-pointer transition-colors hover:bg-blue-50/30">
                     <td className="num-cell px-4 py-3 text-xs text-slate-500">
                       <Link to="/deals/$dealCode" params={{ dealCode: d.code }} className="transition-colors group-hover:text-blue-700">{d.code}</Link>
