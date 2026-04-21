@@ -1,4 +1,5 @@
-import { Clock, X } from "lucide-react";
+import { Clock, Info, X } from "lucide-react";
+import { HISTORY_DEDUPE_HINT } from "@/lib/normalize-query";
 
 export function SearchHistoryDropdown({
   history,
