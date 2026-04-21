@@ -15,6 +15,7 @@ import {
   YAxis,
 } from "recharts";
 import type { CapturedMetric } from "@/lib/web-vitals";
+import { useRouteMountMark } from "@/lib/web-vitals";
 
 export const Route = createFileRoute("/metrics")({
   head: () => ({
@@ -62,6 +63,7 @@ function formatTime(ts: number) {
 }
 
 function MetricsPage() {
+  useRouteMountMark("/metrics");
   return (
     <AppShell
       title="パフォーマンス計測"

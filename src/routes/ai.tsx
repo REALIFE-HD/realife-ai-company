@@ -7,6 +7,7 @@ import { AppShell } from "@/components/layout/AppShell";
 import { Footer } from "@/components/layout/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
+import { useRouteMountMark } from "@/lib/web-vitals";
 
 export const Route = createFileRoute("/ai")({
   head: () => ({
@@ -33,6 +34,7 @@ const GREETING: Msg = {
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`;
 
 function AiPage() {
+  useRouteMountMark("/ai");
   const { user } = useAuth();
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<Msg[]>([GREETING]);

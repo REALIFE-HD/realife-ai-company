@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
 import { Footer } from "@/components/layout/Footer";
+import { useRouteMountMark } from "@/lib/web-vitals";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -66,6 +67,7 @@ function getIcon(name: string): LucideIcon {
 }
 
 function DocsPage() {
+  useRouteMountMark("/docs");
   const [sections, setSections] = useState<DocSection[]>([]);
   const [faqs, setFaqs] = useState<DocFaq[]>([]);
   const [loading, setLoading] = useState(true);

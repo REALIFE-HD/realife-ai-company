@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { ArrowLeft, LogOut, Monitor, Moon, RefreshCw, Sun, Trash2 } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
 import { Footer } from "@/components/layout/Footer";
+import { useRouteMountMark } from "@/lib/web-vitals";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
@@ -39,6 +40,7 @@ export const Route = createFileRoute("/settings")({
 });
 
 function SettingsPage() {
+  useRouteMountMark("/settings");
   const { settings: ctxSettings, loading, update } = useUserSettings();
   const { user, signOut } = useAuth();
   const { preference: themePref, setPreference: setThemePref } = useTheme();

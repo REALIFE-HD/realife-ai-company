@@ -6,6 +6,7 @@ import { DashboardCharts } from "@/components/dashboard/DashboardCharts";
 import { DepartmentsGrid } from "@/components/dashboard/DepartmentsGrid";
 import { CTASection } from "@/components/dashboard/CTASection";
 import { Footer } from "@/components/layout/Footer";
+import { useRouteMountMark } from "@/lib/web-vitals";
 import {
   DepartmentFilterDialog,
   DEFAULT_DEPT_FILTERS,
@@ -32,6 +33,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  useRouteMountMark("/");
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState<DeptFilters>(DEFAULT_DEPT_FILTERS);
   const [filterOpen, setFilterOpen] = useState(false);
