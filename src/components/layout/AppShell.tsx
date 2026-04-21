@@ -9,8 +9,36 @@ import { useAuth } from "@/hooks/use-auth";
 function useNow(intervalMs = 30_000) {
   const [now, setNow] = useState(() => new Date());
   useEffect(() => {
-    const t = setInterval(() => setNow(new Date()), intervalMs);
-    return () => clearInterval(t);
+    if (typeof document === "undefined") return;
+
+    let timer: ReturnType<typeof setInterval> | null = null;
+
+    const start = () => {
+      if (timer != null) return;
+      timer = setInterval(() => setNow(new Date()), intervalMs);
+    };
+    const stop = () => {
+      if (timer != null) {
+        clearInterval(timer);
+        timer = null;
+      }
+    };
+    const onVisibility = () => {
+      if (document.hidden) {
+        stop();
+      } else {
+        setNow(new Date()); // 再表示時に即時同期
+        start();
+      }
+    };
+
+    if (!document.hidden) start();
+    document.addEventListener("visibilitychange", onVisibility);
+
+    return () => {
+      document.removeEventListener("visibilitychange", onVisibility);
+      stop();
+    };
   }, [intervalMs]);
   return now;
 }
