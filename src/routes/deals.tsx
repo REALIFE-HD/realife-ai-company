@@ -32,6 +32,7 @@ export const Route = createFileRoute("/deals")({
 });
 
 function DealsPage() {
+  useRouteMountMark("/deals");
   const initial = Route.useLoaderData();
   const [deals, setDeals] = useState<Deal[]>(initial.deals);
   const [search, setSearch] = useState("");

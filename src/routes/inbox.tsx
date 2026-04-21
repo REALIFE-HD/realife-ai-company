@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { ArrowLeft, Inbox as InboxIcon, Sparkles, Send, Trash2, Archive, RotateCcw } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
+import { useRouteMountMark } from "@/lib/web-vitals";
 import { Footer } from "@/components/layout/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
@@ -59,6 +60,7 @@ const STATUS_FILTERS: { v: "all" | InboxStatus; label: string }[] = [
 ];
 
 function InboxPage() {
+  useRouteMountMark("/inbox");
   const initial = Route.useLoaderData();
   const [items, setItems] = useState<InboxMessage[]>(initial.items);
   const [filter, setFilter] = useState<"all" | InboxStatus>("all");

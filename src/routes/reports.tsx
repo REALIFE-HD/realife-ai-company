@@ -2,6 +2,7 @@ import { createFileRoute, Link, ClientOnly } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
 import { Footer } from "@/components/layout/Footer";
+import { useRouteMountMark } from "@/lib/web-vitals";
 import {
   Bar,
   BarChart,
@@ -44,6 +45,7 @@ const DEPT_PROGRESS = DEPARTMENTS.map((d, i) => ({
 }));
 
 function ReportsPage() {
+  useRouteMountMark("/reports");
   const ytd = MONTHLY.reduce((acc, m) => acc + m.revenue, 0);
   const avg = (ytd / MONTHLY.length).toFixed(1);
   const peak = MONTHLY.reduce((m, c) => (c.revenue > m.revenue ? c : m));
