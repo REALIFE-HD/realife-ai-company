@@ -115,7 +115,7 @@ export function AppShell({ children, title, subtitle }: { children: ReactNode; t
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50/80 via-white to-slate-50/40">
+    <div className="min-h-screen bg-[#F5F5F7]">
       {/* Mobile top bar */}
       <div className="sticky top-0 z-40 flex h-14 items-center justify-between border-b border-slate-200 bg-white/90 px-4 backdrop-blur md:hidden">
         <Brand />
