@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { NewInstructionDialog } from "@/components/instructions/NewInstructionDialog";
 import { useUserSettings } from "@/hooks/use-user-settings";
 import { useAuth } from "@/hooks/use-auth";
+import { SearchHistoryDropdown } from "./SearchHistoryDropdown";
 
 function useNow(intervalMs = 30_000) {
   const [now, setNow] = useState(() => new Date());
@@ -212,6 +213,73 @@ export function AppShell({
     }
   }, [storageKey, searchValue]);
 
+  // 検索履歴（セッション内・ルート別）
+  const historyKey = `realife:search-history:${pathname}`;
+  const HISTORY_LIMIT = 8;
+  const [history, setHistory] = useState<string[]>([]);
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // 履歴ロード
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const raw = window.sessionStorage.getItem(historyKey);
+      setHistory(raw ? (JSON.parse(raw) as string[]) : []);
+    } catch {
+      setHistory([]);
+    }
+  }, [historyKey]);
+
+  const commitHistory = (q: string) => {
+    const v = q.trim();
+    if (!v || v.length < 2) return;
+    setHistory((prev) => {
+      const next = [v, ...prev.filter((x) => x !== v)].slice(0, HISTORY_LIMIT);
+      try {
+        window.sessionStorage.setItem(historyKey, JSON.stringify(next));
+      } catch {
+        /* ignore */
+      }
+      return next;
+    });
+  };
+
+  // 入力が止まったら(800ms)履歴に追加
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    if (!searchValue) return;
+    debounceRef.current = setTimeout(() => commitHistory(searchValue), 800);
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchValue]);
+
+  const removeHistory = (q: string) => {
+    setHistory((prev) => {
+      const next = prev.filter((x) => x !== q);
+      try {
+        window.sessionStorage.setItem(historyKey, JSON.stringify(next));
+      } catch {
+        /* ignore */
+      }
+      return next;
+    });
+  };
+  const clearHistory = () => {
+    setHistory([]);
+    try {
+      window.sessionStorage.removeItem(historyKey);
+    } catch {
+      /* ignore */
+    }
+  };
+  const selectHistory = (q: string) => {
+    setSearch(q);
+    setHistoryOpen(false);
+  };
+
   return (
     <div className="min-h-screen bg-[#F5F5F7]">
       {/* Mobile top bar */}
@@ -272,8 +340,23 @@ export function AppShell({
                 type="search"
                 value={searchValue}
                 onChange={(e) => setSearch(e.target.value)}
+                onFocus={() => setHistoryOpen(true)}
+                onBlur={() => {
+                  if (searchValue) commitHistory(searchValue);
+                  setTimeout(() => setHistoryOpen(false), 120);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    commitHistory(searchValue);
+                    setHistoryOpen(false);
+                  } else if (e.key === "Escape") {
+                    setHistoryOpen(false);
+                  }
+                }}
                 placeholder={searchPlaceholder}
                 aria-label="検索"
+                aria-expanded={historyOpen}
+                aria-haspopup="listbox"
                 className="h-9 w-72 rounded-md border border-slate-200 bg-white pl-8 pr-8 text-[13px] text-slate-800 placeholder:text-slate-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100"
               />
               {searchValue && (
@@ -285,6 +368,14 @@ export function AppShell({
                 >
                   <XCircle className="h-3.5 w-3.5" />
                 </button>
+              )}
+              {historyOpen && (
+                <SearchHistoryDropdown
+                  history={history}
+                  onSelect={selectHistory}
+                  onRemove={removeHistory}
+                  onClear={clearHistory}
+                />
               )}
             </div>
 
