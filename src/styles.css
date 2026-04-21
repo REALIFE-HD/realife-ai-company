@@ -125,7 +125,9 @@
   --secondary: oklch(0.26 0.005 264);    /* ~ #3A3A3C */
   --secondary-foreground: oklch(0.96 0.003 264);
   --muted: oklch(0.26 0.005 264);
-  --muted-foreground: oklch(0.72 0.01 264);
+  /* WCAG AA を意識して 0.72 → 0.78 に引き上げ。サブラベル/キャプションが
+     ダークカード(--card 0.22)上で 4.5:1 以上のコントラスト比を確保。 */
+  --muted-foreground: oklch(0.78 0.01 264);
   --accent: oklch(0.32 0.06 250);        /* deep translucent blue tint */
   --accent-foreground: oklch(0.85 0.13 250);
   --destructive: oklch(0.65 0.22 27);
@@ -354,5 +356,79 @@
   /* 区切り線などの divide */
   & .divide-slate-100 > :not([hidden]) ~ :not([hidden]),
   & .divide-slate-200 > :not([hidden]) ~ :not([hidden]) { border-color: var(--border); }
+
+  /* ----- ステータスバッジ系 (amber / red / emerald / green) -----
+     pale 背景 + 中濃度テキストのライト用バッジを、ダーク時は
+     「彩度を保ちつつ背景は暗く・前景は明るく」に反転。
+     どの色も card(0.22) 上で >= 4.5:1 のコントラスト比を狙う。 */
+
+  /* amber (注意/構築中) */
+  & .bg-amber-50,
+  & .bg-amber-50\/60,
+  & .bg-amber-100 { background-color: color-mix(in oklab, oklch(0.7 0.16 80) 20%, transparent); }
+  & .text-amber-700,
+  & .text-amber-800 { color: oklch(0.85 0.14 80); }
+  & .border-amber-100,
+  & .border-amber-200 { border-color: color-mix(in oklab, oklch(0.7 0.16 80) 45%, transparent); }
+  & .ring-amber-100,
+  & .ring-amber-200 { --tw-ring-color: color-mix(in oklab, oklch(0.7 0.16 80) 45%, transparent); }
+
+  /* red (警告/失注/失敗) */
+  & .bg-red-50,
+  & .bg-red-100 { background-color: color-mix(in oklab, oklch(0.65 0.22 27) 22%, transparent); }
+  & .text-red-700,
+  & .text-red-800 { color: oklch(0.82 0.16 27); }
+  & .border-red-100,
+  & .border-red-200 { border-color: color-mix(in oklab, oklch(0.65 0.22 27) 45%, transparent); }
+  & .ring-red-100,
+  & .ring-red-200 { --tw-ring-color: color-mix(in oklab, oklch(0.65 0.22 27) 45%, transparent); }
+
+  /* emerald / green (成功/受注/完了) */
+  & .bg-emerald-50,
+  & .bg-emerald-100,
+  & .bg-green-50,
+  & .bg-green-100 { background-color: color-mix(in oklab, oklch(0.7 0.17 152) 20%, transparent); }
+  & .text-emerald-700,
+  & .text-emerald-800,
+  & .text-green-700,
+  & .text-green-800 { color: oklch(0.84 0.15 152); }
+  & .border-emerald-100,
+  & .border-emerald-200,
+  & .border-green-100,
+  & .border-green-200 { border-color: color-mix(in oklab, oklch(0.7 0.17 152) 45%, transparent); }
+  & .ring-emerald-100,
+  & .ring-emerald-200,
+  & .ring-green-100,
+  & .ring-green-200 { --tw-ring-color: color-mix(in oklab, oklch(0.7 0.17 152) 45%, transparent); }
+
+  /* blue ring も補強(KPIカードの delta バッジで使用) */
+  & .ring-blue-100,
+  & .ring-blue-200 { --tw-ring-color: color-mix(in oklab, var(--primary) 40%, transparent); }
+
+  /* テーブル: ヘッダー行・ホバー行を semantic に */
+  & thead,
+  & .bg-slate-50\/50 { background-color: color-mix(in oklab, var(--muted) 60%, transparent); }
+  & tbody tr:hover,
+  & .hover\:bg-slate-50\/50:hover { background-color: color-mix(in oklab, var(--muted) 50%, transparent); }
+
+  /* リング(slate系) → border 相当 */
+  & .ring-slate-100,
+  & .ring-slate-200,
+  & .ring-slate-200\/70 { --tw-ring-color: var(--border); }
+
+  /* 影: ライト用に rgba(15,23,42,0.04..0.18) を直書きしている箇所が多い。
+     ダークでは見えなくなるため、深い黒で軽く沈ませる。 */
+  & .shadow-\[0_1px_2px_rgba\(15\,23\,42\,0\.04\)\] {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  }
+  & .hover\:shadow-\[0_12px_28px_-16px_rgba\(15\,23\,42\,0\.18\)\]:hover {
+    box-shadow: 0 12px 28px -16px rgba(0, 0, 0, 0.7);
+  }
+  & .hover\:shadow-\[0_24px_48px_-24px_rgba\(37\,99\,235\,0\.35\)\]:hover {
+    box-shadow: 0 24px 48px -24px color-mix(in oklab, var(--primary) 60%, black);
+  }
+
+  /* ダーク時はホバー枠を slate-300 ではなく primary 寄りで強調 */
+  & .hover\:border-blue-300:hover { border-color: color-mix(in oklab, var(--primary) 55%, transparent); }
 }
 
