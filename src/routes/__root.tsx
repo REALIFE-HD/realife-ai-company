@@ -70,7 +70,8 @@ export const Route = createRootRoute({
 // React マウント前にテーマを適用して FOUC (一瞬ライト→ダークの切替) を防ぐ。
 // localStorage("realife:theme") から preference を読み、system のときは
 // prefers-color-scheme に追従して <html> に dark クラス + color-scheme を反映する。
-const THEME_BOOT_SCRIPT = `(function(){try{var k='realife:theme';var p=localStorage.getItem(k);if(p!=='light'&&p!=='dark'&&p!=='system')p='system';var t=p==='system'?(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):p;var r=document.documentElement;if(t==='dark')r.classList.add('dark');else r.classList.remove('dark');r.style.colorScheme=t;}catch(e){}})();`;
+// デフォルトはダーク。ユーザーが設定画面で light / system を選んだ場合のみそれに従う。
+const THEME_BOOT_SCRIPT = `(function(){try{var k='realife:theme';var p=localStorage.getItem(k);if(p!=='light'&&p!=='dark'&&p!=='system')p='dark';var t=p==='system'?(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):p;var r=document.documentElement;if(t==='dark')r.classList.add('dark');else r.classList.remove('dark');r.style.colorScheme=t;}catch(e){}})();`;
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (

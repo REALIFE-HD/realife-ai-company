@@ -102,7 +102,7 @@ function SettingsPage() {
     } catch {
       /* ignore */
     }
-    setThemePref("system");
+    setThemePref("dark");
     updateDisplayPrefs({ density: "comfortable", dateFormat: "ja-long" });
     updateSearchPrefs({ historyLimit: 8 });
     toast.success("ローカル設定を初期化しました");
@@ -234,7 +234,7 @@ function SettingsPage() {
                 })}
               </div>
               <p className="text-[11px] text-muted-foreground">
-                System を選ぶと OS の外観設定(ライト/ダーク)に自動で追従します。ヘッダーのアイコンからもいつでも切替できます。
+                既定はダークです。System を選ぶと OS の外観設定(ライト/ダーク)に自動で追従します。
               </p>
             </div>
 
