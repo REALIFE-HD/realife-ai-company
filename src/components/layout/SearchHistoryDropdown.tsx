@@ -1,4 +1,5 @@
-import { Clock, X } from "lucide-react";
+import { Clock, Info, X } from "lucide-react";
+import { HISTORY_DEDUPE_HINT } from "@/lib/normalize-query";
 
 export function SearchHistoryDropdown({
   history,
@@ -30,8 +31,16 @@ export function SearchHistoryDropdown({
       className="absolute left-0 right-0 top-full z-30 mt-1 overflow-hidden rounded-md border border-slate-200 bg-white shadow-lg"
     >
       <div className="flex items-center justify-between border-b border-slate-100 px-3 py-1.5">
-        <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+        <span className="flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500">
           最近の検索
+          <span
+            tabIndex={0}
+            aria-label={HISTORY_DEDUPE_HINT}
+            title={HISTORY_DEDUPE_HINT}
+            className="inline-flex h-3.5 w-3.5 cursor-help items-center justify-center text-slate-400 hover:text-slate-600"
+          >
+            <Info className="h-3 w-3" aria-hidden="true" />
+          </span>
         </span>
         <button
           type="button"
