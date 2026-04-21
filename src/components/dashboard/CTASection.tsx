@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 
 export function CTASection() {
   return (
-    <section className="relative overflow-hidden rounded-2xl border border-border/80 bg-gradient-to-br from-white via-white to-blue-50/30 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+    <section className="cta-section relative overflow-hidden rounded-2xl border border-border/80 bg-card shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
       {/* Subtle accent rail */}
       <div
         aria-hidden="true"
@@ -12,13 +12,14 @@ export function CTASection() {
       {/* Soft top glow */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-24 right-0 h-56 w-56 rounded-full bg-blue-100/60 blur-3xl"
+        className="cta-glow pointer-events-none absolute -top-24 right-0 h-56 w-56 rounded-full bg-blue-100/60 blur-3xl"
       />
-      {/* Faint grid texture */}
+      {/* Faint grid texture (theme-aware via .cta-grid) */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-[0.35] [background-image:linear-gradient(to_right,rgba(15,23,42,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.04)_1px,transparent_1px)] [background-size:32px_32px] [mask-image:radial-gradient(ellipse_60%_50%_at_80%_30%,black_30%,transparent_80%)]"
+        className="cta-grid pointer-events-none absolute inset-0 opacity-[0.35] [background-size:32px_32px] [mask-image:radial-gradient(ellipse_60%_50%_at_80%_30%,black_30%,transparent_80%)]"
       />
+
 
       <div className="relative grid gap-7 p-7 sm:p-9 lg:grid-cols-12 lg:items-center lg:gap-10">
         <div className="lg:col-span-8">
