@@ -2,10 +2,24 @@ import { Link } from "@tanstack/react-router";
 import { ChevronRight } from "lucide-react";
 import type { Department } from "@/data/departments";
 
-const STATUS_STYLE: Record<Department["status"], string> = {
-  active: "border-blue-100 bg-blue-50 text-blue-700",
-  setup: "border-amber-200 bg-amber-50 text-amber-700",
-  standard: "",
+type StatusMeta = { label: string; badge: string; dot: string };
+
+const STATUS_META: Record<Department["status"], StatusMeta> = {
+  active: {
+    label: "稼働中",
+    badge: "border-blue-100 bg-blue-50 text-blue-700",
+    dot: "bg-blue-500 shadow-[0_0_0_3px_rgba(59,130,246,0.18)] animate-pulse",
+  },
+  setup: {
+    label: "構築中",
+    badge: "border-amber-200 bg-amber-50 text-amber-700",
+    dot: "bg-amber-500 shadow-[0_0_0_3px_rgba(245,158,11,0.18)]",
+  },
+  standard: {
+    label: "通常運用",
+    badge: "border-slate-200 bg-slate-50 text-slate-600",
+    dot: "bg-slate-400",
+  },
 };
 
 export function DepartmentCard({ d }: { d: Department }) {
@@ -41,13 +55,18 @@ export function DepartmentCard({ d }: { d: Department }) {
           <span className="num flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-slate-200 bg-slate-50 text-[13px] font-semibold tracking-tight text-slate-700 transition-colors group-hover:border-blue-600 group-hover:bg-blue-600 group-hover:text-white">
             {d.id}
           </span>
-          {d.status !== "standard" && d.statusLabel && (
-            <span
-              className={`inline-flex max-w-full items-center truncate rounded-full border px-2 py-0.5 text-[10px] font-medium ${STATUS_STYLE[d.status]}`}
-            >
-              {d.statusLabel}
-            </span>
-          )}
+          {(() => {
+            const meta = STATUS_META[d.status];
+            const label = d.statusLabel ?? meta.label;
+            return (
+              <span
+                className={`inline-flex max-w-full items-center gap-1.5 truncate rounded-full border px-2 py-0.5 text-[10px] font-medium ${meta.badge}`}
+              >
+                <span aria-hidden="true" className={`h-1.5 w-1.5 shrink-0 rounded-full ${meta.dot}`} />
+                <span className="truncate">{label}</span>
+              </span>
+            );
+          })()}
         </div>
         {d.unread !== undefined && d.unread > 0 && (
           <span
