@@ -4,7 +4,6 @@ import { AppShell } from "@/components/layout/AppShell";
 import { KpiCards } from "@/components/dashboard/KpiCards";
 import { DashboardCharts } from "@/components/dashboard/DashboardCharts";
 import { CTASection } from "@/components/dashboard/CTASection";
-import { Footer } from "@/components/layout/Footer";
 import { useRouteMountMark } from "@/lib/web-vitals";
 
 export const Route = createFileRoute("/")({
@@ -43,7 +42,6 @@ function Index() {
         <DashboardCharts />
         <CTASection />
       </div>
-      <Footer />
     </AppShell>
   );
 }

@@ -2,7 +2,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
-import { Footer } from "@/components/layout/Footer";
 import { useRouteMountMark } from "@/lib/web-vitals";
 import { DepartmentCard } from "@/components/dashboard/DepartmentCard";
 import { CTASection } from "@/components/dashboard/CTASection";
@@ -155,7 +154,6 @@ function DepartmentsIndex() {
           )}
         </section>
       </div>
-      <Footer />
       </AppShell>
       <DepartmentFilterDialog
         open={filterOpen}

@@ -16,7 +16,6 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
-import { Footer } from "@/components/layout/Footer";
 import { useRouteMountMark } from "@/lib/web-vitals";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -273,7 +272,6 @@ function DocsPage() {
           </div>
         </section>
       </div>
-      <Footer />
     </AppShell>
   );
 }

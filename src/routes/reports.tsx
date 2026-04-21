@@ -1,7 +1,6 @@
 import { createFileRoute, Link, ClientOnly } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
-import { Footer } from "@/components/layout/Footer";
 import { useRouteMountMark } from "@/lib/web-vitals";
 import {
   Bar,
@@ -115,7 +114,6 @@ function ReportsPage() {
           </div>
         </section>
       </div>
-      <Footer />
     </AppShell>
   );
 }

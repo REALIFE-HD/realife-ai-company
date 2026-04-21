@@ -9,7 +9,6 @@ import {
   type Department,
 } from "@/data/departments";
 import { AppShell } from "@/components/layout/AppShell";
-import { Footer } from "@/components/layout/Footer";
 import { CTASection } from "@/components/dashboard/CTASection";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { NewInstructionDialog } from "@/components/instructions/NewInstructionDialog";
@@ -281,7 +280,6 @@ function DepartmentDetail() {
         </section>
         <CTASection />
       </div>
-      <Footer />
     </AppShell>
   );
 }
