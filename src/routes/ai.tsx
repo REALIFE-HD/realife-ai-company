@@ -7,6 +7,7 @@ import { AppShell } from "@/components/layout/AppShell";
 import { Footer } from "@/components/layout/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
+import { useRouteMountMark } from "@/lib/web-vitals";
 
 export const Route = createFileRoute("/ai")({
   head: () => ({
