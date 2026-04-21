@@ -190,6 +190,28 @@
     font-family: var(--font-mono);
     font-variant-numeric: tabular-nums;
   }
+
+  /* 数値セル: テーブル内の金額・件数・日付などに使用。
+     右寄せ + 等幅数字 + 桁揃えを統一。 */
+  th.num-cell,
+  td.num-cell,
+  .num-cell {
+    font-family: var(--font-numeric);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1, "ss01" 1;
+    text-align: right;
+    white-space: nowrap;
+    letter-spacing: -0.005em;
+  }
+
+  /* KPI カードの数値: 大きい表示でも桁が揃うように */
+  .kpi-value {
+    font-family: var(--font-numeric);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1, "ss01" 1;
+    letter-spacing: -0.01em;
+    font-weight: 600;
+  }
 }
 
 @utility grid-bg-light {

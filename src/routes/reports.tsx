@@ -65,7 +65,7 @@ function ReportsPage() {
           ].map((s) => (
             <div key={s.l} className="rounded-xl border border-slate-200 bg-white px-4 py-3">
               <p className="text-[11px] uppercase tracking-wider text-slate-500">{s.l}</p>
-              <p className="mt-1 font-mono text-2xl font-semibold tracking-tight text-slate-900 tabular">{s.v}</p>
+              <p className="kpi-value mt-1 text-right text-2xl text-slate-900">{s.v}</p>
             </div>
           ))}
         </section>

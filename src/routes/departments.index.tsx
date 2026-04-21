@@ -80,7 +80,7 @@ function DepartmentsIndex() {
                 <dt className="text-[11px] font-medium uppercase tracking-wider text-slate-500">
                   {s.label}
                 </dt>
-                <dd className="mt-1 font-mono text-2xl font-semibold tracking-tight text-slate-900 tabular">
+                <dd className="kpi-value mt-1 text-right text-2xl text-slate-900">
                   {s.value}
                 </dd>
               </div>

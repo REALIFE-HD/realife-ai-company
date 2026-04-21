@@ -32,7 +32,7 @@ export function KpiCards() {
                 <Icon className="h-3.5 w-3.5" aria-hidden="true" />
               </span>
             </div>
-            <p className="num mt-3.5 text-[1.875rem] font-semibold leading-none tracking-tight text-slate-950">
+            <p className="kpi-value mt-3.5 text-right text-[1.875rem] leading-none text-slate-950">
               {k.value}
             </p>
             <div className="mt-2.5 flex items-center gap-2">
