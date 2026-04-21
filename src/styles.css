@@ -407,7 +407,8 @@
 /* ============================================================
  * DepartmentCard 用 アニメーション枠 (conic gradient 一周回転)
  * - @property で角度をアニメ可能なカスタムプロパティとして登録
- * - hover 中は無限ループで枠線が時計回りに 1 周し続ける
+ * - hover 中のみ背景生成 + アニメ開始（非ホバーは paint コスト 0）
+ * - will-change で独立レイヤー化、合成のみで描画
  * ============================================================ */
 @property --dept-border-angle {
   syntax: "<angle>";
@@ -421,6 +422,18 @@
 
 .dept-card-border {
   --dept-border-angle: 0deg;
+  /* 非ホバー時は背景なし → 合成負荷ゼロ */
+  background: none;
+  padding: 1.5px;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  will-change: opacity;
+}
+
+.group:hover > .dept-card-border {
   background: conic-gradient(
     from var(--dept-border-angle),
     color-mix(in oklab, var(--primary) 80%, transparent) 0deg,
@@ -428,20 +441,17 @@
     transparent 280deg,
     color-mix(in oklab, var(--primary) 80%, transparent) 360deg
   );
-  padding: 1.5px;
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-}
-
-.group:hover > .dept-card-border {
   animation: dept-border-spin 2.4s linear infinite;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .group:hover > .dept-card-border {
+    animation: none;
+  }
+}
+
 @supports not (background: conic-gradient(from 0deg, red, blue)) {
-  .dept-card-border {
+  .group:hover > .dept-card-border {
     background: linear-gradient(
       135deg,
       color-mix(in oklab, var(--primary) 70%, transparent),
@@ -449,6 +459,7 @@
       transparent 60%,
       color-mix(in oklab, var(--primary) 70%, transparent)
     );
+    animation: none;
   }
 }
 
