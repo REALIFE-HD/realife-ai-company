@@ -63,25 +63,20 @@ function formatTime(ts: number) {
 
 function MetricsPage() {
   return (
-    <AppShell>
+    <AppShell
+      title="パフォーマンス計測"
+      subtitle="Web Vitals と画面遷移の所要時間を時系列で確認できます。"
+    >
       <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <Link
-              to="/"
-              className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
-            >
-              <ArrowLeft className="h-4 w-4" /> ホーム
-            </Link>
-            <h1 className="mt-2 text-2xl font-semibold tracking-tight">パフォーマンス計測</h1>
-            <p className="text-sm text-muted-foreground">
-              Web Vitals と画面遷移の所要時間を時系列で確認できます。アプリを操作した分だけデータが蓄積されます。
-            </p>
-          </div>
-        </div>
+        <Link
+          to="/"
+          className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+        >
+          <ArrowLeft className="h-4 w-4" /> ホーム
+        </Link>
 
         <ClientOnly fallback={<div className="text-sm text-muted-foreground">読み込み中…</div>}>
-          {() => <MetricsDashboard />}
+          <MetricsDashboard />
         </ClientOnly>
 
         <Footer />
