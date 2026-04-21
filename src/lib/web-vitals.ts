@@ -22,6 +22,10 @@ export type CapturedMetric = {
   id: string;
   navigationType?: string;
   timestamp: number;
+  /** エラー系メトリクスのみ。スタックトレース文字列 */
+  stack?: string;
+  /** エラー系メトリクスのみ。発生元 URL */
+  source?: string;
 };
 
 declare global {
