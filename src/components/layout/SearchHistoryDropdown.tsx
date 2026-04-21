@@ -93,6 +93,9 @@ export function SearchHistoryDropdown({
       <ul ref={listRef} className="max-h-64 overflow-y-auto py-1" onMouseLeave={() => onHover?.(-1)}>
         {history.map((q, i) => {
           const isActive = i === activeIndex;
+          // 上限到達時、最末尾(=最古)は次に削除される項目として薄く表示し title で予告
+          const willBeEvicted =
+            typeof limit === "number" && history.length >= limit && i === history.length - 1;
           return (
             <li
               key={q}
@@ -101,9 +104,8 @@ export function SearchHistoryDropdown({
               ref={isActive ? activeItemRef : undefined}
               onMouseEnter={() => onHover?.(i)}
               onMouseMove={() => { if (i !== activeIndex) onHover?.(i); }}
-              className={`group flex items-center ${
-                isActive ? "bg-blue-50" : ""
-              }`}
+              title={willBeEvicted ? "次に新しい検索を行うと削除されます" : undefined}
+              className={`group flex items-center ${isActive ? "bg-blue-50" : ""} ${willBeEvicted ? "opacity-60" : ""}`}
             >
               <button
                 type="button"
