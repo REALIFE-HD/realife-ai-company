@@ -1,5 +1,5 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { LayoutGrid, Building2, Briefcase, BarChart3, MessageSquare, Settings, Bell, Plus, Menu, X, BookOpen, Inbox, LogOut, Search, SlidersHorizontal, XCircle } from "lucide-react";
+import { LayoutGrid, Building2, Briefcase, BarChart3, MessageSquare, Settings, Bell, Plus, Menu, X, BookOpen, Inbox, LogOut, Search, SlidersHorizontal, XCircle, FolderOpen } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { toast } from "sonner";
 import { NewInstructionDialog } from "@/components/instructions/NewInstructionDialog";
@@ -63,6 +63,7 @@ const NAV = [
   { label: "部門", to: "/departments", icon: Building2 },
   { label: "案件", to: "/deals", icon: Briefcase },
   { label: "インボックス", to: "/inbox", icon: Inbox },
+  { label: "秘書室受付台帳", to: "/secretariat", icon: FolderOpen },
   { label: "レポート", to: "/reports", icon: BarChart3 },
   { label: "AIチャット", to: "/ai", icon: MessageSquare },
   { label: "ドキュメント", to: "/docs", icon: BookOpen },
