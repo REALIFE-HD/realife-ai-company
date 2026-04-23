@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as SecretariatRouteImport } from './routes/secretariat'
 import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as MetricsRouteImport } from './routes/metrics'
 import { Route as InboxRouteImport } from './routes/inbox'
@@ -26,6 +27,11 @@ import { Route as AiPreviewRouteImport } from './routes/ai.preview'
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SecretariatRoute = SecretariatRouteImport.update({
+  id: '/secretariat',
+  path: '/secretariat',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReportsRoute = ReportsRouteImport.update({
@@ -98,6 +104,7 @@ export interface FileRoutesByFullPath {
   '/inbox': typeof InboxRoute
   '/metrics': typeof MetricsRoute
   '/reports': typeof ReportsRoute
+  '/secretariat': typeof SecretariatRoute
   '/settings': typeof SettingsRoute
   '/ai/preview': typeof AiPreviewRoute
   '/deals/$dealCode': typeof DealsDealCodeRoute
@@ -113,6 +120,7 @@ export interface FileRoutesByTo {
   '/inbox': typeof InboxRoute
   '/metrics': typeof MetricsRoute
   '/reports': typeof ReportsRoute
+  '/secretariat': typeof SecretariatRoute
   '/settings': typeof SettingsRoute
   '/ai/preview': typeof AiPreviewRoute
   '/deals/$dealCode': typeof DealsDealCodeRoute
@@ -129,6 +137,7 @@ export interface FileRoutesById {
   '/inbox': typeof InboxRoute
   '/metrics': typeof MetricsRoute
   '/reports': typeof ReportsRoute
+  '/secretariat': typeof SecretariatRoute
   '/settings': typeof SettingsRoute
   '/ai/preview': typeof AiPreviewRoute
   '/deals/$dealCode': typeof DealsDealCodeRoute
@@ -146,6 +155,7 @@ export interface FileRouteTypes {
     | '/inbox'
     | '/metrics'
     | '/reports'
+    | '/secretariat'
     | '/settings'
     | '/ai/preview'
     | '/deals/$dealCode'
@@ -161,6 +171,7 @@ export interface FileRouteTypes {
     | '/inbox'
     | '/metrics'
     | '/reports'
+    | '/secretariat'
     | '/settings'
     | '/ai/preview'
     | '/deals/$dealCode'
@@ -176,6 +187,7 @@ export interface FileRouteTypes {
     | '/inbox'
     | '/metrics'
     | '/reports'
+    | '/secretariat'
     | '/settings'
     | '/ai/preview'
     | '/deals/$dealCode'
@@ -192,6 +204,7 @@ export interface RootRouteChildren {
   InboxRoute: typeof InboxRoute
   MetricsRoute: typeof MetricsRoute
   ReportsRoute: typeof ReportsRoute
+  SecretariatRoute: typeof SecretariatRoute
   SettingsRoute: typeof SettingsRoute
   DepartmentsIdRoute: typeof DepartmentsIdRoute
   DepartmentsIndexRoute: typeof DepartmentsIndexRoute
@@ -204,6 +217,13 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/secretariat': {
+      id: '/secretariat'
+      path: '/secretariat'
+      fullPath: '/secretariat'
+      preLoaderRoute: typeof SecretariatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reports': {
@@ -322,6 +342,7 @@ const rootRouteChildren: RootRouteChildren = {
   InboxRoute: InboxRoute,
   MetricsRoute: MetricsRoute,
   ReportsRoute: ReportsRoute,
+  SecretariatRoute: SecretariatRoute,
   SettingsRoute: SettingsRoute,
   DepartmentsIdRoute: DepartmentsIdRoute,
   DepartmentsIndexRoute: DepartmentsIndexRoute,

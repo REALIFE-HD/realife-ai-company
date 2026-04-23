@@ -184,7 +184,7 @@ function SecretariatPage() {
       title="秘書室受付台帳"
       subtitle={`${filtered.length.toLocaleString("ja-JP")} 件 / 全 ${rows.length.toLocaleString("ja-JP")} 件`}
     >
-      <div className="flex flex-col gap-4 font-jp">
+      <div className="flex flex-col gap-4">
         {/* Filters */}
         <div className="flex flex-wrap items-center gap-2">
           <Select value={urgency} onValueChange={setUrgency}>
@@ -313,7 +313,7 @@ function SecretariatPage() {
 
       {/* Detail modal */}
       <Dialog open={!!selected} onOpenChange={(o) => !o && setSelected(null)}>
-        <DialogContent className="max-w-2xl font-jp">
+        <DialogContent className="max-w-2xl">
           {selected && (
             <>
               <DialogHeader>
